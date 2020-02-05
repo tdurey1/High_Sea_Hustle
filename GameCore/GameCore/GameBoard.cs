@@ -26,8 +26,9 @@ namespace GameCore
         " 15 "
         };
 
-        // Keeps track of how many pieces are availabel t0 place to see if there is a tie
+        // Keeps track of how many pieces are availabel to place to see if there is a tie
         int availablePieces = 16;
+        bool isTie = false;
 
         // initialize GameBoard with empty slots
         GamePiece[][] positions = new GamePiece[4][] {
@@ -73,11 +74,7 @@ namespace GameCore
                 string error = (boardPosition == 16) ? "A piece was already placed there. Choose another position" :
                     "Please choose a valid position (0-15).";
 
-                Console.Clear();
-                drawBoard();
-                Console.WriteLine(error);
-                Console.WriteLine();
-                Thread.Sleep(1000);
+                displayError(error);
                 return false;
             }
 
@@ -91,11 +88,7 @@ namespace GameCore
                 string error = (gamePiece == 16) ? "This GamePiece is already on the game board, choose another one." :
                      "Please choose a valid GamePiece (0-15).";
 
-                Console.Clear();
-                drawBoard();
-                Console.WriteLine(error);
-                Console.WriteLine();
-                Thread.Sleep(1000);
+                displayError(error);
                 return false;
             }
 
@@ -109,6 +102,15 @@ namespace GameCore
             availablePieces--;
 
             return true;
+        }
+
+        public void displayError(string error)
+        {
+            drawBoard();
+            Console.WriteLine(error);
+            Console.WriteLine();
+            piecesRemaining();
+            Thread.Sleep(1000);
         }
 
         public int getPosition()
@@ -182,7 +184,10 @@ namespace GameCore
 
             // Checks for a tie
             if (availablePieces == 0)
+            {
+                isTie = true;
                 return true;
+            }
 
             return false;
         }
@@ -214,7 +219,7 @@ namespace GameCore
         // Stars a new game if the user chooses to
         public bool startNewGame()
         {
-            string result = (availablePieces > 0) ? "Winner!" : "It's a tie!";
+            string result = (isTie == false) ? "Winner!" : "It's a tie!";
 
             Console.Clear();
             drawBoard();
