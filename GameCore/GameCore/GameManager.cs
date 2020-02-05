@@ -11,7 +11,6 @@
 
             while (exitGame == false)
             {
-
                 if (!gameBoard.placeGamePiece())
                     continue;
 
@@ -21,6 +20,7 @@
                     {
                         gameBoard = new GameBoard();
                         gameBoard.drawBoard();
+                        gameBoard.piecesRemaining();
                     }
                     else
                         exitGame = true;

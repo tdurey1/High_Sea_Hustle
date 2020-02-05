@@ -220,8 +220,6 @@ namespace GameCore
         public bool startNewGame()
         {
             string result = (isTie == false) ? "Winner!" : "It's a tie!";
-
-            Console.Clear();
             drawBoard();
             Console.WriteLine(result);
 
@@ -235,11 +233,8 @@ namespace GameCore
                     Console.WriteLine("Goodbye!");
                     return false;
                 }
-                else if (playAgain.ToLower() == "yes" || playAgain.ToLower() == "y")
-                {
-                    Console.Clear();
+                else if (playAgain.ToLower() == "yes" || playAgain.ToLower() == "y") 
                     return true;
-                }
                 else
                     Console.WriteLine("Please enter either \"yes\" or \"no\";");
             }
