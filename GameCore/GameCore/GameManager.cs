@@ -5,6 +5,9 @@
         static void Main(string[] args)
         {
             GameBoard gameBoard = new GameBoard();
+            Player player1 = new Player();
+            Player player2 = new Player();
+
             bool exitGame = false;
             gameBoard.drawBoard();
             gameBoard.piecesRemaining();
