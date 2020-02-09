@@ -28,7 +28,7 @@ public class GameBoard : MonoBehaviour
     }
 
     // Keeps track of how many pieces are availabel to place to see if there is a tie
-    int availablePieces = 16;
+    //int availablePieces = 16;
     bool isTie = false;
 
     // initialize GameBoard with empty slots

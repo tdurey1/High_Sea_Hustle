@@ -17,4 +17,9 @@ public class GamePiece : MonoBehaviour
     public int color = 0;
     public int type = 0;
     public string bitValue = "";
+
+    private void OnMouseDown()
+    {
+        Debug.Log("It worked");
+    }
 }
