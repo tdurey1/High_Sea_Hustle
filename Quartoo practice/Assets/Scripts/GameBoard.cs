@@ -39,28 +39,10 @@ public class GameBoard : MonoBehaviour
             new GamePiece[] {null, null, null, null } };
 
     // initialize all of the GamePieces
-    GamePiece[] gamePieces = new GamePiece[16]
-     {
-             // black GamePieces
-            new GamePiece() {color = 0, height = 0, type = 0, emblem = 0, bitValue = "0000"},
-            new GamePiece() {color = 0, height = 0, type = 0, emblem = 1, bitValue = "0001"},
-            new GamePiece() {color = 0, height = 0, type = 1, emblem = 0, bitValue = "0010"},
-            new GamePiece() {color = 0, height = 0, type = 1, emblem = 1, bitValue = "0011"},
-            new GamePiece() {color = 0, height = 1, type = 0, emblem = 0, bitValue = "0100"},
-            new GamePiece() {color = 0, height = 1, type = 0, emblem = 1, bitValue = "0101"},
-            new GamePiece() {color = 0, height = 1, type = 1, emblem = 0, bitValue = "0110"},
-            new GamePiece() {color = 0, height = 1, type = 1, emblem = 1, bitValue = "0111"},
-                                                                        
-            // white GamePieces                                         
-            new GamePiece() {color = 1, height = 0, type = 0, emblem = 0, bitValue = "1000"},
-            new GamePiece() {color = 1, height = 0, type = 0, emblem = 1, bitValue = "1001"},
-            new GamePiece() {color = 1, height = 0, type = 1, emblem = 0, bitValue = "1010"},
-            new GamePiece() {color = 1, height = 0, type = 1, emblem = 1, bitValue = "1011"},
-            new GamePiece() {color = 1, height = 1, type = 0, emblem = 0, bitValue = "1100"},
-            new GamePiece() {color = 1, height = 1, type = 0, emblem = 1, bitValue = "1101"},
-            new GamePiece() {color = 1, height = 1, type = 1, emblem = 0, bitValue = "1110"},
-            new GamePiece() {color = 1, height = 1, type = 1, emblem = 1, bitValue = "1111"},
-    };
+    GamePiece[] gamePieces = new GamePiece[16];
+    GamePiece[] availablePieces = new GamePiece[16];
+    GamePiece[] usedPieces = new GamePiece[16];
+
 
     // Returns true if a piece was successfully placed
     public bool placeGamePiece()
@@ -98,7 +80,7 @@ public class GameBoard : MonoBehaviour
         positions[row][col] = gamePieces[gamePiece];
         //updateGameBoard(boardPosition, gamePieces[gamePiece]);
         gamePieces[gamePiece] = null;
-        availablePieces--;
+        //availablePieces--;
 
         return true;
     }
@@ -171,11 +153,11 @@ public class GameBoard : MonoBehaviour
             return true;
 
         // Checks for a tie
-        if (availablePieces == 0)
-        {
-            isTie = true;
-            return true;
-        }
+        //if (availablePieces == 0)
+        //{
+        //    isTie = true;
+        //    return true;
+        //}
 
         return false;
     }
