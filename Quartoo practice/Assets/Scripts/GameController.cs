@@ -5,15 +5,20 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    public Text[] buttonList;
+    public Button[] buttonList;
+    public GamePiece[] gamePieces;
+    public GamePiece[] availablePieces;
+    public GamePiece selectedPiece;
     private string playerSide;
     private int moveCount;
 
     void SetGameControllerReferenceOnButtons()
     {
-        for (int i = 0; i < buttonList.Length; i++)
+        for (int i = 0; i < gamePieces.Length; i++)
         {
-            buttonList[i].GetComponentInParent<GameBoard>().SetGameControllerReference(this);
+            buttonList[i].GetComponent<GameBoard>().SetGameControllerReference(this);
+            gamePieces[i].GetComponentInParent<GameBoard>().SetGameControllerReference(this);
+            availablePieces[i].GetComponent<GamePiece>().SetGameControllerReference(this);
         }
     }
 
@@ -24,19 +29,24 @@ public class GameController : MonoBehaviour
         moveCount = 0;
     }
 
-    public string GetPlayerSide()
+    public GamePiece GetSelectedPiece()
     {
-        return  playerSide;
+        return selectedPiece;
+    }
+
+    public void SetSelectedPiece(GamePiece gamePiece)
+    {
+        selectedPiece = gamePiece;
     }
 
     public void EndTurn()
     {
         moveCount++;
 
-        if (buttonList[0].text == playerSide && buttonList[1].text == playerSide && buttonList[2].text == playerSide)
-        {
-            GameOver();
-        }
+        //if (buttonList[0].text == playerSide && buttonList[1].text == playerSide && buttonList[2].text == playerSide)
+        //{
+        //    GameOver();
+        //}
 
         if (moveCount >= 16)
         {
@@ -62,14 +72,14 @@ public class GameController : MonoBehaviour
         playerSide = "X";
         moveCount = 0;
 
-        for (int i = 0; i < buttonList.Length; i++)
-        {
-            buttonList[i].text = "";
-        }
+        //for (int i = 0; i < buttonList.Length; i++)
+        //{
+        //    buttonList[i].text = "";
+        //}
         SetBoardInteractable(false);
     }
 
-    public void SetBoardInteractable (bool toggle)
+    public void SetBoardInteractable(bool toggle)
     {
         for (int i = 0; i < buttonList.Length; i++)
         {
