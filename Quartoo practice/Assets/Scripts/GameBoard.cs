@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameBoard : MonoBehaviour
 {
     public Button button;
-    public Text buttonText;
+    public GamePiece gamePiece;
     private GameController gameController;
     bool isTie = false;
 
@@ -24,9 +24,18 @@ public class GameBoard : MonoBehaviour
 
     public void SetSpace()
     {
-        //buttonText.text = gameController.GetSelectedPiece();
+        SetGamePieceAtrributes(gameController.GetSelectedPiece());
         button.interactable = false;
         gameController.EndTurn();
+    }
+
+    public void SetGamePieceAtrributes(GamePiece selectedGamePiece)
+    {
+        gamePiece.height = selectedGamePiece.height;
+        gamePiece.emblem = selectedGamePiece.emblem;
+        gamePiece.color = selectedGamePiece.color;
+        gamePiece.type = selectedGamePiece.type;
+
     }
 
     public void SetGameControllerReference(GameController controller)
