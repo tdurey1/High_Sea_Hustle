@@ -11,8 +11,6 @@ public class GamePiece : MonoBehaviour
         gameController = controller;
     }
 
-    GameObject gamePiece;
-
     public int height = 0;
     public int emblem = 0;
     public int color = 0;
