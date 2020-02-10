@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class GamePiece : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private GameController gameController;
+
+    public void SetGameControllerReference(GameController controller)
     {
-        
+        gameController = controller;
     }
 
     GameObject gamePiece;
@@ -20,6 +21,6 @@ public class GamePiece : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("It worked");
+        gameController.SetSelectedPiece(this);
     }
 }

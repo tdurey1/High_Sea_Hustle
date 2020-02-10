@@ -6,14 +6,20 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
     public Text[] buttonList;
+    public GamePiece[] gamePieces;
+    public GamePiece[] availablePieces;
+    public GamePiece selectedPiece;
     private string playerSide;
     private int moveCount;
 
     void SetGameControllerReferenceOnButtons()
     {
+
         for (int i = 0; i < buttonList.Length; i++)
         {
             buttonList[i].GetComponentInParent<GameBoard>().SetGameControllerReference(this);
+            gamePieces[i].GetComponentInParent<GamePiece>().SetGameControllerReference(this);
+            availablePieces[i].GetComponentInParent<GamePiece>().SetGameControllerReference(this);
         }
     }
 
@@ -24,9 +30,14 @@ public class GameController : MonoBehaviour
         moveCount = 0;
     }
 
-    public string GetPlayerSide()
+    public GamePiece GetSelectedPiece()
     {
-        return  playerSide;
+        return  selectedPiece;
+    }
+
+    public void SetSelectedPiece(GamePiece gamePiece)
+    {
+        selectedPiece = gamePiece;
     }
 
     public void EndTurn()

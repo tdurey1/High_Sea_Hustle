@@ -8,27 +8,6 @@ public class GameBoard : MonoBehaviour
     public Button button;
     public Text buttonText;
     private GameController gameController;
-
-    public void SetSpace()
-    {
-        buttonText.text = gameController.GetPlayerSide();
-        button.interactable = false;
-        gameController.EndTurn();
-    }
-
-    public void SetGameControllerReference(GameController controller)
-    {
-        gameController = controller;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Keeps track of how many pieces are availabel to place to see if there is a tie
-    //int availablePieces = 16;
     bool isTie = false;
 
     // initialize GameBoard with empty slots
@@ -43,6 +22,23 @@ public class GameBoard : MonoBehaviour
     GamePiece[] availablePieces = new GamePiece[16];
     GamePiece[] usedPieces = new GamePiece[16];
 
+    public void SetSpace()
+    {
+        //buttonText.text = gameController.GetSelectedPiece();
+        button.interactable = false;
+        gameController.EndTurn();
+    }
+
+    public void SetGameControllerReference(GameController controller)
+    {
+        gameController = controller;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
 
     // Returns true if a piece was successfully placed
     public bool placeGamePiece()
