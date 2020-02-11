@@ -6,14 +6,44 @@ using UnityEngine.UI;
 public class GameBoard : MonoBehaviour
 {
     public Button button;
-    public Text buttonText;
+    public GamePiece gamePiece;
     private GameController gameController;
+    bool isTie = false;
+
+    // initialize GameBoard with empty slots
+    GamePiece[][] positions = new GamePiece[4][] {
+            new GamePiece[] {null, null, null, null },
+            new GamePiece[] {null, null, null, null },
+            new GamePiece[] {null, null, null, null },
+            new GamePiece[] {null, null, null, null } };
+
+    // NOTE: May have the game controller keep track of this
+    //GamePiece[] gamePieces = new GamePiece[16];
+    //List<GamePiece> availablePieces = new List<GamePiece>();
+    //List<GamePiece> usedPieces = new List<GamePiece>();
 
     public void SetSpace()
     {
-        buttonText.text = gameController.GetPlayerSide();
-        button.interactable = false;
-        gameController.EndTurn();
+        GamePiece selectedPiece = gameController.GetSelectedPiece();
+
+        if (selectedPiece != null)
+        {
+            SetGamePieceAtrributes(selectedPiece);
+            gameController.AddToUsedPieces(selectedPiece);
+            gameController.RemoveFromAvailablePieces(selectedPiece);
+            gameController.SetSelectedPiece(null);
+            button.interactable = false;
+            gameController.EndTurn();
+        }
+    }
+
+    public void SetGamePieceAtrributes(GamePiece selectedGamePiece)
+    {
+        gamePiece.height = selectedGamePiece.height;
+        gamePiece.emblem = selectedGamePiece.emblem;
+        gamePiece.color = selectedGamePiece.color;
+        gamePiece.type = selectedGamePiece.type;
+
     }
 
     public void SetGameControllerReference(GameController controller)
@@ -27,63 +57,46 @@ public class GameBoard : MonoBehaviour
         
     }
 
-    // Keeps track of how many pieces are availabel to place to see if there is a tie
-    //int availablePieces = 16;
-    bool isTie = false;
-
-    // initialize GameBoard with empty slots
-    GamePiece[][] positions = new GamePiece[4][] {
-            new GamePiece[] {null, null, null, null },
-            new GamePiece[] {null, null, null, null },
-            new GamePiece[] {null, null, null, null },
-            new GamePiece[] {null, null, null, null } };
-
-    // initialize all of the GamePieces
-    GamePiece[] gamePieces = new GamePiece[16];
-    GamePiece[] availablePieces = new GamePiece[16];
-    GamePiece[] usedPieces = new GamePiece[16];
-
-
     // Returns true if a piece was successfully placed
-    public bool placeGamePiece()
-    {
-        // If position already taken returns 16; if invalid, returns 17
-        int boardPosition = getPosition();
+    //public bool placeGamePiece()
+    //{
+    //    // If position already taken returns 16; if invalid, returns 17
+    //    int boardPosition = getPosition();
 
-        // Since are board only goes up to 16 positions (0 - 15), 16 and 17 will never be a viable position so 
-        // we can use it for an error check
-        if (boardPosition > 15)
-        {
-            string error = (boardPosition == 16) ? "A piece was already placed there. Choose another position" :
-                "Please choose a valid position (0-15).";
+    //    // Since are board only goes up to 16 positions (0 - 15), 16 and 17 will never be a viable position so 
+    //    // we can use it for an error check
+    //    if (boardPosition > 15)
+    //    {
+    //        string error = (boardPosition == 16) ? "A piece was already placed there. Choose another position" :
+    //            "Please choose a valid position (0-15).";
 
-            return false;
-        }
+    //        return false;
+    //    }
 
-        // If piece is already used returns 16; if invalid, returns 17
-        int gamePiece = getGamePiece();
+    //    // If piece is already used returns 16; if invalid, returns 17
+    //    int gamePiece = getGamePiece();
 
-        // Since we only have 16 pieces (0 - 15), 16 and 17 will never be a viable position so 
-        // we can use it for an error check
-        if (gamePiece > 15)
-        {
-            string error = (gamePiece == 16) ? "This GamePiece is already on the game board, choose another one." :
-                 "Please choose a valid GamePiece (0-15).";
+    //    // Since we only have 16 pieces (0 - 15), 16 and 17 will never be a viable position so 
+    //    // we can use it for an error check
+    //    if (gamePiece > 15)
+    //    {
+    //        string error = (gamePiece == 16) ? "This GamePiece is already on the game board, choose another one." :
+    //             "Please choose a valid GamePiece (0-15).";
 
-            return false;
-        }
+    //        return false;
+    //    }
 
-        // Set row and col values
-        int row = boardPosition / 4;
-        int col = boardPosition % 4;
+    //    // Set row and col values
+    //    int row = boardPosition / 4;
+    //    int col = boardPosition % 4;
 
-        positions[row][col] = gamePieces[gamePiece];
-        //updateGameBoard(boardPosition, gamePieces[gamePiece]);
-        gamePieces[gamePiece] = null;
-        //availablePieces--;
+    //    positions[row][col] = gamePieces[gamePiece];
+    //    //updateGameBoard(boardPosition, gamePieces[gamePiece]);
+    //    gamePieces[gamePiece] = null;
+    //    //availablePieces--;
 
-        return true;
-    }
+    //    return true;
+    //}
 
     public int getPosition()
     {
@@ -103,88 +116,20 @@ public class GameBoard : MonoBehaviour
         return currentPosition;
     }
 
-    public int getGamePiece()
-    {
-        int currentGamePiece = 5;
+    //public int getGamePiece()
+    //{
+    //    int currentGamePiece = 5;
 
-        // Check for out of range input
-        if (currentGamePiece < 0 || currentGamePiece > 15)
-            return 17;
+    //    // Check for out of range input
+    //    if (currentGamePiece < 0 || currentGamePiece > 15)
+    //        return 17;
 
-        // Checks if the GamePiece is already used
-        if (gamePieces[currentGamePiece] == null)
-            return 16;
+    //    // Checks if the GamePiece is already used
+    //    if (gamePieces[currentGamePiece] == null)
+    //        return 16;
 
-        return currentGamePiece;
-    }
-
-    // This function checks to see if there is a winner or a tie
-    public bool isGameOver()
-    {
-        // checks the rows
-        for (int i = 0; i < positions.Length; i++)
-        {
-            GamePiece[] result = positions[i];
-            bool checkedRows = checkWinConditions(result[0], result[1], result[2], result[3]);
-            if (checkedRows)
-                return true;
-        }
-
-        // checks the cols
-        for (int i = 0; i < positions.Length; i++)
-        {
-            GamePiece[] result = new GamePiece[4];
-            for (int j = 0; j < 4; j++)
-                result[j] = positions[j][i];
-
-            bool checkedRows = checkWinConditions(result[0], result[1], result[2], result[3]);
-            if (checkedRows)
-                return true;
-        }
-
-        // checks the main diagonal (left to right)
-        bool diagonalResult = checkWinConditions(positions[0][0], positions[1][1], positions[2][2], positions[3][3]);
-        if (diagonalResult)
-            return true;
-
-        // checks the secondary diagonal (right to left)
-        bool otherDiagonalResult = checkWinConditions(positions[0][3], positions[1][2], positions[2][1], positions[3][0]);
-        if (otherDiagonalResult)
-            return true;
-
-        // Checks for a tie
-        //if (availablePieces == 0)
-        //{
-        //    isTie = true;
-        //    return true;
-        //}
-
-        return false;
-    }
-
-    // Checks all possible conditions of a winning move
-    public bool checkWinConditions(GamePiece a, GamePiece b, GamePiece c, GamePiece d)
-    {
-        // checks if the other positions of the game board are empty (no GamePieces on them)          
-        if (a == null || b == null || c == null || d == null)
-            return false;
-
-        // checks if there are 4 GamePieces next to each other with similiar stats
-        if (a.height == b.height && a.height == c.height && a.height == d.height)
-            return true;
-
-        else if (a.color == b.color && a.color == c.color && a.color == d.color)
-            return true;
-
-        else if (a.emblem == b.emblem && a.emblem == c.emblem && a.emblem == d.emblem)
-            return true;
-
-        else if (a.type == b.type && a.type == c.type && a.type == d.type)
-            return true;
-
-        // if there arent any conditions met, that means that there isn't a winner
-        return false;
-    }
+    //    return currentGamePiece;
+    //}
 
     // Stars a new game if the user chooses to
     public bool startNewGame()
@@ -210,14 +155,14 @@ public class GameBoard : MonoBehaviour
     //}
 
     // Returns a string of game pieces not played
-    public List<GamePiece> getAvailablePieces()
-    {
-        List<GamePiece> availablePieces = new List<GamePiece>();
+    //public List<GamePiece> getAvailablePieces()
+    //{
+    //    List<GamePiece> availablePieces = new List<GamePiece>();
 
-        foreach (GamePiece piece in gamePieces)
-            if (piece != null)
-                availablePieces.Add(piece);
+    //    foreach (GamePiece piece in gamePieces)
+    //        if (piece != null)
+    //            availablePieces.Add(piece);
 
-        return availablePieces;
-    }
+    //    return availablePieces;
+    //}
 }

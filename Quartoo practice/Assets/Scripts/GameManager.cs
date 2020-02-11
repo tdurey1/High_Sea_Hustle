@@ -11,37 +11,37 @@ public class GameManager : MonoBehaviour
 
     }
 
-    GameBoard gameBoard = new GameBoard();
-    List<GamePiece> availablePieces = new List<GamePiece>();
-    Player player1 = new Player();
-    Player player2 = new Player();
+    //GameBoard gameBoard = new GameBoard();
+    //List<GamePiece> availablePieces = new List<GamePiece>();
+    //Player player1 = new Player();
+    //Player player2 = new Player();
 
-    bool exitGame = false;
+    //bool exitGame = false;
 
-    void setAvailablePieces ()
-    {
-        availablePieces = gameBoard.getAvailablePieces();
-    }
+    ////void setAvailablePieces ()
+    ////{
+    ////    availablePieces = gameBoard.getAvailablePieces();
+    ////}
 
-    void runGame()
-    {
-        while (exitGame == false)
-        {
-            if (!gameBoard.placeGamePiece())
-                continue;
+    //void runGame()
+    //{
+    //    while (exitGame == false)
+    //    {
+    //        //if (!gameBoard.placeGamePiece())
+    //        //    continue;
 
-            if (gameBoard.isGameOver())
-            {
-                if (gameBoard.startNewGame())
-                {
-                    gameBoard = new GameBoard();
-                    setAvailablePieces();
-                }
-                else
-                    exitGame = true;
-            }
-            else
-                setAvailablePieces();
-        }
-    }
+    //        if (gameBoard.isGameOver())
+    //        {
+    //            if (gameBoard.startNewGame())
+    //            {
+    //                gameBoard = new GameBoard();
+    //                //setAvailablePieces();
+    //            }
+    //            else
+    //                exitGame = true;
+    //        }
+    //        //else
+    //        //    setAvailablePieces();
+    //    }
+    //}
 }
