@@ -32,6 +32,7 @@ public class GameBoard : MonoBehaviour
             gameController.AddToUsedPieces(selectedPiece);
             gameController.RemoveFromAvailablePieces(selectedPiece);
             gameController.SetSelectedPiece(null);
+            gameController.SetRecentMove(this.button);
             button.interactable = false;
             gameController.EndTurn();
         }

@@ -5067,6 +5067,23 @@ MonoBehaviour:
   - {fileID: 1361621270}
   - {fileID: 1124309381}
   - {fileID: 1187206905}
+  gamePieces:
+  - {fileID: 1605876151}
+  - {fileID: 331424137}
+  - {fileID: 1057447538}
+  - {fileID: 931869018}
+  - {fileID: 2076509862}
+  - {fileID: 694629905}
+  - {fileID: 682958478}
+  - {fileID: 2127733171}
+  - {fileID: 1442940761}
+  - {fileID: 284174452}
+  - {fileID: 1977372776}
+  - {fileID: 1115824105}
+  - {fileID: 283759258}
+  - {fileID: 1381091157}
+  - {fileID: 1873676447}
+  - {fileID: 1904735053}
   usedPieces: []
   availablePieces:
   - {fileID: 1605876151}
@@ -5086,6 +5103,7 @@ MonoBehaviour:
   - {fileID: 1873676447}
   - {fileID: 1904735053}
   selectedPiece: {fileID: 0}
+  recentMove: {fileID: 0}
 --- !u!4 &1815130339
 Transform:
   m_ObjectHideFlags: 0
