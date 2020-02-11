@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
     public Button[] buttonList;
+    public List<GamePiece> gamePieces;
     public List<GamePiece> usedPieces;
     public List<GamePiece> availablePieces;
     public GamePiece selectedPiece;
+    public Button recentMove;
     private string playerSide;
     private int moveCount;
 
@@ -31,6 +33,16 @@ public class GameController : MonoBehaviour
         SetGameControllerReferenceOnButtons();
         playerSide = "X";
         moveCount = 0;
+    }
+
+    public void SetRecentMove(Button button)
+    {
+        recentMove = button;
+    }
+
+    public Button GetRecentMove()
+    {
+        return recentMove;
     }
 
     public GamePiece GetSelectedPiece()
@@ -90,6 +102,9 @@ public class GameController : MonoBehaviour
         if (moveCount >= 16)
             GameOver();
 
+        if (moveCount == 5)
+            RestartGame();
+
         changeSides();
     }
 
@@ -136,12 +151,17 @@ public class GameController : MonoBehaviour
     {
         playerSide = "X";
         moveCount = 0;
+        usedPieces.Clear();
+        availablePieces = gamePieces;
 
-        //for (int i = 0; i < buttonList.Length; i++)
-        //{
-        //    buttonList[i].text = "";
-        //}
-        SetBoardInteractable(false);
+        for (int i = 0; i < buttonList.Length; i++)
+        {
+            buttonList[i].GetComponentInChildren<GamePiece>().height = 2;
+            buttonList[i].GetComponentInChildren<GamePiece>().emblem = 2;
+            buttonList[i].GetComponentInChildren<GamePiece>().color = 2;
+            buttonList[i].GetComponentInChildren<GamePiece>().type = 2;
+        }
+        SetBoardInteractable(true);
     }
 
     public void SetBoardInteractable(bool toggle)
