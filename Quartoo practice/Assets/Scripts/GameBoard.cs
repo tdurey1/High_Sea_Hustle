@@ -28,6 +28,8 @@ public class GameBoard : MonoBehaviour
 
         if (selectedPiece != null)
         {
+            Vector3 newPosition = button.transform.position;
+            selectedPiece.transform.position = newPosition;
             SetGamePieceAtrributes(selectedPiece);
             gameController.AddToUsedPieces(selectedPiece);
             gameController.RemoveFromAvailablePieces(selectedPiece);
@@ -36,6 +38,11 @@ public class GameBoard : MonoBehaviour
             button.interactable = false;
             gameController.EndTurn();
         }
+    }
+
+    public void MovePiece()
+    {
+
     }
 
     public void SetGamePieceAtrributes(GamePiece selectedGamePiece)
