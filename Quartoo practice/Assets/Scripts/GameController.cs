@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
             recentMove = button;
             button.interactable = false;
             // if this is true, game is over
-            if (gameCore.SetPiece(selectedPiece, button.name))
+            if (gameCore.SetPiece(selectedPiece.name, button.name))
             {
                 GameOver();
             }
@@ -49,16 +49,6 @@ public class GameController : MonoBehaviour
     {
         selectedPiece = gamePiece;
     }
-
-    //public void RemoveAvailablePiece(GamePiece gamePiece)
-    //{
-    //    gameCore.RemoveFromAvailablePieces(gamePiece);
-    //}
-
-    //public void AddUsedPiece(GamePiece gamePiece)
-    //{
-    //    gameCore.AddToUsedPieces(gamePiece);
-    //}
 
     public void EndTurn()
     {

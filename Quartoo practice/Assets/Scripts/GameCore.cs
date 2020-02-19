@@ -7,37 +7,56 @@ public class GameCore : MonoBehaviour
     private GameController gameController;
     private int row = 1;
     private int col = 0;
+    public struct Piece
+    {
+        public int height;
+        public int color;
+        public int type;
+        public int emblem;
+        public string id;
+
+        public Piece (int height, int color, int type, int emblem, string id)
+        {
+            this.height = height;
+            this.color = color;
+            this.type = type;
+            this.emblem = emblem;
+            this.id = id;
+        }
+    }
+
     // initialize GameBoard with empty slots
-    public GamePiece[][] gameBoard = new GamePiece[4][] {
-            new GamePiece[] {null, null, null, null },
-            new GamePiece[] {null, null, null, null },
-            new GamePiece[] {null, null, null, null },
-            new GamePiece[] {null, null, null, null }
+    public Piece[][] gameBoard = new Piece[4][] {
+            new Piece[] {new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, "")},
+            new Piece[] {new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, "")},
+            new Piece[] {new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, "")},
+            new Piece[] {new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, "") }
     };
 
     // usedPieces is empty until a game piece is set
-    public List<GamePiece> usedPieces = new List<GamePiece>();
-
+    public List<Piece> usedPieces = new List<Piece>();
     // initialize availablePieces (it will include all game pieces until the first move)
-    public List<GamePiece> availablePieces = new List<GamePiece> {
-        new GamePiece( 0, 0, 0, 0, 0 ),
-        new GamePiece( 0, 0, 0, 1, 1 ),
-        new GamePiece( 0, 0, 1, 0, 2 ),
-        new GamePiece( 0, 0, 1, 1, 3 ),
-        new GamePiece( 0, 1, 0, 0, 4 ),
-        new GamePiece( 0, 1, 0, 1, 5 ),
-        new GamePiece( 0, 1, 1, 0, 6 ),
-        new GamePiece( 0, 1, 1, 1, 7 ),
+    public List<Piece> availablePieces = new List<Piece>()
+    {
+        // Gold Pieces
+        new Piece(0, 0, 0, 0, "A1"),
+        new Piece(0, 0, 0, 1, "A2"),
+        new Piece(0, 0, 1, 0, "A3"),
+        new Piece(0, 0, 1, 1, "A4"),
+        new Piece(0, 1, 0, 0, "B1"),
+        new Piece(0, 1, 0, 1, "B2"),
+        new Piece(0, 1, 1, 0, "B3"),
+        new Piece(0, 1, 1, 1, "B4"),
 
-        // silver GamePieces                                         
-        new GamePiece( 1, 0, 0, 0, 8 ),
-        new GamePiece( 1, 0, 0, 1, 9 ),
-        new GamePiece( 1, 0, 1, 0, 10 ),
-        new GamePiece( 1, 0, 1, 1, 11 ),
-        new GamePiece( 1, 1, 0, 0, 12 ),
-        new GamePiece( 1, 1, 0, 1, 13 ),
-        new GamePiece( 1, 1, 1, 0, 14 ),
-        new GamePiece( 1, 1, 1, 1, 15 ),
+        // Silver Pieces
+        new Piece(1, 0, 0, 0, "C1"),
+        new Piece(1, 0, 0, 1, "C2"),
+        new Piece(1, 0, 1, 0, "C3"),
+        new Piece(1, 0, 1, 1, "C4"),
+        new Piece(1, 1, 0, 0, "D1"),
+        new Piece(1, 1, 0, 1, "D2"),
+        new Piece(1, 1, 1, 0, "D3"),
+        new Piece(1, 1, 1, 1, "D4")
     };
 
     public void SetGameControllerReference(GameController controller)
@@ -45,17 +64,15 @@ public class GameCore : MonoBehaviour
         gameController = controller;
     }
 
-    public bool SetPiece(GamePiece gamePiece, string position)
+    public bool SetPiece(string gamePieceID, string position)
     {
-        
         // updates variables row and col
         ConvertPosition(position);
 
-        GamePiece convertedGamepiece = ConvertGamePiece(gamePiece);
+        Piece convertedGamepiece = ConvertGamePiece(gamePieceID);
         usedPieces.Add(convertedGamepiece);
         availablePieces.Remove(convertedGamepiece);
         gameBoard[row][col] = convertedGamepiece;
-        Debug.Log(gameBoard[row][col].color);
         return (EndTurn() ? true : false);
     }
 
@@ -138,21 +155,18 @@ public class GameCore : MonoBehaviour
         }
     }
 
-    private GamePiece ConvertGamePiece(GamePiece gamePiece)
+    private Piece ConvertGamePiece(string gamePiece)
     {
-        GamePiece convertedGamePiece = new GamePiece(
-            gamePiece.color,
-            gamePiece.height,
-            gamePiece.type,
-            gamePiece.emblem,
-            gamePiece.id
-        );
+        Piece convertedGamePiece = new Piece();
+        string subStringPiece = gamePiece.Substring(10);
+        foreach (Piece piece in availablePieces)
+            if (subStringPiece == piece.id)
+                convertedGamePiece = piece;
 
         return convertedGamePiece;
-
     }
 
-    public GamePiece[][] GetGameBoard()
+    public Piece[][] GetGameBoard()
     {
         return gameBoard;
     }
@@ -164,31 +178,31 @@ public class GameCore : MonoBehaviour
 
     private bool EndTurn()
     {
-        //// checks the rows
-        //for (int i = 0; i < gameBoard.Length; i++)
-        //{
-        //    GamePiece[] result = gameBoard[i];
-        //    if (checkWinConditions(result[0], result[1], result[2], result[3]))
-        //        return true;
-        //}
+        // checks the rows
+        for (int i = 0; i < gameBoard.Length; i++)
+        {
+            Piece[] result = gameBoard[i];
+            if (checkWinConditions(result[0], result[1], result[2], result[3]))
+                return true;
+        }
 
-        //// checks the cols
-        //for (int i = 0; i < gameBoard.Length; i++)
-        //{
-        //    GamePiece[] result = new GamePiece[4];
-        //    for (int j = 0; j < 4; j++)
-        //        result[j] = gameBoard[j][i];
-        //    if (checkWinConditions(result[0], result[1], result[2], result[3]))
-        //        return true;
-        //}
+        // checks the cols
+        for (int i = 0; i < gameBoard.Length; i++)
+        {
+            Piece[] result = new Piece[4];
+            for (int j = 0; j < 4; j++)
+                result[j] = gameBoard[j][i];
+            if (checkWinConditions(result[0], result[1], result[2], result[3]))
+                return true;
+        }
 
         // checks the main diagonal (left to right)
         if (checkWinConditions(gameBoard[0][0], gameBoard[1][1], gameBoard[2][2], gameBoard[3][3]))
             return true;
 
         //// checks the secondary diagonal (right to left)
-        //if (checkWinConditions(gameBoard[0][3], gameBoard[1][2], gameBoard[2][1], gameBoard[3][0]))
-        //    return true;
+        if (checkWinConditions(gameBoard[0][3], gameBoard[1][2], gameBoard[2][1], gameBoard[3][0]))
+            return true;
 
         // Checks for a tie
         if (usedPieces.Count >= 16)
@@ -198,10 +212,11 @@ public class GameCore : MonoBehaviour
     }
 
     // Checks all possible conditions of a winning move
-    private bool checkWinConditions(GamePiece a, GamePiece b, GamePiece c, GamePiece d)
+    private bool checkWinConditions(Piece a, Piece b, Piece c, Piece d)
     {
+
         // checks if the other gameBoard of the game board are empty (no GamePieces on them)          
-        if (a == null || b == null || c == null || d == null)
+        if (a.height == 2 || b.height == 2 || c.height == 2 || d.height == 2)
             return false;
 
         // checks if there are 4 GamePieces next to each other with similiar stats
@@ -220,11 +235,4 @@ public class GameCore : MonoBehaviour
         // if there arent any conditions met, that means that there isn't a winner
         return false;
     }
-
-    // Might not need this since gameController can just instantiate a new gameCore
-    //public void ResetGameBoard()
-    //{
-    //    usedPieces.Clear();
-
-    //}
 }
