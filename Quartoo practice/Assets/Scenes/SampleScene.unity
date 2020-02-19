@@ -989,7 +989,7 @@ PrefabInstance:
     - target: {fileID: 9146775076226727656, guid: 8cc87937eabcc104bba7ed2842a255f6,
         type: 3}
       propertyPath: m_Name
-      value: GamePiece B3
+      value: GamePiece (6)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc87937eabcc104bba7ed2842a255f6, type: 3}
@@ -2534,7 +2534,7 @@ PrefabInstance:
     - target: {fileID: 9146775076226727656, guid: 8cc87937eabcc104bba7ed2842a255f6,
         type: 3}
       propertyPath: m_Name
-      value: GamePiece C1
+      value: GamePiece (8)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc87937eabcc104bba7ed2842a255f6, type: 3}
@@ -2843,7 +2843,7 @@ PrefabInstance:
     - target: {fileID: 9146775076226727656, guid: 8cc87937eabcc104bba7ed2842a255f6,
         type: 3}
       propertyPath: m_Name
-      value: GamePiece A4
+      value: GamePiece (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc87937eabcc104bba7ed2842a255f6, type: 3}
@@ -3216,7 +3216,7 @@ PrefabInstance:
     - target: {fileID: 9146775076226727656, guid: 8cc87937eabcc104bba7ed2842a255f6,
         type: 3}
       propertyPath: m_Name
-      value: GamePiece B1
+      value: GamePiece (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc87937eabcc104bba7ed2842a255f6, type: 3}
@@ -3909,7 +3909,7 @@ PrefabInstance:
     - target: {fileID: 9146775076226727656, guid: 8cc87937eabcc104bba7ed2842a255f6,
         type: 3}
       propertyPath: m_Name
-      value: GamePiece D1
+      value: GamePiece (12)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc87937eabcc104bba7ed2842a255f6, type: 3}
@@ -5400,7 +5400,7 @@ PrefabInstance:
     - target: {fileID: 9146775076226727656, guid: 8cc87937eabcc104bba7ed2842a255f6,
         type: 3}
       propertyPath: m_Name
-      value: GamePiece C2
+      value: GamePiece (9)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc87937eabcc104bba7ed2842a255f6, type: 3}
@@ -5696,23 +5696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e16e340a7ef18e743a514c15ab96f380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonList:
-  - {fileID: 1807151869}
-  - {fileID: 414270175}
-  - {fileID: 662366531}
-  - {fileID: 542294511}
-  - {fileID: 650458275}
-  - {fileID: 400124028}
-  - {fileID: 706783183}
-  - {fileID: 726662890}
-  - {fileID: 1319224039}
-  - {fileID: 2031537875}
-  - {fileID: 1672373109}
-  - {fileID: 868499003}
-  - {fileID: 857781225}
-  - {fileID: 1361621270}
-  - {fileID: 1124309381}
-  - {fileID: 1187206905}
   gamePieces:
   - {fileID: 1605876151}
   - {fileID: 331424137}
@@ -5730,8 +5713,23 @@ MonoBehaviour:
   - {fileID: 1381091157}
   - {fileID: 1873676447}
   - {fileID: 1904735053}
-  usedPieces: []
-  availablePieces: []
+  buttonList:
+  - {fileID: 1807151869}
+  - {fileID: 414270175}
+  - {fileID: 662366531}
+  - {fileID: 542294511}
+  - {fileID: 650458275}
+  - {fileID: 400124028}
+  - {fileID: 706783183}
+  - {fileID: 726662890}
+  - {fileID: 1319224039}
+  - {fileID: 2031537875}
+  - {fileID: 1672373109}
+  - {fileID: 868499003}
+  - {fileID: 857781225}
+  - {fileID: 1361621270}
+  - {fileID: 1124309381}
+  - {fileID: 1187206905}
   selectedPiece: {fileID: 0}
   recentMove: {fileID: 0}
 --- !u!4 &1815130339
@@ -6338,7 +6336,7 @@ PrefabInstance:
     - target: {fileID: 9146775076226727656, guid: 8cc87937eabcc104bba7ed2842a255f6,
         type: 3}
       propertyPath: m_Name
-      value: GamePiece A1
+      value: GamePiece
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc87937eabcc104bba7ed2842a255f6, type: 3}
@@ -6552,7 +6550,7 @@ PrefabInstance:
     - target: {fileID: 9146775076226727656, guid: 8cc87937eabcc104bba7ed2842a255f6,
         type: 3}
       propertyPath: m_Name
-      value: GamePiece D2
+      value: GamePiece (13)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc87937eabcc104bba7ed2842a255f6, type: 3}
@@ -6980,7 +6978,7 @@ PrefabInstance:
     - target: {fileID: 9146775076226727656, guid: 8cc87937eabcc104bba7ed2842a255f6,
         type: 3}
       propertyPath: m_Name
-      value: GamePiece B4
+      value: GamePiece (7)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc87937eabcc104bba7ed2842a255f6, type: 3}
@@ -7623,7 +7621,7 @@ PrefabInstance:
     - target: {fileID: 9146775076226727656, guid: 8cc87937eabcc104bba7ed2842a255f6,
         type: 3}
       propertyPath: m_Name
-      value: GamePiece B2
+      value: GamePiece (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc87937eabcc104bba7ed2842a255f6, type: 3}
