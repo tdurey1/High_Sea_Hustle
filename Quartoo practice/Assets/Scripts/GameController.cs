@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     public GamePiece selectedPiece;
     public Button recentMove;
     private int playerTurn;
+    private static bool isNetworkGame = false;
 
     void Awake()
     {
@@ -142,4 +143,9 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public static bool IsNetworkGame
+    {
+        get { return isNetworkGame; }
+        set { isNetworkGame = value; }
+    }
 }
