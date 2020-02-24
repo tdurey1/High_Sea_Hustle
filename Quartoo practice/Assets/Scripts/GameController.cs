@@ -78,7 +78,7 @@ public class GameController : MonoBehaviour
     }
 
     // called by NetworkController when player has sent a move
-    public void receiveMoveFromNetwork(Button recvMove)
+    public void receiveMoveFromNetwork(string recvMove, string recvPiece)
     {
         // needs implementing - Tristan:  I could only send a move to the game controller
         // through a public function.  I was unable to put this in the NetworkGame() function

@@ -54,10 +54,10 @@ namespace Photon.Pun
         [FormerlySerializedAs("group")]
         public byte Group = 0;
 
-        public void RPC(string v, object others, Button moveToSend)
-        {
-            throw new NotImplementedException();
-        }
+        //public void RPC(string v, object others, Button moveToSend)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         protected internal bool mixedModeIsReliable = false;
 

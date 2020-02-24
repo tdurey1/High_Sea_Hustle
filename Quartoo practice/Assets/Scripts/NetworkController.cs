@@ -13,7 +13,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public PhotonView photonView;
     public GameController gameController = null;
     private static bool isNetworkGame = false;
-    public Button move;
 
     private void Start()
     {
@@ -22,6 +21,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
         PhotonNetwork.NickName = MasterManager.GameSettings.NickName;
         PhotonNetwork.GameVersion = MasterManager.GameSettings.GameVersion;
         PhotonNetwork.ConnectUsingSettings();
+        networkGame();
     }
 
     public override void OnConnectedToMaster()
@@ -59,17 +59,19 @@ public class NetworkController : MonoBehaviourPunCallbacks
         isNetworkGame = true;
     }
 
-    public void onMoveToSend(Button moveToSend)
+    public void OnMoveToSend(string moveToSend, string pieceToSend)
     {
         photonView.RPC("sendMove", RpcTarget.Others, PhotonNetwork.LocalPlayer, moveToSend);
+        Debug.Log("Location: " + moveToSend.ToString() + " Piece: " + moveToSend.ToString());
     }
 
 
     [PunRPC]
-    public void sendMove(Button sentMove)
+    public void sendMove(string sentMove, string sentPiece)
     {
-        Button newMove = sentMove;
-        gameController.receiveMoveFromNetwork(newMove);
-        Debug.Log(sentMove);
+        string newMove = sentMove;
+        string newPiece = sentPiece;
+        gameController.receiveMoveFromNetwork(newMove, newPiece);
+        Debug.Log("Location: " + sentMove + " piece: " + sentPiece);
     }
 }
