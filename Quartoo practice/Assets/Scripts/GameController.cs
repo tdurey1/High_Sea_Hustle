@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -216,7 +217,7 @@ public class GameController : MonoBehaviour
     void GameOver()
     {
         Debug.Log("GameOver");
-        SetBoardInteractable(false);
+        SceneManager.LoadScene("GameOver");
     }
 
     void SetGameControllerReferenceOnGamePieces()
@@ -237,7 +238,6 @@ public class GameController : MonoBehaviour
         foreach (Button button in buttonList)
             button.interactable = false;
     }
-
 
     public void EnableAvailablePieces()
     {
@@ -270,8 +270,8 @@ public class GameController : MonoBehaviour
         ChoosePiece.interactable = true;
 
     }
->>>>>>> 9030aba... added new buttons for selecting and changing pieces. Move deselected piece back to original position. deactivate selection buttons when not your turn
 
+   
     public void DisableAllPieces()
     {
         foreach (GamePiece piece in gamePieces)
