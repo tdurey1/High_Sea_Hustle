@@ -32,6 +32,7 @@ public class GameController : MonoBehaviour
         // Player's turn
         if (playerTurn == 1)
         {
+
             // Have ai pick piece
             string aiPieceChosen = aiController.chooseGamePiece(gameCore.availablePieces);
             ConvertAIPiece(aiPieceChosen);
@@ -163,6 +164,9 @@ public class GameController : MonoBehaviour
     public void SetSelectedPiece(GamePiece gamePiece)
     {
         Button chooseButton = GameObject.Find("ChoosePiece").GetComponent<Button>();
+
+        //stage the piece that's chosen
+        //disable pieces when not your turn
         selectedPiece = gamePiece;
         Vector3 newPosition = chooseButton.transform.position;
         selectedPiece.transform.position = newPosition;
@@ -213,6 +217,15 @@ public class GameController : MonoBehaviour
             button.interactable = false;
     }
 
+
+    public void DisableAllPieces()
+    {
+        foreach (GamePiece piece in gamePieces)
+        {
+            piece.GetComponent<BoxCollider2D>().enabled = false;
+        }
+    }
+
     public void EnableUserInput()
     {
         foreach (GameCore.BoardSpace availableButton in gameCore.availableBoardSpaces)
@@ -236,13 +249,6 @@ public class GameController : MonoBehaviour
                 }
     }
 
-    public void DisableAllPieces()
-    {
-        foreach (GamePiece piece in gamePieces)
-        {
-            piece.GetComponent<BoxCollider2D>().enabled = false;
-        }
-    }
 
     public void RestartGame()
     {
