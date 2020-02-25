@@ -8,15 +8,15 @@ public class GameCore : MonoBehaviour
     {
         public int height;
         public int color;
-        public int type;
+        public int shape;
         public int emblem;
         public string id;
 
-        public Piece (int height, int color, int type, int emblem, string id)
+        public Piece (int height, int color, int shape, int emblem, string id)
         {
             this.height = height;
             this.color = color;
-            this.type = type;
+            this.shape = shape;
             this.emblem = emblem;
             this.id = id;
         }
@@ -186,17 +186,26 @@ public class GameCore : MonoBehaviour
 
         // checks if there are 4 GamePieces next to each other with similiar stats
         if (a.height == b.height && a.height == c.height && a.height == d.height)
+        {
+            Debug.Log("won by height");
             return true;
+        }
 
         else if (a.color == b.color && a.color == c.color && a.color == d.color)
+        {
+            Debug.Log("won by color");
             return true;
-
+        }
         else if (a.emblem == b.emblem && a.emblem == c.emblem && a.emblem == d.emblem)
+        {
+            Debug.Log("won by emblem");
             return true;
-
-        else if (a.type == b.type && a.type == c.type && a.type == d.type)
+        }
+        else if (a.shape == b.shape && a.shape == c.shape && a.shape == d.shape)
+        {
+            Debug.Log("won by shape");
             return true;
-
+        }
         // if there arent any conditions met, that means that there isn't a winner
         return false;
     }
