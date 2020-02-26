@@ -158,7 +158,7 @@ public class GameController : MonoBehaviour
             }
 
             // if this is true, game is over
-            if (gameCore.SetPiece(selectedPiece.name, button.name))
+            if (gameCore.SetPiece(selectedPiece.id, button.name))
                 GameOver();
             else
                 EndTurn();
