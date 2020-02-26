@@ -6,8 +6,8 @@ public class GameCore : MonoBehaviour
 {
     public struct Piece
     {
-        public int height;
         public int color;
+        public int height;
         public int shape;
         public int emblem;
         public string id;
@@ -95,7 +95,7 @@ public class GameCore : MonoBehaviour
     {
         BoardSpace convertedBoardSpace = ConvertPosition(position);
         Piece convertedGamepiece = ConvertGamePiece(gamePieceID);
-
+        Debug.Log(convertedGamepiece.id);
         usedPieces.Add(convertedGamepiece);
         availablePieces.Remove(convertedGamepiece);
         availableBoardSpaces.Remove(convertedBoardSpace);
@@ -178,31 +178,30 @@ public class GameCore : MonoBehaviour
     // Checks all possible conditions of a winning move
     private bool checkWinConditions(Piece a, Piece b, Piece c, Piece d)
     {
-
         // checks if the other gameBoard of the game board are empty (no GamePieces on them)          
-        if (a.height == 2 || b.height == 2 || c.height == 2 || d.height == 2)
+        if (a.color == 2 || b.color == 2 || c.color == 2 || d.color == 2)
             return false;
 
         // checks if there are 4 GamePieces next to each other with similiar stats
-        if (a.height == b.height && a.height == c.height && a.height == d.height)
-        {
-            Debug.Log("won by height");
-            return true;
-        }
-
-        else if (a.color == b.color && a.color == c.color && a.color == d.color)
+        if (a.color == b.color && a.color == c.color && a.color == d.color)
         {
             Debug.Log("won by color");
             return true;
         }
-        else if (a.emblem == b.emblem && a.emblem == c.emblem && a.emblem == d.emblem)
+
+        else if (a.height == b.height && a.height == c.height && a.height == d.height)
         {
-            Debug.Log("won by emblem");
+            Debug.Log("won by height");
             return true;
         }
         else if (a.shape == b.shape && a.shape == c.shape && a.shape == d.shape)
         {
             Debug.Log("won by shape");
+            return true;
+        }
+        else if (a.emblem == b.emblem && a.emblem == c.emblem && a.emblem == d.emblem)
+        {
+            Debug.Log("won by emblem");
             return true;
         }
         // if there arent any conditions met, that means that there isn't a winner
