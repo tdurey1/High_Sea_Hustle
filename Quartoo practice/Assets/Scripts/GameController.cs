@@ -62,18 +62,20 @@ public class GameController : MonoBehaviour
         // AI's turn
         else
         {
-            // ai is placing a piece by the user
+            // AI is placing a piece by the user
             if (placingPiece == true)
             {
                 DisableAllPieces();
+                // NOTE: call set piece here off ai then call PiecePlaced()
                 //StartCoroutine("DelayAIMove", boardSpace);
             }
-            // AI is choosing a piece for the ai to place
+            // AI is choosing a piece for the AI to place
             else
             {
                 // Have ai pick piece
                 string aiPieceChosen = aiController.chooseGamePiece(gameCore.availablePieces);
                 ConvertAIPiece(aiPieceChosen);
+                EndTurn();
             }
         }
     }
