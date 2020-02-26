@@ -12,10 +12,10 @@ public class GameCore : MonoBehaviour
         public int emblem;
         public string id;
 
-        public Piece (int height, int color, int shape, int emblem, string id)
+        public Piece(int color, int height, int shape, int emblem, string id)
         {
-            this.height = height;
             this.color = color;
+            this.height = height;
             this.shape = shape;
             this.emblem = emblem;
             this.id = id;
@@ -27,7 +27,7 @@ public class GameCore : MonoBehaviour
         public int row;
         public int col;
 
-        public BoardSpace (string id, int row, int col)
+        public BoardSpace(string id, int row, int col)
         {
             this.id = id;
             this.row = row;
@@ -45,29 +45,29 @@ public class GameCore : MonoBehaviour
 
     // UsedPieces is empty until a game piece is set
     public List<Piece> usedPieces = new List<Piece>();
-  
+
     // Initialize availablePieces (it will include all game pieces until the first move)
     public List<Piece> availablePieces = new List<Piece>()
     {
         // Gold Pieces
-        new Piece(0, 0, 0, 0, "A1"),
-        new Piece(0, 0, 0, 1, "A2"),
-        new Piece(0, 0, 1, 0, "A3"),
-        new Piece(0, 0, 1, 1, "A4"),
-        new Piece(0, 1, 0, 0, "B1"),
-        new Piece(0, 1, 0, 1, "B2"),
-        new Piece(0, 1, 1, 0, "B3"),
-        new Piece(0, 1, 1, 1, "B4"),
+        new Piece(0, 0, 0, 0, "A1"), // gold, short, round, no emblem
+        new Piece(0, 0, 0, 1, "A2"), // gold, short, round, emblem
+        new Piece(0, 0, 1, 0, "A3"), // gold, short, triangle, no emblem
+        new Piece(0, 0, 1, 1, "A4"), // gold, short, triangle, emblem
+        new Piece(0, 1, 0, 0, "B1"), // gold, tall, round, no emblem
+        new Piece(0, 1, 0, 1, "B2"), // gold, tall, round, emblem
+        new Piece(0, 1, 1, 0, "B3"), // gold, tall, triangle, no emblem
+        new Piece(0, 1, 1, 1, "B4"), // gold, tall, tirangle, emblem
 
         // Silver Pieces
-        new Piece(1, 0, 0, 0, "C1"),
-        new Piece(1, 0, 0, 1, "C2"),
-        new Piece(1, 0, 1, 0, "C3"),
-        new Piece(1, 0, 1, 1, "C4"),
-        new Piece(1, 1, 0, 0, "D1"),
-        new Piece(1, 1, 0, 1, "D2"),
-        new Piece(1, 1, 1, 0, "D3"),
-        new Piece(1, 1, 1, 1, "D4")
+        new Piece(1, 0, 0, 0, "C1"), // silver, short, round, no emblem
+        new Piece(1, 0, 0, 1, "C2"), // silver, short, round, emblem
+        new Piece(1, 0, 1, 0, "C3"), // silver, short, triangle, no emblem
+        new Piece(1, 0, 1, 1, "C4"), // silver, short, triangle, emblem
+        new Piece(1, 1, 0, 0, "D1"), // silver, tall, round, no emblem
+        new Piece(1, 1, 0, 1, "D2"), // silver, tall, round, emblem
+        new Piece(1, 1, 1, 0, "D3"), // silver, tall, triangle, no emblem
+        new Piece(1, 1, 1, 1, "D4")  // silver, tall, triangle, emblem
     };
 
     // Initialize availableBoardSpaces for the ai to use and calculate a move
@@ -110,22 +110,21 @@ public class GameCore : MonoBehaviour
         BoardSpace convertedBoardSpace = new BoardSpace();
         string subStringPosition = position.Substring(12);
 
-        foreach (BoardSpace space in availableBoardSpaces) 
+        foreach (BoardSpace space in availableBoardSpaces)
             if (subStringPosition == space.id)
-                convertedBoardSpace = space; 
+                convertedBoardSpace = space;
 
         return convertedBoardSpace;
     }
 
     // Check a substring of gamePiece (the id of the gamepiece in unity), and return 
     // the corresponding Piece in availablePieces
-    private Piece ConvertGamePiece(string gamePiece)
+    private Piece ConvertGamePiece(string gamePieceID)
     {
         Piece convertedGamePiece = new Piece();
-        string subStringPiece = gamePiece.Substring(10);
 
         foreach (Piece piece in availablePieces)
-            if (subStringPiece == piece.id)
+            if (gamePieceID == piece.id)
                 convertedGamePiece = piece;
 
         return convertedGamePiece;
