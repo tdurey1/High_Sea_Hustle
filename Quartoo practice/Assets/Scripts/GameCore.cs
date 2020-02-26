@@ -95,7 +95,6 @@ public class GameCore : MonoBehaviour
     {
         BoardSpace convertedBoardSpace = ConvertPosition(position);
         Piece convertedGamepiece = ConvertGamePiece(gamePieceID);
-        Debug.Log(convertedGamepiece.id);
         usedPieces.Add(convertedGamepiece);
         availablePieces.Remove(convertedGamepiece);
         availableBoardSpaces.Remove(convertedBoardSpace);
