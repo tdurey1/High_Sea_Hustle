@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour
     public Vector3 oldPosition;
     public Button recentMove;
     private int playerTurn;
-    private bool placingPiece = true;
+    private bool placingPiece = false;
 
     void Awake()
     {
@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour
         GameInfo.gameType = 'E';
         GameInfo.selectPieceAtStart = 2;
 
-        SetBoardInteractable(false);
+        DisableAllBoardSpaces();
         SetGameControllerReferenceOnGamePieces();
         playerTurn = GameInfo.selectPieceAtStart;
     }
@@ -50,6 +50,7 @@ public class GameController : MonoBehaviour
                 Debug.Log("User placing a piece");
 
                 //Make gameboard interactable, gamepieces not interactable
+                DisableChooseOptions();
                 EnableAvailableBoardSpaces();
                 DisableAllPieces();
             }
@@ -58,25 +59,27 @@ public class GameController : MonoBehaviour
             {
                 Debug.Log("User choosing opponents piece");
 
-                SetBoardInteractable(false);
+                DisableAllBoardSpaces();
                 EnableAvailablePieces();
+                EnableChooseOptions();
             }
         }
         // AI's turn
         else
         {
+            DisableChooseOptions();
+            DisableAllPieces();
+
             // AI is placing a piece by the user
             if (placingPiece == true)
             {
                 Debug.Log("AI placing a piece");
 
-                DisableAllPieces();
-
                 string aiBoardSpaceChosen = aiController.choosePosition(gameCore.availableBoardSpaces);
                 Button boardSpace = ConvertAIBoardSpace(aiBoardSpaceChosen);
                 StartCoroutine("DelayAIMove", boardSpace);
             }
-            // AI is choosing a piece for the AI to place
+            // AI is choosing a piece for the Player to place
             else
             {
                 Debug.Log("AI choosing opponents piece");
@@ -89,7 +92,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    //WARNING!! THIS IS NOT FINISHED
+    //WARNING!! THIS IS NOT COMPLETE
     void HardAIGame()
     {
         // Player's turn
@@ -102,7 +105,7 @@ public class GameController : MonoBehaviour
         // AI's turn
         else
         {
-            SetBoardInteractable(false);
+            DisableAllBoardSpaces();
             string aiPieceChosen = aiController.chooseGamePiece(gameCore.availablePieces);
             ConvertAIPiece(aiPieceChosen);
             string aiBoardSpaceChosen = aiController.choosePosition(gameCore.availableBoardSpaces);
@@ -153,34 +156,15 @@ public class GameController : MonoBehaviour
         if (playerTurn == 1)
         {
             Debug.Log("player started");
-
-            // Have boardgame disbaled, but gamepieces enable
-            SetBoardInteractable(false);
             // NOTE: Include some UI to inform user to select a piece
         }
         // Player 2 (ai) selects first piece
         else
         {
             Debug.Log("Ai started");
-            DisableChooseOptions();
-            string aiPieceChosen = aiController.chooseGamePiece(gameCore.availablePieces);
-            ConvertAIPiece(aiPieceChosen);
-            SetBoardInteractable(true);
-
+            EasyAIGame();
             // NOTE: Include some UI to inform user that the ai has already selected a piece
         }
-
-        ChangeSides();
-    }
-
-    public void SelectOpponentsPiece()
-    {
-        EndTurn();
-        //DisableAllPieces();
-        //DisableChooseOptions();
-        //string aiBoardSpaceChosen = aiController.choosePosition(gameCore.availableBoardSpaces);
-        //Button boardSpace = ConvertAIBoardSpace(aiBoardSpaceChosen);
-        //StartCoroutine("DelayAIMove", boardSpace);
     }
 
     // Coroutine that waits a certain amount of time before the ai sets a piece
@@ -188,7 +172,6 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         PlacePieceOnBoard(boardSpace);
-        PiecePlaced();
     }
 
     public void ConvertAIPiece(string aiPieceChosen)
@@ -207,7 +190,7 @@ public class GameController : MonoBehaviour
     #region Standard Functions
     public void PlacePieceOnBoard(Button button)
     {
-        string debug = (playerTurn == 1) ? "Player placed a piece" : "AI placed a piece";
+        string debug = (playerTurn == 1) ? "Player 1 placed a piece" : "Player 2 placed a piece";
         Debug.Log(debug);
 
         if (selectedPiece != null)
@@ -217,11 +200,6 @@ public class GameController : MonoBehaviour
             recentMove = button;
             button.interactable = false;
             selectedPiece.GetComponent<BoxCollider2D>().enabled = false;
-            if (playerTurn == 1)
-            {
-                EnableAvailablePieces();
-                EnableChooseOptions();
-            }
 
             // if this is true, game is over
             if (gameCore.SetPiece(selectedPiece.id, button.name))
@@ -229,6 +207,12 @@ public class GameController : MonoBehaviour
             else
                 PiecePlaced();
         }
+    }
+
+    public void SelectOpponentsPiece()
+    {
+        if (selectedPiece)
+            EndTurn();
     }
 
     private void PiecePlaced()
@@ -272,6 +256,7 @@ public class GameController : MonoBehaviour
         if (selectedPiece)
         {
             selectedPiece.transform.position = oldPosition;
+            selectedPiece = null;
         }
     }
 
@@ -366,17 +351,10 @@ public class GameController : MonoBehaviour
                 }
     }
 
-
-    public void RestartGame()
-    {
-        playerTurn = 1;
-        SetBoardInteractable(true);
-    }
-
-    public void SetBoardInteractable(bool toggle)
+    public void DisableAllBoardSpaces()
     {
         foreach (Button button in buttonList)
-            button.interactable = toggle;
+            button.interactable = false;
     }
     #endregion
 }
