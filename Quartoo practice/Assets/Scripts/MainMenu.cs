@@ -35,7 +35,7 @@ public class MainMenu : MonoBehaviour
 
     public void storyModeGame()
     {
-        GameInfo.gameType = 'N';
+        GameInfo.gameType = 'S';
         SceneManager.LoadScene("StoryMode");
     }
 

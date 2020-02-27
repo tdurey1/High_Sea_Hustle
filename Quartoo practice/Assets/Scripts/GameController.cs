@@ -15,14 +15,13 @@ public class GameController : MonoBehaviour
     public Button recentMove;
     private int playerTurn;
     private bool placingPiece = true;
-    private static bool isNetworkGame = false;
 
     void Awake()
     {
         //WARNING!! THESE ARE SET ONLY FOR TESTING!! DELETE THESE LATER!! ONLY TRISTAN
         //CAN DELETE THEM! DONT DELETE WITHOUT ASKING HIM FIRST PUNKS
         GameInfo.gameType = 'E';
-        GameInfo.selectPieceAtStart = 1;
+        GameInfo.selectPieceAtStart = 2;
 
         SetBoardInteractable(false);
         SetGameControllerReferenceOnGamePieces();
@@ -45,16 +44,20 @@ public class GameController : MonoBehaviour
         // Player's turn
         if (playerTurn == 1)
         {
-            // Player is placing a piece selected by the ai
+            // Player is placing a piece selected by the AI
             if (placingPiece == true)
             {
+                Debug.Log("User placing a piece");
+
                 //Make gameboard interactable, gamepieces not interactable
                 EnableAvailableBoardSpaces();
                 DisableAllPieces();
             }
-            // Player is choosing a piece for the ai to place
+            // Player is choosing a piece for the AI to place
             else
             {
+                Debug.Log("User choosing opponents piece");
+
                 SetBoardInteractable(false);
                 EnableAvailablePieces();
             }
@@ -65,13 +68,19 @@ public class GameController : MonoBehaviour
             // AI is placing a piece by the user
             if (placingPiece == true)
             {
+                Debug.Log("AI placing a piece");
+
                 DisableAllPieces();
-                // NOTE: call set piece here off ai then call PiecePlaced()
-                //StartCoroutine("DelayAIMove", boardSpace);
+
+                string aiBoardSpaceChosen = aiController.choosePosition(gameCore.availableBoardSpaces);
+                Button boardSpace = ConvertAIBoardSpace(aiBoardSpaceChosen);
+                StartCoroutine("DelayAIMove", boardSpace);
             }
             // AI is choosing a piece for the AI to place
             else
             {
+                Debug.Log("AI choosing opponents piece");
+
                 // Have ai pick piece
                 string aiPieceChosen = aiController.chooseGamePiece(gameCore.availablePieces);
                 ConvertAIPiece(aiPieceChosen);
@@ -138,23 +147,30 @@ public class GameController : MonoBehaviour
     // NOTE: Do we want to add a short (three - five seconds) opening at start of an ai gamescreen?
     private void StartAIGame()
     {
+        Debug.Log("Start ai game");
+
         // Player 1 (human) selects first piece
         if (playerTurn == 1)
         {
+            Debug.Log("player started");
+
             // Have boardgame disbaled, but gamepieces enable
             SetBoardInteractable(false);
-
             // NOTE: Include some UI to inform user to select a piece
         }
         // Player 2 (ai) selects first piece
         else
         {
+            Debug.Log("Ai started");
+            DisableChooseOptions();
             string aiPieceChosen = aiController.chooseGamePiece(gameCore.availablePieces);
             ConvertAIPiece(aiPieceChosen);
             SetBoardInteractable(true);
 
             // NOTE: Include some UI to inform user that the ai has already selected a piece
         }
+
+        ChangeSides();
     }
 
     public void SelectOpponentsPiece()
@@ -171,7 +187,8 @@ public class GameController : MonoBehaviour
     IEnumerator DelayAIMove(Button boardSpace)
     {
         yield return new WaitForSeconds(2);
-        SetPiece(boardSpace);
+        PlacePieceOnBoard(boardSpace);
+        PiecePlaced();
     }
 
     public void ConvertAIPiece(string aiPieceChosen)
@@ -188,8 +205,11 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region Standard Functions
-    public void SetPiece(Button button)
+    public void PlacePieceOnBoard(Button button)
     {
+        string debug = (playerTurn == 1) ? "Player placed a piece" : "AI placed a piece";
+        Debug.Log(debug);
+
         if (selectedPiece != null)
         {
             Vector3 newPosition = button.transform.position;
@@ -214,6 +234,7 @@ public class GameController : MonoBehaviour
     private void PiecePlaced()
     {
         placingPiece = false;
+        selectedPiece = null;
 
         if (GameInfo.gameType == 'E')
             EasyAIGame();
@@ -237,7 +258,7 @@ public class GameController : MonoBehaviour
             Vector3 newPosition = StagePiece.transform.position;
             selectedPiece.transform.position = newPosition;
         }
-        else
+        else      
         {
             selectedPiece = gamePiece;
             oldPosition = gamePiece.transform.position;
@@ -262,6 +283,7 @@ public class GameController : MonoBehaviour
     public void EndTurn()
     {
         ChangeSides();
+        placingPiece = true;
 
         if (GameInfo.gameType == 'E')
             EasyAIGame();
@@ -298,7 +320,6 @@ public class GameController : MonoBehaviour
             foreach (GamePiece piece in gamePieces)
                 if (availablePiece.id == piece.name.Substring(10))
                 {
-                    Debug.Log(piece.name);
                     piece.GetComponent<BoxCollider2D>().enabled = true;
                     break;
                 }
