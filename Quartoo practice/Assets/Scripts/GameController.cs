@@ -38,7 +38,59 @@ public class GameController : MonoBehaviour
             StartStoryModeGame();
     }
 
-    #region Game Type
+    #region Networking functions
+    void StartNetworkingGame()
+    {
+
+    }
+
+    void NetworkGame()
+    {
+        //do more stuff
+
+    }
+
+    // called by NetworkController when player has sent a move
+    public void receiveMoveFromNetwork(string recvMove, string recvPiece)
+    {
+        // needs implementing - Tristan:  I could only send a move to the game controller
+        // through a public function.  I was unable to put this in the NetworkGame() function
+    }
+    #endregion
+
+    #region Story Mode Functions
+    void StartStoryModeGame()
+    {
+
+    }
+
+    void StoryModeGame()
+    {
+        // do stuff
+    }
+    #endregion
+
+    #region AI Functions
+    // NOTE: Do we want to add a short (three - five seconds) opening at start of an ai gamescreen?
+    private void StartAIGame()
+    {
+        Debug.Log("Start ai game");
+
+        // Player 1 (human) selects first piece
+        if (playerTurn == 1)
+        {
+            Debug.Log("player started");
+            // NOTE: Include some UI to inform user to select a piece
+        }
+        // Player 2 (ai) selects first piece
+        else
+        {
+            Debug.Log("Ai started");
+            EasyAIGame();
+            // NOTE: Include some UI to inform user that the ai has already selected a piece
+        }
+    }
+
     void EasyAIGame()
     {
         // Player's turn
@@ -114,60 +166,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void StoryMode()
-    {
-        // do stuff
-    }
-
-    // called by NetworkController when player has sent a move
-    public void receiveMoveFromNetwork(string recvMove, string recvPiece)
-    {
-        // needs implementing - Tristan:  I could only send a move to the game controller
-        // through a public function.  I was unable to put this in the NetworkGame() function
-    }
-    void NetworkGame()
-    {
-        //do more stuff
-
-    }
-    #endregion
-
-    #region Networking functions
-    void StartNetworkingGame()
-    {
-
-    }
-    #endregion
-
-    #region Story Mode Functions
-    void StartStoryModeGame()
-    {
-
-    }
-    #endregion
-
-    #region AI Functions
-    // NOTE: Do we want to add a short (three - five seconds) opening at start of an ai gamescreen?
-    private void StartAIGame()
-    {
-        Debug.Log("Start ai game");
-
-        // Player 1 (human) selects first piece
-        if (playerTurn == 1)
-        {
-            Debug.Log("player started");
-            // NOTE: Include some UI to inform user to select a piece
-        }
-        // Player 2 (ai) selects first piece
-        else
-        {
-            Debug.Log("Ai started");
-            EasyAIGame();
-            // NOTE: Include some UI to inform user that the ai has already selected a piece
-        }
-    }
-
-    // Coroutine that waits a certain amount of time before the ai sets a piece
+    // NOTE: Remove this delay after Levi gets a legit AI integrated
     IEnumerator DelayAIMove(Button boardSpace)
     {
         yield return new WaitForSeconds(2);
@@ -187,7 +186,7 @@ public class GameController : MonoBehaviour
     }
     #endregion
 
-    #region Standard Functions
+    #region Turn-Based Functions
     public void PlacePieceOnBoard(Button button)
     {
         string debug = (playerTurn == 1) ? "Player 1 placed a piece" : "Player 2 placed a piece";
@@ -227,7 +226,7 @@ public class GameController : MonoBehaviour
         else if (GameInfo.gameType == 'N')
             NetworkGame();
         else
-            StoryMode();
+            StoryModeGame();
     }
 
     public void SetSelectedPiece(GamePiece gamePiece)
@@ -277,7 +276,7 @@ public class GameController : MonoBehaviour
         else if (GameInfo.gameType == 'N')
             NetworkGame();
         else
-            StoryMode();
+            StoryModeGame();
     }
 
     void GameOver()
@@ -286,19 +285,15 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene("GameOver");
     }
 
-    void SetGameControllerReferenceOnGamePieces()
-    {
-        for (int i = 0; i < buttonList.Length; i++)
-        {
-            gamePieces[i].GetComponent<GamePiece>().SetGameControllerReference(this);
-        }
-    }
-
     void ChangeSides()
     {
         playerTurn = (playerTurn == 1) ? 2 : 1;
     }
 
+
+    #endregion
+
+    #region Enabling/Disabling functions
     public void EnableAvailablePieces()
     {
         foreach (GameCore.Piece availablePiece in gameCore.availablePieces)
@@ -310,17 +305,6 @@ public class GameController : MonoBehaviour
                 }
     }
 
-
-    public void DisableChooseOptions()
-    {
-        Button ChoosePiece = GameObject.Find("ChoosePiece").GetComponent<Button>();
-        Button ChooseAnother = GameObject.Find("ChooseAnother").GetComponent<Button>();
-
-        ChooseAnother.interactable = false;
-        ChoosePiece.interactable = false;
-
-    }
-
     public void EnableChooseOptions()
     {
         Button ChoosePiece = GameObject.Find("ChoosePiece").GetComponent<Button>();
@@ -329,15 +313,6 @@ public class GameController : MonoBehaviour
         ChooseAnother.interactable = true;
         ChoosePiece.interactable = true;
 
-    }
-
-
-    public void DisableAllPieces()
-    {
-        foreach (GamePiece piece in gamePieces)
-        {
-            piece.GetComponent<BoxCollider2D>().enabled = false;
-        }
     }
 
     public void EnableAvailableBoardSpaces()
@@ -351,10 +326,38 @@ public class GameController : MonoBehaviour
                 }
     }
 
+    public void DisableAllPieces()
+    {
+        foreach (GamePiece piece in gamePieces)
+        {
+            piece.GetComponent<BoxCollider2D>().enabled = false;
+        }
+    }
+
+    public void DisableChooseOptions()
+    {
+        Button ChoosePiece = GameObject.Find("ChoosePiece").GetComponent<Button>();
+        Button ChooseAnother = GameObject.Find("ChooseAnother").GetComponent<Button>();
+
+        ChooseAnother.interactable = false;
+        ChoosePiece.interactable = false;
+
+    }
+
     public void DisableAllBoardSpaces()
     {
         foreach (Button button in buttonList)
             button.interactable = false;
+    }
+    #endregion
+
+    #region Miscellaneous Functions
+    void SetGameControllerReferenceOnGamePieces()
+    {
+        for (int i = 0; i < buttonList.Length; i++)
+        {
+            gamePieces[i].GetComponent<GamePiece>().SetGameControllerReference(this);
+        }
     }
     #endregion
 }

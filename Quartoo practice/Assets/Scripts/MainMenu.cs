@@ -8,11 +8,6 @@ public class MainMenu : MonoBehaviour
     public GameObject helpPanel;
     public GameObject settingsPanel;
 
-    void Start()
-    {
-        
-    }
-
     public void quickGame()
     {
         // NOTE: Sets every quickplay to an easy game. Change this to be either easy or hard

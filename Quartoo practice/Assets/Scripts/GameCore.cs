@@ -43,6 +43,7 @@ public class GameCore : MonoBehaviour
             new Piece[] {new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, ""), new Piece(2, 0, 0, 0, "") }
     };
 
+    // NOTE: may not need this list
     // UsedPieces is empty until a game piece is set
     public List<Piece> usedPieces = new List<Piece>();
 
@@ -116,8 +117,7 @@ public class GameCore : MonoBehaviour
         return convertedBoardSpace;
     }
 
-    // Check a substring of gamePiece (the id of the gamepiece in unity), and return 
-    // the corresponding Piece in availablePieces
+    // Check the id of a gamePiece sent from unity, and return the corresponding Piece in availablePieces
     private Piece ConvertGamePiece(string gamePieceID)
     {
         Piece convertedGamePiece = new Piece();
@@ -129,6 +129,7 @@ public class GameCore : MonoBehaviour
         return convertedGamePiece;
     }
 
+    // NOTE: not sure if we need these next two functions
     public Piece[][] GetGameBoard()
     {
         return gameBoard;
