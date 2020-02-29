@@ -17,12 +17,19 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public GameObject StartGameButton;
     public GameObject FindGamesButton;
     public GameObject roomListingPrefab;
+    public GameObject roomListingPanel;
+
+    public Canvas CreateOrJoinCanvas;
+    public Canvas RoomLobbyCanvas;
+    public Canvas WaitingLoadingCanvas;
+
+    public GameObject StatusText;
+    public GameObject StartButton;
     
 
     public Transform roomsPanel;
 
     public string roomName;
-    private string currentCanvas;
 
     #endregion
 
@@ -37,7 +44,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         PhotonNetwork.ConnectUsingSettings();
         Debug.Log("F: StartRoom.cs/private void Start - Connected to photon servers");
-        currentCanvas = "CreateOrJoinCanvas";
+        CreateOrJoinCanvas.gameObject.SetActive(true);
     }
 
     #endregion
@@ -67,6 +74,11 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         Debug.Log("F: StartRoom.cs/public override void OnCreateRoomFailed - Room with same name exists");
 
         // Users with the same name???
+    }
+
+    public override void OnCreatedRoom()
+    {
+        base.OnCreatedRoom();
     }
 
     #endregion
@@ -109,6 +121,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         }
     }
 
+
     #endregion
 
     #region Buttons
@@ -117,12 +130,28 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         Debug.Log("Create button clicked");
         CreateRoom();
-        currentCanvas = "RoomLobbyCanvas";
+        CreateOrJoinCanvas.gameObject.SetActive(false);
+        RoomLobbyCanvas.gameObject.SetActive(true);
+
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            FindGamesButton.gameObject.SetActive(false);
+            roomListingPanel.gameObject.SetActive(false);
+        }
     }
 
     public void OnJoinGameButtonClicked()
     {
-        currentCanvas = "RoomLobbyCanvas";
+        CreateOrJoinCanvas.gameObject.SetActive(false);
+        RoomLobbyCanvas.gameObject.SetActive(true);
+
+        Debug.Log(PhotonNetwork.LocalPlayer.IsMasterClient);
+
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            FindGamesButton.gameObject.SetActive(true);
+            roomListingPanel.gameObject.SetActive(true);
+        }
     }
 
     public void OnCancelButtonClicked()
@@ -142,19 +171,30 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void OnBackButtonClicked()
     {
-        if (currentCanvas == "CreateOrJoinCanvas")
+        if (CreateOrJoinCanvas)
         {
             PhotonNetwork.Disconnect();
             SceneManager.LoadScene("MainMenu");
         }
 
-        if (currentCanvas == "RoomLobbyCanvas" || currentCanvas == "WaitingLoadingCanvas")
+        if (RoomLobbyCanvas || WaitingLoadingCanvas)
         {
             if (PhotonNetwork.InRoom)
             {
                 PhotonNetwork.LeaveRoom();
             }
-            currentCanvas = "CreateOrJoinCanvas";
+            CreateOrJoinCanvas.gameObject.SetActive(true);
+        }
+    }
+
+    public void OnStartGameButtonClicked()
+    {
+        RoomLobbyCanvas.gameObject.SetActive(false);
+        WaitingLoadingCanvas.gameObject.SetActive(true);
+
+        if (!PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            StartButton.gameObject.SetActive(false);
         }
     }
 

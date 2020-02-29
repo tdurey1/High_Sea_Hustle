@@ -961,9 +961,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 920772745}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1900603073}
+        m_MethodName: OnStartGameButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -971,17 +971,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1352912656}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &844147187
 MonoBehaviour:
@@ -1358,28 +1347,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 633190168}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1352912656}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1073111730
 MonoBehaviour:
@@ -1822,7 +1789,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 153, y: 281}
+  m_AnchoredPosition: {x: -71, y: 213}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1544203126
@@ -2165,6 +2132,12 @@ MonoBehaviour:
   FindGamesButton: {fileID: 1544203124}
   roomListingPrefab: {fileID: 7495897679479870737, guid: 175d6755acdca3d4180a6c3be846499f,
     type: 3}
+  roomListingPanel: {fileID: 178570173}
+  CreateOrJoinCanvas: {fileID: 633190171}
+  RoomLobbyCanvas: {fileID: 920772748}
+  WaitingLoadingCanvas: {fileID: 1352912659}
+  StatusText: {fileID: 240168504}
+  StartButton: {fileID: 631448283}
   roomsPanel: {fileID: 178570174}
   roomName: 
 --- !u!4 &1900603074
