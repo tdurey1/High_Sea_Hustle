@@ -76,9 +76,13 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         // Users with the same name???
     }
 
-    public override void OnCreatedRoom()
+    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        base.OnCreatedRoom();
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            Debug.Log("Two players connected, ready to start");
+        }
     }
 
     #endregion
@@ -196,6 +200,16 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         {
             StartButton.gameObject.SetActive(false);
         }
+        else
+        {
+            StartGameButton.gameObject.SetActive(true);
+        }
+    }
+
+    public void OnStartButtonClicked()
+    {
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.LoadLevel("GameScene");
     }
 
     #endregion
