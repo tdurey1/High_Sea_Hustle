@@ -48,14 +48,16 @@ public class GameController : MonoBehaviour
     {
         //do more stuff
 
-    }
+        // game state - public enum???
+        // none = first turn
+        // player
+        // opponent
+        // player chooses piece
+        // player chooses location
+        // player done
 
-    // called by NetworkController when player has sent a move
-    public void receiveMoveFromNetwork(string recvMove, string recvPiece)
-    {
-        // needs implementing - Tristan:  I could only send a move to the game controller
-        // through a public function.  I was unable to put this in the NetworkGame() function
     }
+    
     #endregion
 
     #region Story Mode Functions
