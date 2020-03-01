@@ -59,7 +59,7 @@ public class GameController : MonoBehaviour
                 Debug.Log("Host placing a piece");
                 EnableAvailableBoardSpaces();
 
-                //Make gameboard interactable, gamepieces not interactable
+                // ***Var here declaring which board space
                
             }
             // Host is choosing a piece for the opponent to place
