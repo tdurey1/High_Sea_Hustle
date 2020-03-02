@@ -95,6 +95,7 @@ public class NetworkController : MonoBehaviour
 
     public void SendMove()
     {
+        
         photonView.RPC("RPC_SendMove", RpcTarget.All, moveLocation, movePiece);
     }
 
