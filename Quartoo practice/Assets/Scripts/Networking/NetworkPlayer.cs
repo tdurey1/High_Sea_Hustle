@@ -13,6 +13,19 @@ public class NetworkPlayer : MonoBehaviour
     public static string movePiece;
     public static string moveLocation;
 
+    private void Start()
+    {
+        photonView = PhotonView.Get(this);
+        networkPlayer = this;
+    }
+
+    // need?
+    [PunRPC]
+    public void RPC_receiveNetworkMessage(string message)
+    {
+        Debug.Log("Message sent over network: " + message);
+    }
+
 
     [PunRPC]
     public void RPC_SendMove(string location, string piece)
@@ -22,21 +35,19 @@ public class NetworkPlayer : MonoBehaviour
             return;
 
         Debug.Log("Receiving move...");
-        movePiece = piece;
-        moveLocation = location;
+        //SetMovePiece(movePiece);
+        //SetMoveLocation(moveLocation);
+        //movePiece = piece;
+        //moveLocation = location;
         networkMessageReceived = true;
+        Debug.Log(piece);
+        Debug.Log(location);
     }
 
-    //[PunRPC]
-    //public void RPC_SendMove(string location, string piece)
-    //{
-    //    Debug.Log(photonView);
-    //    if (photonView.IsMine)
-    //        return;
+    public void SendMove(string moveLocation, string movePiece)
+    {
+        photonView.RPC("RPC_SendMove", RpcTarget.All, moveLocation, movePiece);
+    }
 
-    //    Debug.Log("Receiving move...");
-    //    movePiece = piece;
-    //    moveLocation = location;
-    //    networkMessageReceived = true;
-    //}
+ 
 }
