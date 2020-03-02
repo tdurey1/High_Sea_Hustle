@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -8,8 +9,8 @@ public class NetworkController : MonoBehaviour
 {
     public static NetworkController NetController;
 
-    private PhotonView photonView;
-    private static string networkMessage;
+    [SerializeField] private PhotonView photonView;
+    private static string networkMessage = "";
     private static bool networkMessageReceived = false;
 
     // Move variable
@@ -24,7 +25,15 @@ public class NetworkController : MonoBehaviour
 
     private void Start()
     {
-        photonView.GetComponent<PhotonView>();
+        if (photonView == null)
+        {
+            Debug.Log("Instantiated PV");
+          
+            GameObject player = PhotonNetwork.Instantiate("NetworkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+            //  photonView = player.GetComponent<PhotonView>();
+            photonView = PhotonView.Get(this);
+            Debug.Log(photonView);
+        }
     }
 
     // Update is called once per frame
@@ -37,8 +46,8 @@ public class NetworkController : MonoBehaviour
             if (!photonView.IsMine)
                 return;
             // check once per frame if a message has been sent
-            else
-                photonView.RPC("receiveNetworkMessage", RpcTarget.All, networkMessage);
+            //else
+                //photonView.RPC("RPC_receiveNetworkMessage", RpcTarget.All, networkMessage);
         }
     }
 
@@ -53,6 +62,8 @@ public class NetworkController : MonoBehaviour
      * photonView.RPC("functionName", RpcTarget.whoYouWantToSendThisTo, valueToBeTransferred);
      */
 
+
+    // if it is not our turn, we're waiting for a message
     public IEnumerator WaitForTurn()
     {
         Debug.Log("Network waiting for turn");
@@ -64,7 +75,7 @@ public class NetworkController : MonoBehaviour
     }
 
     [PunRPC]
-    void receiveNetworkMessage(string message)
+    public void RPC_receiveNetworkMessage(string message)
     {
         Debug.Log("Message sent over network: " + message);
     }
@@ -72,6 +83,7 @@ public class NetworkController : MonoBehaviour
     [PunRPC]
     public void RPC_SendMove(string location, string piece)
     {
+        Debug.Log(photonView);
         if (photonView.IsMine)
             return;
 
@@ -84,5 +96,15 @@ public class NetworkController : MonoBehaviour
     public void SendMove()
     {
         photonView.RPC("RPC_SendMove", RpcTarget.All, moveLocation, movePiece);
+    }
+
+    public void SetMovePiece(string id)
+    {
+        movePiece = id;
+    }
+
+    public void SetMoveLocation(string name)
+    {
+        moveLocation = name;
     }
 }

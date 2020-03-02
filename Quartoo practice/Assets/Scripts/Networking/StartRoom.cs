@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
@@ -134,14 +135,11 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         Debug.Log("Create button clicked");
         CreateRoom();
-        CreateOrJoinCanvas.gameObject.SetActive(false);
-        RoomLobbyCanvas.gameObject.SetActive(true);
-
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
-        {
-            FindGamesButton.gameObject.SetActive(false);
-            roomListingPanel.gameObject.SetActive(false);
-        }
+            Debug.Log("You are master client");
+        CreateOrJoinCanvas.gameObject.SetActive(false);
+        WaitingLoadingCanvas.gameObject.SetActive(true);
+        StartButton.gameObject.SetActive(true);
     }
 
     public void OnJoinGameButtonClicked()
@@ -201,15 +199,17 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
             StartButton.gameObject.SetActive(false);
         }
         else
-        {
-            StartGameButton.gameObject.SetActive(true);
+        { 
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            {
+                StartButton.gameObject.SetActive(true);
+            }
         }
     }
 
     public void OnStartButtonClicked()
     {
-        if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.LoadLevel("GameScene");
+        PhotonNetwork.LoadLevel("GameScene");
     }
 
     #endregion

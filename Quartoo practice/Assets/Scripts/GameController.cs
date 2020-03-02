@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
 {
     public List<GamePiece> gamePieces;
     private GameCore gameCore = new GameCore();
-    private NetworkController networkController = new NetworkController();
+    NetworkController networkController = new NetworkController();
     AIv1 aiController = new AIv1();
     public Button[] buttonList;
     public GamePiece selectedPiece;
@@ -22,10 +22,10 @@ public class GameController : MonoBehaviour
     {
         //WARNING!! THESE ARE SET ONLY FOR TESTING!! DELETE THESE LATER!! ONLY TRISTAN
         //CAN DELETE THEM! DONT DELETE WITHOUT ASKING HIM FIRST PUNKS
-        GameInfo.gameType = 'E';
+        GameInfo.gameType = 'N';
         //GameInfo.selectPieceAtStart = 2;
 
-        DisableAllBoardSpaces();
+        //DisableAllBoardSpaces();
         SetGameControllerReferenceOnGamePieces();
         playerTurn = GameInfo.selectPieceAtStart;
     }
@@ -43,7 +43,7 @@ public class GameController : MonoBehaviour
     #region Networking functions
     void StartNetworkingGame()
     {
-
+        selectedPiece = GameObject.Find("GamePiece A1").GetComponent<GamePiece>();
     }
 
     void NetworkGame()
@@ -69,6 +69,8 @@ public class GameController : MonoBehaviour
                 EnableAvailablePieces();
                 EnableChooseOptions();
             }
+
+
         }
         // Opponent's turn
         else if (networkGameState == GameInfo.NetworkGameState.opponentsTurn)
@@ -81,16 +83,6 @@ public class GameController : MonoBehaviour
             // recieve piece to place()
             networkController.WaitForTurn();
         }
-
-        //do more stuff
-
-        // game state - public enum???
-        // none = first turn
-        // player
-        // opponent
-        // player chooses piece
-        // player chooses location
-        // player done
 
     }
     
@@ -241,6 +233,9 @@ public class GameController : MonoBehaviour
 
             if (GameInfo.gameType == 'N')
             {
+                networkController.SetMovePiece(selectedPiece.id);
+                networkController.SetMoveLocation(button.name);
+                networkController.SendMove();
                 //Send move to network
                 //networkSendMove(selectedPiece.id, button.name)
             }
