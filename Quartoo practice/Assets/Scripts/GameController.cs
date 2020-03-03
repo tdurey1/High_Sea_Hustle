@@ -45,19 +45,22 @@ public class GameController : MonoBehaviour
     void StartNetworkingGame()
     {
         selectedPiece = GameObject.Find("GamePiece A1").GetComponent<GamePiece>();
-        networkGameState =  (GameInfo.selectPieceAtStart == 1) ? GameInfo.NetworkGameState.myTurn : GameInfo.NetworkGameState.opponentsTurn;
-        Debug.Log(networkGameState);
+        networkGameState = (GameInfo.selectPieceAtStart == 1) ? GameInfo.NetworkGameState.myTurn : GameInfo.NetworkGameState.opponentsTurn;
+        placingPiece = (GameInfo.selectPieceAtStart == 1) ? false : true;
         NetworkGame();
     }
 
     void NetworkGame()
     {
+        // Disable everything at the start. They will be enabled later in this function as needed
+        DisableAllBoardSpaces();
+        DisableAllPieces();
+        DisableChooseOptions();
+
         // Host's turn
         if (networkGameState == GameInfo.NetworkGameState.myTurn)
         {
             Debug.Log("Hosts turn");
-            DisableAllBoardSpaces();
-
             // Host is placing a piece selected by the opponent
             if (placingPiece == true)
             {
@@ -66,7 +69,7 @@ public class GameController : MonoBehaviour
 
                 // ***Var here declaring which board space
                 //Make gameboard interactable, gamepieces not interactable
-               
+
             }
             // Host is choosing a piece for the opponent to place
             else
@@ -76,30 +79,15 @@ public class GameController : MonoBehaviour
                 EnableChooseOptions();
             }
         }
-        // Opponent's turn
-        else if (networkGameState == GameInfo.NetworkGameState.opponentsTurn)
-        {
-            DisableAllBoardSpaces();
-            DisableAllPieces();
-            DisableChooseOptions();
-
-            // recieve move
-            // recieve piece to place()
-            networkController.WaitForTurn();
-        }
 
         // Opponent's turn
         else if (networkGameState == GameInfo.NetworkGameState.opponentsTurn)
         {
             Debug.Log("Opponents turn");
-            DisableAllBoardSpaces();
-            DisableAllPieces();
-            DisableChooseOptions();
 
             // recieve move
             // recieve piece to place()
             StartCoroutine(networkController.WaitForTurn());
-            //SelectOpponentsPiece();
         }
     }
 
@@ -115,10 +103,13 @@ public class GameController : MonoBehaviour
         {
             ReceivePieceFromNetwork();
         }
+
+        NetworkGame();
     }
 
     public void ReceivePieceFromNetwork()
     {
+        Debug.Log("piece received from network is " + networkController.GetMovePiece());
         GamePiece pieceSelected = new GamePiece();
         foreach (GamePiece piece in gamePieces)
         {
@@ -126,11 +117,8 @@ public class GameController : MonoBehaviour
                 pieceSelected = piece;
         }
         selectedPiece = null;
-        Debug.Log("selected piece = " + selectedPiece);
-        networkGameState = GameInfo.NetworkGameState.myTurn;
         SetSelectedPiece(pieceSelected);
         ChangeGameStateTurn();
-        NetworkGame();
     }
 
     public void ReceiveMoveFromNetwork()
@@ -159,9 +147,6 @@ public class GameController : MonoBehaviour
         // if this is true, game is over
         if (gameCore.SetPiece(selectedPiece.id, networkButton.name))
             GameOver();
-
-        ChangeGameStateTurn();
-        NetworkGame();
     }
     #endregion
 
@@ -316,7 +301,7 @@ public class GameController : MonoBehaviour
                 //Send move to network
                 //networkSendMove(selectedPiece.id, button.name)
             }
-                // if this is true, game is over
+            // if this is true, game is over
             if (gameCore.SetPiece(selectedPiece.id, button.name))
                 GameOver();
             else
@@ -358,7 +343,7 @@ public class GameController : MonoBehaviour
             Vector3 newPosition = StagePiece.transform.position;
             selectedPiece.transform.position = newPosition;
         }
-        else      
+        else
         {
             selectedPiece = gamePiece;
             oldPosition = gamePiece.transform.position;
