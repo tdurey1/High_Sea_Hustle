@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour
 
         //DisableAllBoardSpaces();
         SetGameControllerReferenceOnGamePieces();
+        SetGameControllerReferenceOnNetwork();
         playerTurn = GameInfo.selectPieceAtStart;
     }
 
@@ -64,6 +65,7 @@ public class GameController : MonoBehaviour
                 EnableAvailableBoardSpaces();
 
                 // ***Var here declaring which board space
+                //Make gameboard interactable, gamepieces not interactable
                
             }
             // Host is choosing a piece for the opponent to place
@@ -73,9 +75,19 @@ public class GameController : MonoBehaviour
                 EnableAvailablePieces();
                 EnableChooseOptions();
             }
-
-
         }
+        // Opponent's turn
+        else if (networkGameState == GameInfo.NetworkGameState.opponentsTurn)
+        {
+            DisableAllBoardSpaces();
+            DisableAllPieces();
+            DisableChooseOptions();
+
+            // recieve move
+            // recieve piece to place()
+            networkController.WaitForTurn();
+        }
+
         // Opponent's turn
         else if (networkGameState == GameInfo.NetworkGameState.opponentsTurn)
         {
@@ -87,22 +99,25 @@ public class GameController : MonoBehaviour
             // recieve move
             // recieve piece to place()
             StartCoroutine(networkController.WaitForTurn());
-            char messageType = networkController.GetNetworkMessage();
-            Debug.Log("Message type = " + messageType);
-            if (messageType == 'M')
-            {
-                ReciveMoveFromNetwork();
-            }
-            else if (messageType == 'P')
-            {
-                RecievePieceFromNetwork();
-            }
             //SelectOpponentsPiece();
         }
-
     }
 
-    public void RecievePieceFromNetwork()
+    public void NetworkMessageReceived()
+    {
+        char messageType = networkController.GetNetworkMessage();
+        Debug.Log("Message type = " + messageType);
+        if (messageType == 'M')
+        {
+            ReceiveMoveFromNetwork();
+        }
+        else if (messageType == 'P')
+        {
+            ReceivePieceFromNetwork();
+        }
+    }
+
+    public void ReceivePieceFromNetwork()
     {
         GamePiece pieceSelected = new GamePiece();
         foreach (GamePiece piece in gamePieces)
@@ -114,10 +129,11 @@ public class GameController : MonoBehaviour
         Debug.Log("selected piece = " + selectedPiece);
         networkGameState = GameInfo.NetworkGameState.myTurn;
         SetSelectedPiece(pieceSelected);
+        ChangeGameStateTurn();
         NetworkGame();
     }
 
-    public void ReciveMoveFromNetwork()
+    public void ReceiveMoveFromNetwork()
     {
         Button networkButton = buttonList[0];
 
@@ -144,6 +160,7 @@ public class GameController : MonoBehaviour
         if (gameCore.SetPiece(selectedPiece.id, networkButton.name))
             GameOver();
 
+        ChangeGameStateTurn();
         NetworkGame();
     }
     #endregion
@@ -480,6 +497,11 @@ public class GameController : MonoBehaviour
         {
             gamePieces[i].GetComponent<GamePiece>().SetGameControllerReference(this);
         }
+    }
+
+    void SetGameControllerReferenceOnNetwork()
+    {
+        networkController.SetGameControllerReference(this);
     }
     #endregion
 }
