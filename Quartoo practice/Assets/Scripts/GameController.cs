@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
 {
     public List<GamePiece> gamePieces;
     private GameCore gameCore = new GameCore();
-    NetworkController networkController = new NetworkController();
+    private static NetworkController networkController = new NetworkController();
     AIv1 aiController = new AIv1();
     public Button[] buttonList;
     public GamePiece selectedPiece;
@@ -44,6 +44,9 @@ public class GameController : MonoBehaviour
     void StartNetworkingGame()
     {
         selectedPiece = GameObject.Find("GamePiece A1").GetComponent<GamePiece>();
+        networkGameState =  (GameInfo.selectPieceAtStart == 1) ? GameInfo.NetworkGameState.myTurn : GameInfo.NetworkGameState.opponentsTurn;
+        Debug.Log(networkGameState);
+        NetworkGame();
     }
 
     void NetworkGame()
@@ -51,6 +54,7 @@ public class GameController : MonoBehaviour
         // Host's turn
         if (networkGameState == GameInfo.NetworkGameState.myTurn)
         {
+            Debug.Log("Hosts turn");
             DisableAllBoardSpaces();
 
             // Host is placing a piece selected by the opponent
@@ -75,17 +79,73 @@ public class GameController : MonoBehaviour
         // Opponent's turn
         else if (networkGameState == GameInfo.NetworkGameState.opponentsTurn)
         {
+            Debug.Log("Opponents turn");
             DisableAllBoardSpaces();
             DisableAllPieces();
             DisableChooseOptions();
 
             // recieve move
             // recieve piece to place()
-            networkController.WaitForTurn();
+            StartCoroutine(networkController.WaitForTurn());
+            char messageType = networkController.GetNetworkMessage();
+            Debug.Log("Message type = " + messageType);
+            if (messageType == 'M')
+            {
+                ReciveMoveFromNetwork();
+            }
+            else if (messageType == 'P')
+            {
+                RecievePieceFromNetwork();
+            }
+            //SelectOpponentsPiece();
         }
 
     }
-    
+
+    public void RecievePieceFromNetwork()
+    {
+        GamePiece pieceSelected = new GamePiece();
+        foreach (GamePiece piece in gamePieces)
+        {
+            if (piece.id == networkController.GetMovePiece())
+                pieceSelected = piece;
+        }
+        selectedPiece = null;
+        Debug.Log("selected piece = " + selectedPiece);
+        networkGameState = GameInfo.NetworkGameState.myTurn;
+        SetSelectedPiece(pieceSelected);
+        NetworkGame();
+    }
+
+    public void ReciveMoveFromNetwork()
+    {
+        Button networkButton = buttonList[0];
+
+        foreach (GamePiece piece in gamePieces)
+        {
+            if (piece.id == networkController.GetMovePiece())
+                selectedPiece = piece;
+        }
+
+        foreach (Button button in buttonList)
+        {
+            if (button.name == networkController.GetMoveLocation())
+                networkButton = button;
+        }
+
+        selectedPiece.GetComponent<BoxCollider2D>().enabled = false;
+        Vector3 newPosition = networkButton.transform.position;
+        selectedPiece.transform.position = newPosition;
+        recentMove = networkButton;
+        networkButton.interactable = false;
+
+
+        // if this is true, game is over
+        if (gameCore.SetPiece(selectedPiece.id, networkButton.name))
+            GameOver();
+
+        NetworkGame();
+    }
     #endregion
 
     #region Story Mode Functions
@@ -270,6 +330,7 @@ public class GameController : MonoBehaviour
 
     public void SetSelectedPiece(GamePiece gamePiece)
     {
+        Debug.Log("called set selected piece");
         Button StagePiece = GameObject.Find("StagePiece").GetComponent<Button>();
 
         if (selectedPiece)
@@ -317,7 +378,9 @@ public class GameController : MonoBehaviour
         {
             // send piece to opponent
             // sendPiece(selectedPiece.id)
-            networkGameState = GameInfo.NetworkGameState.opponentsTurn;
+            networkController.SetMovePiece(selectedPiece.id);
+            networkController.SendPiece();
+            ChangeGameStateTurn();
             NetworkGame();
         }
         else
@@ -339,6 +402,12 @@ public class GameController : MonoBehaviour
     void ChangeSides()
     {
         playerTurn = (playerTurn == 1) ? 2 : 1;
+    }
+
+    void ChangeGameStateTurn()
+    {
+        networkGameState = (networkGameState == GameInfo.NetworkGameState.myTurn) ? GameInfo.NetworkGameState.opponentsTurn : GameInfo.NetworkGameState.myTurn;
+        Debug.Log("networkGameState = " + networkGameState);
     }
 
 

@@ -140,6 +140,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         CreateOrJoinCanvas.gameObject.SetActive(false);
         WaitingLoadingCanvas.gameObject.SetActive(true);
         StartButton.gameObject.SetActive(true);
+        GameInfo.selectPieceAtStart = 1;
     }
 
     public void OnJoinGameButtonClicked()
@@ -154,6 +155,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
             FindGamesButton.gameObject.SetActive(true);
             roomListingPanel.gameObject.SetActive(true);
         }
+        GameInfo.selectPieceAtStart = 2;
     }
 
     public void OnCancelButtonClicked()

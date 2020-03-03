@@ -6,12 +6,13 @@ using Photon.Pun;
 public class NetworkPlayer : MonoBehaviour
 {
     public static NetworkPlayer networkPlayer;
+    [SerializeField] private NetworkController networkController; 
     [SerializeField] private PhotonView photonView;
     private static string networkMessage = "";
-    private static bool networkMessageReceived = false;
 
     public static string movePiece;
     public static string moveLocation;
+    public static string onDeckPiece;
 
     private void Start()
     {
@@ -23,6 +24,9 @@ public class NetworkPlayer : MonoBehaviour
     [PunRPC]
     public void RPC_receiveNetworkMessage(string message)
     {
+        if (photonView.IsMine)
+            return;
+
         Debug.Log("Message sent over network: " + message);
     }
 
@@ -35,18 +39,33 @@ public class NetworkPlayer : MonoBehaviour
             return;
 
         Debug.Log("Receiving move...");
-        //SetMovePiece(movePiece);
-        //SetMoveLocation(moveLocation);
-        //movePiece = piece;
-        //moveLocation = location;
-        networkMessageReceived = true;
-        Debug.Log(piece);
-        Debug.Log(location);
+        networkController.SetMovePiece(piece);
+        networkController.SetMoveLocation(location);
+        networkController.SetNetworkMesage('M');
+        //networkController.SetNetworkMessageRecieved(true);
+    }
+
+    [PunRPC]
+    public void RPC_SendPiece(string piece)
+    {
+        if (photonView.IsMine)
+            return;
+
+        Debug.Log("NetworkController = " + networkController);
+        Debug.Log("piece = " + piece);
+        networkController.SetMovePiece(piece);
+        networkController.SetNetworkMesage('P');
+        //networkController.SetNetworkMessageRecieved(true);
     }
 
     public void SendMove(string moveLocation, string movePiece)
     {
         photonView.RPC("RPC_SendMove", RpcTarget.All, moveLocation, movePiece);
+    }
+
+    public void SendPiece(string movePiece)
+    {
+        photonView.RPC("RPC_SendPiece", RpcTarget.All, movePiece);
     }
 
  

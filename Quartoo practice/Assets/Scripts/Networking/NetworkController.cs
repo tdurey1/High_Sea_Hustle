@@ -11,7 +11,7 @@ public class NetworkController : MonoBehaviour
     //public static NetworkPlayer netPlayer;
 
     [SerializeField] private PhotonView photonView;
-    private static string networkMessage = "";
+    private static char networkMessage;
     private static bool networkMessageReceived = false;
 
     // Move variable
@@ -29,7 +29,6 @@ public class NetworkController : MonoBehaviour
         Debug.Log("Instantiated PV");
 
         GameObject player = PhotonNetwork.Instantiate("NetworkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
-        
     }
 
     // Update is called once per frame
@@ -63,26 +62,73 @@ public class NetworkController : MonoBehaviour
     public IEnumerator WaitForTurn()
     {
         Debug.Log("Network waiting for turn");
+        Debug.Log("network message recieved = " + networkMessageReceived);
         while (networkMessageReceived == false)
         {
             yield return null;
         }
-        networkMessageReceived = false;
+
+        if (networkMessage == 'M')
+        {
+            yield return 'M';
+        }
+        else if (networkMessage == 'P')
+        {
+            yield return 'P';
+        }
     }
 
 
     public void SendMove()
     {
+        Debug.Log("MoveLocation = " + moveLocation);
         NetworkPlayer.networkPlayer.SendMove(moveLocation, movePiece);
+        Debug.Log("MoveLocation = " + moveLocation);
+    }
+
+    public void SendPiece()
+    {
+        Debug.Log("sending piece " + movePiece);
+        NetworkPlayer.networkPlayer.SendPiece(movePiece);
     }
 
     public void SetMovePiece(string id)
     {
         movePiece = id;
+        Debug.Log("network movePiece = " + movePiece);
+    }
+
+    public string GetMovePiece()
+    {
+        return movePiece;
     }
 
     public void SetMoveLocation(string name)
     {
         moveLocation = name;
+    }
+    public string GetMoveLocation()
+    {
+        return moveLocation;
+    }
+
+    public void SetNetworkMesage(char message)
+    {
+        networkMessage = message;
+    }
+
+    public char GetNetworkMessage()
+    {
+        return networkMessage;
+    }
+
+    public void SetNetworkMessageRecieved(bool boolean)
+    {
+        networkMessageReceived = boolean;
+    }
+
+    public bool GetNetworkMessageRecieved()
+    {
+        return networkMessageReceived;
     }
 }

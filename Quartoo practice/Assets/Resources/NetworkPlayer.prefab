@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a6a889d93ddfbf418c5f65d0493200a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkController: {fileID: 9066191096952560447, guid: d6856ff4e2f502d48bb00b7eb2bf1495,
+    type: 3}
   photonView: {fileID: 114834098398783910}
 --- !u!114 &114834098398783910
 MonoBehaviour:
