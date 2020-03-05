@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameCore : MonoBehaviour
 {
+    #region Variables
     public struct Piece
     {
         public int color;
@@ -91,7 +91,9 @@ public class GameCore : MonoBehaviour
         new BoardSpace("D3", 3, 2),
         new BoardSpace("D4", 3, 3),
     };
+    #endregion
 
+    #region Standard Functions
     public char SetPiece(string gamePieceID, string position)
     {
         BoardSpace convertedBoardSpace = ConvertPosition(position);
@@ -101,32 +103,6 @@ public class GameCore : MonoBehaviour
         availableBoardSpaces.Remove(convertedBoardSpace);
         gameBoard[convertedBoardSpace.row][convertedBoardSpace.col] = convertedGamepiece;
         return EndTurn();
-    }
-
-    // Check a substring of position (the id of the button in unity), and return 
-    // the corresponding BoardSpace in availableBoardSpaces
-    private BoardSpace ConvertPosition(string position)
-    {
-        BoardSpace convertedBoardSpace = new BoardSpace();
-        string subStringPosition = position.Substring(12);
-
-        foreach (BoardSpace space in availableBoardSpaces)
-            if (subStringPosition == space.id)
-                convertedBoardSpace = space;
-
-        return convertedBoardSpace;
-    }
-
-    // Check the id of a gamePiece sent from unity, and return the corresponding Piece in availablePieces
-    private Piece ConvertGamePiece(string gamePieceID)
-    {
-        Piece convertedGamePiece = new Piece();
-
-        foreach (Piece piece in availablePieces)
-            if (gamePieceID == piece.id)
-                convertedGamePiece = piece;
-
-        return convertedGamePiece;
     }
 
     // NOTE: not sure if we need these next two functions
@@ -207,4 +183,32 @@ public class GameCore : MonoBehaviour
         // if there arent any conditions met, that means that there isn't a winner
         return false;
     }
+    #endregion
+
+    #region Conversion Functions
+    // Check a substring of position (the id of the button in unity), and return the corresponding BoardSpace in availableBoardSpaces
+    private BoardSpace ConvertPosition(string position)
+    {
+        BoardSpace convertedBoardSpace = new BoardSpace();
+        string subStringPosition = position.Substring(12);
+
+        foreach (BoardSpace space in availableBoardSpaces)
+            if (subStringPosition == space.id)
+                convertedBoardSpace = space;
+
+        return convertedBoardSpace;
+    }
+
+    // Check the id of a gamePiece sent from unity, and return the corresponding Piece in availablePieces
+    private Piece ConvertGamePiece(string gamePieceID)
+    {
+        Piece convertedGamePiece = new Piece();
+
+        foreach (Piece piece in availablePieces)
+            if (gamePieceID == piece.id)
+                convertedGamePiece = piece;
+
+        return convertedGamePiece;
+    }
+    #endregion
 }

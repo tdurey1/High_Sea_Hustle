@@ -58,9 +58,9 @@ public class NetworkController : MonoBehaviour
 
         while (networkMessageReceived == false)
             yield return null;
-
+        
+        Debug.Log("Got out of loop");
         networkMessageReceived = false;
-
         gameController.NetworkMessageReceived();
     }
 

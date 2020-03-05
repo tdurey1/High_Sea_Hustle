@@ -2,31 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    public List<GamePiece> gamePieces;
-    private GameCore gameCore = new GameCore();
+    #region Variables and Startup
+    // Controllers
     private static NetworkController networkController = new NetworkController();
-    AIv1 aiController = new AIv1();
+    private AIv1 aiController = new AIv1();
+    private GameCore gameCore = new GameCore();
+
+    // Unit Objects
+    public List<GamePiece> gamePieces;
     public Button[] buttonList;
     public GamePiece selectedPiece;
-    public Vector3 oldPosition;
     public Button recentMove;
+    public GameObject GameSceneManagerObject;
+    public Vector3 oldPosition;
+
+    // GameController specific variables
     private int playerTurn;
     private bool placingPiece = false;
-    private GameInfo.NetworkGameState networkGameState = GameInfo.NetworkGameState.start;
-    public GameObject GameSceneManagerObject;
 
     void Awake()
     {
-        //WARNING!! THESE ARE SET ONLY FOR TESTING!! DELETE THESE LATER!! ONLY TRISTAN
-        //CAN DELETE THEM! DONT DELETE WITHOUT ASKING HIM FIRST PUNKS
-        //GameInfo.gameType = 'N';
-        //GameInfo.selectPieceAtStart = 2;
-
-        //DisableAllBoardSpaces();
         SetGameControllerReferenceOnGamePieces();
         SetGameControllerReferenceOnNetwork();
         playerTurn = GameInfo.selectPieceAtStart;
@@ -41,36 +39,30 @@ public class GameController : MonoBehaviour
         else
             StartStoryModeGame();
     }
+    #endregion
 
     #region Networking functions
     void StartNetworkingGame()
     {
-        selectedPiece = GameObject.Find("GamePiece A1").GetComponent<GamePiece>();
-        networkGameState = (GameInfo.selectPieceAtStart == 1) ? GameInfo.NetworkGameState.myTurn : GameInfo.NetworkGameState.opponentsTurn;
         placingPiece = (GameInfo.selectPieceAtStart == 1) ? false : true;
         NetworkGame();
     }
 
     void NetworkGame()
     {
-        // Disable everything at the start. They will be enabled later in this function as needed
-        DisableAllBoardSpaces();
-        DisableAllPieces();
-        DisableChooseOptions();
+        // Disable everything at the start. They will be enabled later in the function as needed
+        DisableEverything();
 
         // Host's turn
-        if (networkGameState == GameInfo.NetworkGameState.myTurn)
+        if (playerTurn == 1)
         {
             Debug.Log("Hosts turn");
+
             // Host is placing a piece selected by the opponent
             if (placingPiece == true)
             {
                 Debug.Log("Host placing a piece");
                 EnableAvailableBoardSpaces();
-
-                // ***Var here declaring which board space
-                //Make gameboard interactable, gamepieces not interactable
-
             }
             // Host is choosing a piece for the opponent to place
             else
@@ -82,12 +74,9 @@ public class GameController : MonoBehaviour
         }
 
         // Opponent's turn
-        else if (networkGameState == GameInfo.NetworkGameState.opponentsTurn)
+        else if (playerTurn == 2)
         {
             Debug.Log("Opponents turn");
-
-            // recieve move
-            // recieve piece to place()
             StartCoroutine(networkController.WaitForTurn());
         }
     }
@@ -95,15 +84,14 @@ public class GameController : MonoBehaviour
     public void NetworkMessageReceived()
     {
         char messageType = networkController.GetNetworkMessage();
+
         Debug.Log("Message type = " + messageType);
         if (messageType == 'M')
-        {
             ReceiveMoveFromNetwork();
-        }
         else if (messageType == 'P')
-        {
             ReceivePieceFromNetwork();
-        }
+        else
+            Debug.Log("Yall broke something in network");
 
         NetworkGame();
     }
@@ -112,14 +100,16 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("piece received from network is " + networkController.GetMovePiece());
         GamePiece pieceSelected = new GamePiece();
+
         foreach (GamePiece piece in gamePieces)
         {
             if (piece.id == networkController.GetMovePiece())
                 pieceSelected = piece;
         }
+
         selectedPiece = null;
         SetSelectedPiece(pieceSelected);
-        ChangeGameStateTurn();
+        ChangeSides();
     }
 
     public void ReceiveMoveFromNetwork()
@@ -145,7 +135,7 @@ public class GameController : MonoBehaviour
         networkButton.interactable = false;
 
 
-        // if this is true, game is over
+        // Returns a specific char if game is over 
         char gameState = gameCore.SetPiece(selectedPiece.id, networkButton.name);
 
         if (gameState == 'W' || gameState == 'T')
@@ -299,12 +289,12 @@ public class GameController : MonoBehaviour
 
             if (GameInfo.gameType == 'N')
             {
+                // Send move to other machine on network
                 networkController.SetMovePiece(selectedPiece.id);
                 networkController.SetMoveLocation(button.name);
                 networkController.SendMove();
-                //Send move to network
-                //networkSendMove(selectedPiece.id, button.name)
             }
+
             // if this is true, game is over
             char gameState = gameCore.SetPiece(selectedPiece.id, button.name);
 
@@ -363,7 +353,6 @@ public class GameController : MonoBehaviour
         if (selectedPiece)
         {
             selectedPiece.transform.position = oldPosition;
-
             selectedPiece = null;
         }
     }
@@ -384,11 +373,9 @@ public class GameController : MonoBehaviour
             HardAIGame();
         else if (GameInfo.gameType == 'N')
         {
-            // send piece to opponent
-            // sendPiece(selectedPiece.id)
+            // Send piece to other machine on network
             networkController.SetMovePiece(selectedPiece.id);
             networkController.SendPiece();
-            ChangeGameStateTurn();
             NetworkGame();
         }
         else
@@ -397,31 +384,21 @@ public class GameController : MonoBehaviour
 
     void GameOver(char endGame)
     {
-        Debug.Log("GameOver");
+        // Prevent the user(s) from clicking any boardspace or gamepieces
+        DisableEverything();
 
-        //by default, assume the player lost
+        // By default, assume the player lost
         char playerWinStatus = 'L';
 
-        // May or may not need network game over function
-        if (GameInfo.gameType == 'N')
-        {
-            // tell opponent gameover
-        }
-
-        if (playerTurn == 1) //the player won or tied
+        // The player won or tied
+        if (playerTurn == 1) 
         {
             // Win Condition was met
             if (endGame == 'W')
-            {
-                Debug.Log("Game Over: Winner");
                 playerWinStatus = 'W';
-            }
             // Tie 
             else
-            {
-                Debug.Log("Game Over: Tie");
                 playerWinStatus = 'T';
-            }
         }
 
         if (GameSceneManagerObject != null)
@@ -432,23 +409,14 @@ public class GameController : MonoBehaviour
             Debug.Log("GameSceneManagerObject is null");
     }
 
-    void ChangeSides()
+    private void ChangeSides()
     {
         playerTurn = (playerTurn == 1) ? 2 : 1;
     }
-
-    void ChangeGameStateTurn()
-    {
-        networkGameState = (networkGameState == GameInfo.NetworkGameState.myTurn) ? GameInfo.NetworkGameState.opponentsTurn : GameInfo.NetworkGameState.myTurn;
-        Debug.Log("networkGameState = " + networkGameState);
-    }
-
-
-
     #endregion
 
-    #region 
-    public void EnableAvailablePieces()
+    #region Enabling/Disabling GameObjects
+    private void EnableAvailablePieces()
     {
         foreach (GameCore.Piece availablePiece in gameCore.availablePieces)
             foreach (GamePiece piece in gamePieces)
@@ -459,7 +427,7 @@ public class GameController : MonoBehaviour
                 }
     }
 
-    public void EnableChooseOptions()
+    private void EnableChooseOptions()
     {
         Button ChoosePiece = GameObject.Find("ChoosePiece").GetComponent<Button>();
         Button ChooseAnother = GameObject.Find("ChooseAnother").GetComponent<Button>();
@@ -469,8 +437,7 @@ public class GameController : MonoBehaviour
 
     }
 
-
-    public void EnableAvailableBoardSpaces()
+    private void EnableAvailableBoardSpaces()
     {
         foreach (GameCore.BoardSpace availableButton in gameCore.availableBoardSpaces)
             foreach (Button button in buttonList)
@@ -481,7 +448,7 @@ public class GameController : MonoBehaviour
                 }
     }
 
-    public void DisableAllPieces()
+    private void DisableAllPieces()
     {
         foreach (GamePiece piece in gamePieces)
         {
@@ -489,7 +456,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void DisableChooseOptions()
+    private void DisableChooseOptions()
     {
         Button ChoosePiece = GameObject.Find("ChoosePiece").GetComponent<Button>();
         Button ChooseAnother = GameObject.Find("ChooseAnother").GetComponent<Button>();
@@ -499,10 +466,17 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void DisableAllBoardSpaces()
+    private void DisableAllBoardSpaces()
     {
         foreach (Button button in buttonList)
             button.interactable = false;
+    }
+
+    private void DisableEverything()
+    {
+        DisableAllBoardSpaces();
+        DisableAllPieces();
+        DisableChooseOptions();
     }
     #endregion
 
