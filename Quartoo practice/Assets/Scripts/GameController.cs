@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+    #region Variables and Startup
     public List<GamePiece> gamePieces;
     private GameCore gameCore = new GameCore();
     private static NetworkController networkController = new NetworkController();
@@ -16,17 +17,10 @@ public class GameController : MonoBehaviour
     public Button recentMove;
     private int playerTurn;
     private bool placingPiece = false;
-    private GameInfo.NetworkGameState networkGameState = GameInfo.NetworkGameState.start;
     public GameObject GameSceneManagerObject;
 
     void Awake()
     {
-        //WARNING!! THESE ARE SET ONLY FOR TESTING!! DELETE THESE LATER!! ONLY TRISTAN
-        //CAN DELETE THEM! DONT DELETE WITHOUT ASKING HIM FIRST PUNKS
-        //GameInfo.gameType = 'N';
-        //GameInfo.selectPieceAtStart = 2;
-
-        //DisableAllBoardSpaces();
         SetGameControllerReferenceOnGamePieces();
         SetGameControllerReferenceOnNetwork();
         playerTurn = GameInfo.selectPieceAtStart;
@@ -41,12 +35,11 @@ public class GameController : MonoBehaviour
         else
             StartStoryModeGame();
     }
+    #endregion
 
     #region Networking functions
     void StartNetworkingGame()
     {
-        selectedPiece = GameObject.Find("GamePiece A1").GetComponent<GamePiece>();
-        networkGameState = (GameInfo.selectPieceAtStart == 1) ? GameInfo.NetworkGameState.myTurn : GameInfo.NetworkGameState.opponentsTurn;
         placingPiece = (GameInfo.selectPieceAtStart == 1) ? false : true;
         NetworkGame();
     }
@@ -59,7 +52,7 @@ public class GameController : MonoBehaviour
         DisableChooseOptions();
 
         // Host's turn
-        if (networkGameState == GameInfo.NetworkGameState.myTurn)
+        if (playerTurn == 1)
         {
             Debug.Log("Hosts turn");
             // Host is placing a piece selected by the opponent
@@ -82,12 +75,9 @@ public class GameController : MonoBehaviour
         }
 
         // Opponent's turn
-        else if (networkGameState == GameInfo.NetworkGameState.opponentsTurn)
+        else if (playerTurn == 2)
         {
             Debug.Log("Opponents turn");
-
-            // recieve move
-            // recieve piece to place()
             StartCoroutine(networkController.WaitForTurn());
         }
     }
@@ -119,7 +109,7 @@ public class GameController : MonoBehaviour
         }
         selectedPiece = null;
         SetSelectedPiece(pieceSelected);
-        ChangeGameStateTurn();
+        ChangeSides();
     }
 
     public void ReceiveMoveFromNetwork()
@@ -388,7 +378,6 @@ public class GameController : MonoBehaviour
             // sendPiece(selectedPiece.id)
             networkController.SetMovePiece(selectedPiece.id);
             networkController.SendPiece();
-            ChangeGameStateTurn();
             NetworkGame();
         }
         else
@@ -399,7 +388,7 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("GameOver");
 
-        //by default, assume the player lost
+        // By default, assume the player lost
         char playerWinStatus = 'L';
 
         // May or may not need network game over function
@@ -408,20 +397,15 @@ public class GameController : MonoBehaviour
             // tell opponent gameover
         }
 
-        if (playerTurn == 1) //the player won or tied
+        // The player won or tied
+        if (playerTurn == 1) 
         {
             // Win Condition was met
             if (endGame == 'W')
-            {
-                Debug.Log("Game Over: Winner");
                 playerWinStatus = 'W';
-            }
             // Tie 
             else
-            {
-                Debug.Log("Game Over: Tie");
                 playerWinStatus = 'T';
-            }
         }
 
         if (GameSceneManagerObject != null)
@@ -436,18 +420,9 @@ public class GameController : MonoBehaviour
     {
         playerTurn = (playerTurn == 1) ? 2 : 1;
     }
-
-    void ChangeGameStateTurn()
-    {
-        networkGameState = (networkGameState == GameInfo.NetworkGameState.myTurn) ? GameInfo.NetworkGameState.opponentsTurn : GameInfo.NetworkGameState.myTurn;
-        Debug.Log("networkGameState = " + networkGameState);
-    }
-
-
-
     #endregion
 
-    #region 
+    #region Enabling/Disabling GameObjects
     public void EnableAvailablePieces()
     {
         foreach (GameCore.Piece availablePiece in gameCore.availablePieces)
