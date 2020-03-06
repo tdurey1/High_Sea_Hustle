@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject helpPanel;
     public GameObject settingsPanel;
+    public GameObject darkBackground;
 
     public void quickGame()
     {
@@ -37,20 +38,24 @@ public class MainMenu : MonoBehaviour
     public void showHelpPanel()
     {
         helpPanel.SetActive(true);
+        darkBackground.SetActive(true);
     }
 
     public void hideHelpPanel()
     {
         helpPanel.SetActive(false);
+        darkBackground.SetActive(false);
     }
 
     public void showSettingsPanel()
     {
         settingsPanel.SetActive(true);
+        darkBackground.SetActive(true);
     }
 
     public void hideSettingsPanel()
     {
         settingsPanel.SetActive(false);
+        darkBackground.SetActive(false);
     }
 }
