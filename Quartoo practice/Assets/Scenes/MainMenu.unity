@@ -359,24 +359,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 373453272}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &373453274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373453273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c16d17550c931c344a05e5929a17e196, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  images: []
-  currentImage: {fileID: 0}
-  currentText: {fileID: 0}
-  nextImage: {fileID: 0}
-  previousImage: {fileID: 0}
-  i: 0
 --- !u!1 &374711300
 GameObject:
   m_ObjectHideFlags: 0
@@ -2194,6 +2176,35 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1224169732}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2079494907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2079494906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1285391706}
+          m_MethodName: closeCurrentPanel
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  delegates: []
 --- !u!1001 &2674818593824012293
 PrefabInstance:
   m_ObjectHideFlags: 0

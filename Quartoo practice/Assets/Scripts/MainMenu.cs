@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
@@ -37,8 +35,8 @@ public class MainMenu : MonoBehaviour
 
     public void showHelpPanel()
     {
-        helpPanel.SetActive(true);
         darkBackground.SetActive(true);
+        helpPanel.SetActive(true);
     }
 
     public void hideHelpPanel()
@@ -49,13 +47,21 @@ public class MainMenu : MonoBehaviour
 
     public void showSettingsPanel()
     {
-        settingsPanel.SetActive(true);
         darkBackground.SetActive(true);
+        settingsPanel.SetActive(true);
     }
 
     public void hideSettingsPanel()
     {
         settingsPanel.SetActive(false);
         darkBackground.SetActive(false);
+    }
+
+    public void closeCurrentPanel()
+    {
+        if (settingsPanel.activeSelf)
+            hideSettingsPanel();
+        else
+            hideHelpPanel();
     }
 }
