@@ -415,7 +415,7 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region Enabling/Disabling GameObjects
-    private void EnableAvailablePieces()
+    public void EnableAvailablePieces()
     {
         foreach (GameCore.Piece availablePiece in gameCore.availablePieces)
             foreach (GamePiece piece in gamePieces)
@@ -447,7 +447,7 @@ public class GameController : MonoBehaviour
                 }
     }
 
-    private void DisableAllPieces()
+    public void DisableAllPieces()
     {
         foreach (GamePiece piece in gamePieces)
         {

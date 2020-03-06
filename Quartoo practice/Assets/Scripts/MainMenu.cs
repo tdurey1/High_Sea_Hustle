@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
     public GameObject helpPanel;
     public GameObject settingsPanel;
+    public GameObject darkBackground;
 
     public void quickGame()
     {
@@ -36,21 +35,33 @@ public class MainMenu : MonoBehaviour
 
     public void showHelpPanel()
     {
+        darkBackground.SetActive(true);
         helpPanel.SetActive(true);
     }
 
     public void hideHelpPanel()
     {
         helpPanel.SetActive(false);
+        darkBackground.SetActive(false);
     }
 
     public void showSettingsPanel()
     {
+        darkBackground.SetActive(true);
         settingsPanel.SetActive(true);
     }
 
     public void hideSettingsPanel()
     {
         settingsPanel.SetActive(false);
+        darkBackground.SetActive(false);
+    }
+
+    public void closeCurrentPanel()
+    {
+        if (settingsPanel.activeSelf)
+            hideSettingsPanel();
+        else
+            hideHelpPanel();
     }
 }

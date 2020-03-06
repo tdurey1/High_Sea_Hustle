@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameSceneManager : MonoBehaviour
@@ -8,22 +6,12 @@ public class GameSceneManager : MonoBehaviour
     public GameObject helpPanel;
     public GameObject settingsPanel;
     public GameObject gameOverPanel;
+    public GameObject darkenBackground;
     public UnityEngine.UI.Text gameOverMessage;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void showHelpPanel()
     {
+        darkenBackground.SetActive(true);
         helpPanel.SetActive(true);
         Debug.Log("make panel visible");
     }
@@ -32,6 +20,7 @@ public class GameSceneManager : MonoBehaviour
     {
         //Panel helpPanel = GameObject.Find("helpPanel").GetComponent<Panel>();
         helpPanel.SetActive(false);
+        darkenBackground.SetActive(false);
     }
 
     public void showGameOverPanel(char endgameStatus)
@@ -58,14 +47,23 @@ public class GameSceneManager : MonoBehaviour
 
     public void showSettingsPanel()
     {
+        darkenBackground.SetActive(true);
         settingsPanel.SetActive(true);
-        Debug.Log("make panel visible");
     }
 
     public void hideSettingsPanel()
     {
         //Panel helpPanel = GameObject.Find("helpPanel").GetComponent<Panel>();
         settingsPanel.SetActive(false);
+        darkenBackground.SetActive(false);
+    }
+
+    public void closeCurrentPanel()
+    {
+        if (settingsPanel.activeSelf)
+            hideSettingsPanel();
+        else
+            hideHelpPanel();
     }
 
     public void returnToMainMenu()
