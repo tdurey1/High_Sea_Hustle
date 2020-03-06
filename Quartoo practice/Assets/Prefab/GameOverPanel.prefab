@@ -141,6 +141,7 @@ MonoBehaviour:
   helpPanel: {fileID: 0}
   settingsPanel: {fileID: 0}
   gameOverPanel: {fileID: 0}
+  darkenBackground: {fileID: 0}
   gameOverMessage: {fileID: 0}
 --- !u!114 &2821629817533507363
 MonoBehaviour:
@@ -156,6 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   helpPanel: {fileID: 0}
   settingsPanel: {fileID: 0}
+  darkBackground: {fileID: 0}
 --- !u!1 &2821629817567952815
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,6 +319,7 @@ MonoBehaviour:
   helpPanel: {fileID: 0}
   settingsPanel: {fileID: 0}
   gameOverPanel: {fileID: 0}
+  darkenBackground: {fileID: 0}
   gameOverMessage: {fileID: 0}
 --- !u!114 &2821629817851008390
 MonoBehaviour:
@@ -594,7 +597,7 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
