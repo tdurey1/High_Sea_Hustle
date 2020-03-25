@@ -1,11 +1,13 @@
 ﻿using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class RoomButton : MonoBehaviour
 {
+    public Canvas RoomLobbyCanvas;
+    public Canvas WaitingLoadingCanvas;
+
     public Text nameText;
     public string roomName;
 
@@ -19,5 +21,7 @@ public class RoomButton : MonoBehaviour
         Debug.Log("F: RoomButton.cs/public void JoinRoomOnClick - Room we want to join was clicked");
         PhotonNetwork.JoinRoom(roomName);
         Debug.Log("F: RoomButton.cs/public void JoinRoomOnClick - Succesfully joined room: " + roomName);
+        RoomLobbyCanvas.gameObject.SetActive(false);
+        WaitingLoadingCanvas.gameObject.SetActive(true);
     }
 }

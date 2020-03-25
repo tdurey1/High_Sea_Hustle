@@ -158,11 +158,11 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         GameInfo.selectPieceAtStart = 2;
     }
 
-    public void OnCancelButtonClicked()
-    {
-        Debug.Log("F: StartRoom.cs/public void OnCancelButtonClicked - Cancel button was clicked");
-        // PhotonNetwork.LeaveRoom();
-    }
+    //public void OnCancelButtonClicked()
+    //{
+    //    Debug.Log("F: StartRoom.cs/public void OnCancelButtonClicked - Cancel button was clicked");
+    //    PhotonNetwork.LeaveRoom();
+    //}
 
     public void JoinLobbyOnClick()
     {
@@ -175,16 +175,22 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void OnBackButtonClicked()
     {
-        if (CreateOrJoinCanvas)
+        if (CreateOrJoinCanvas.isActiveAndEnabled)
         {
             PhotonNetwork.Disconnect();
             SceneManager.LoadScene("MainMenu");
         }
 
-        if (RoomLobbyCanvas || WaitingLoadingCanvas)
+        if (RoomLobbyCanvas.isActiveAndEnabled || WaitingLoadingCanvas.isActiveAndEnabled)
         {
             if (PhotonNetwork.InRoom)
             {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
+                    PhotonNetwork.CurrentRoom.IsVisible = false;
+                }
+                
                 PhotonNetwork.LeaveRoom();
             }
             CreateOrJoinCanvas.gameObject.SetActive(true);
