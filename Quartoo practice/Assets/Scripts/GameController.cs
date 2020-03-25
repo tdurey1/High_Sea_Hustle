@@ -29,21 +29,24 @@ public class GameController : MonoBehaviour
         SetGameControllerReferenceOnGamePieces();
         SetGameControllerReferenceOnNetwork();
         playerTurn = GameInfo.selectPieceAtStart;
+
+        // Peter Parrot is just a popup like settings/help, hide it at start so he only shows for a
+        // tutorial and not for ai or network game.
+        gameSceneManagerObject.GetComponent<GameSceneManager>().hideTutorialParrot();
     }
 
     void Start()
     {
-        GameInfo.gameType = 'T';
-        gameSceneManagerObject.GetComponent<GameSceneManager>().hideTutorialParrot();
-
         if (GameInfo.gameType == 'E' || GameInfo.gameType == 'H')
             StartAIGame();
         else if (GameInfo.gameType == 'N')
             StartNetworkingGame();
         else if (GameInfo.gameType == 'S')
             StartStoryModeGame();
-        else
+        else if (GameInfo.gameType == 'T')
             StartTutorialModeGame();
+        else
+            Debug.Log("Houston we have a problem");
     }
     #endregion
 
@@ -312,6 +315,9 @@ public class GameController : MonoBehaviour
     #region Tutorial Functions
     void StartTutorialModeGame()
     {
+        // Enable Peter Parrot
+        gameSceneManagerObject.GetComponent<GameSceneManager>().showTutorialParrot();
+
         // Player should not be able to click on any gamepiece or boardspace
         DisableEverything();
 
