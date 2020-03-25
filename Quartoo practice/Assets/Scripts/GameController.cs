@@ -235,21 +235,52 @@ public class GameController : MonoBehaviour
         // Player's turn
         if (playerTurn == 1)
         {
-            // Have ai pick piece
-            EnableAvailableBoardSpaces();
-            //Make everything interactable
+            // Player is placing a piece selected by the AI
+            if (placingPiece == true)
+            {
+                Debug.Log("User placing a piece");
+
+                //Make gameboard interactable, gamepieces not interactable
+                DisableChooseOptions();
+                EnableAvailableBoardSpaces();
+                DisableAllPieces();
+            }
+            // Player is choosing a piece for the AI to place
+            else
+            {
+                Debug.Log("User choosing opponents piece");
+
+                DisableAllBoardSpaces();
+                EnableAvailablePieces();
+                EnableChooseOptions();
+            }
         }
         // AI's turn
         else
         {
-            DisableAllBoardSpaces();
-            string aiPieceChosen = aiController.chooseGamePiece(gameCore.availablePieces);
-            ConvertAIPiece(aiPieceChosen);
-            string aiBoardSpaceChosen = aiController.choosePosition(gameCore.availableBoardSpaces);
-            Button boardSpace = ConvertAIBoardSpace(aiBoardSpaceChosen);
-            StartCoroutine("DelayAIMove", boardSpace);
-        }
+            DisableChooseOptions();
+            DisableAllPieces();
 
+            // AI is placing a piece by the user
+            if (placingPiece == true)
+            {
+                Debug.Log("AI placing a piece");
+
+                string aiBoardSpaceChosen = aiController.choosePosition(gameCore.availableBoardSpaces);
+                Button boardSpace = ConvertAIBoardSpace(aiBoardSpaceChosen);
+                StartCoroutine("DelayAIMove", boardSpace);
+            }
+            // AI is choosing a piece for the Player to place
+            else
+            {
+                Debug.Log("AI choosing opponents piece");
+
+                // Have ai pick piece
+                string aiPieceChosen = aiController.chooseGamePiece(gameCore.availablePieces);
+                ConvertAIPiece(aiPieceChosen);
+                EndTurn();
+            }
+        }
     }
 
     // NOTE: Remove this delay after Levi gets a legit AI integrated
