@@ -10,13 +10,14 @@ public class GameController : MonoBehaviour
     private static NetworkController networkController = new NetworkController();
     private AIv1 aiController = new AIv1();
     private GameCore gameCore = new GameCore();
-
+    private TutorialManager tutorialManager = new TutorialManager();
+   
     // Unit Objects
     public List<GamePiece> gamePieces;
     public Button[] buttonList;
     public GamePiece selectedPiece;
     public Button recentMove;
-    public GameObject GameSceneManagerObject;
+    public GameObject gameSceneManagerObject;
     public Vector3 oldPosition;
 
     // GameController specific variables
@@ -32,12 +33,17 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        GameInfo.gameType = 'T';
+        gameSceneManagerObject.GetComponent<GameSceneManager>().hideTutorialParrot();
+
         if (GameInfo.gameType == 'E' || GameInfo.gameType == 'H')
             StartAIGame();
         else if (GameInfo.gameType == 'N')
             StartNetworkingGame();
-        else
+        else if (GameInfo.gameType == 'S')
             StartStoryModeGame();
+        else
+            StartTutorialModeGame();
     }
     #endregion
 
@@ -301,6 +307,17 @@ public class GameController : MonoBehaviour
         string boardSpaceString = "Board Space " + aiBoardSpaceChosen;
         return GameObject.Find(boardSpaceString).GetComponent<Button>();
     }
+    #endregion
+
+    #region Tutorial Functions
+    void StartTutorialModeGame()
+    {
+        // Player should not be able to click on any gamepiece or boardspace
+        DisableEverything();
+
+
+    }
+
     #endregion
 
     #region Turn-Based Functions

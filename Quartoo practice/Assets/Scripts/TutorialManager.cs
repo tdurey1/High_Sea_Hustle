@@ -38,17 +38,17 @@ public class TutorialManager : MonoBehaviour
         caption.text = captions[popupIndex];
         //
 
-        for (int i = 0; i < popups.Length; i++)
-        {
-            if (i == popupIndex)
-            {
-                popups[i].SetActive(true);
-            }
-            else
-            {
-                popups[i].SetActive(false);
-            }
-        }
+        //for (int i = 0; i < popups.Length; i++)
+        //{
+        //    if (i == popupIndex)
+        //    {
+        //        popups[i].SetActive(true);
+        //    }
+        //    else
+        //    {
+        //        popups[i].SetActive(false);
+        //    }
+        //}
     }
 
     void Start()
