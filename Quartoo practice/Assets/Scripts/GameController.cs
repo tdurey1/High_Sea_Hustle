@@ -431,12 +431,10 @@ public class GameController : MonoBehaviour
                 playerWinStatus = 'T';
         }
 
-        if (GameSceneManagerObject != null)
-        { 
-            GameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
-        }
+        if (GameInfo.gameType == 'N')
+            GameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus);
         else
-            Debug.Log("GameSceneManagerObject is null");
+            GameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
     }
 
     private void ChangeSides()

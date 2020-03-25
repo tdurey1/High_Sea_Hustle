@@ -7,7 +7,9 @@ public class GameSceneManager : MonoBehaviour
     public GameObject settingsPanel;
     public GameObject gameOverPanel;
     public GameObject darkenBackground;
+    public GameObject networkGameOverPanel;
     public UnityEngine.UI.Text gameOverMessage;
+    public UnityEngine.UI.Text networkGameOverMessage;
 
     public void showHelpPanel()
     {
@@ -43,6 +45,28 @@ public class GameSceneManager : MonoBehaviour
     public void hideGameOverPanel()
     {
         gameOverPanel.SetActive(false);
+    }
+
+    public void showNetworkGameOverPanel(char endgameStatus)
+    {
+        string message;
+
+        if (endgameStatus == 'L')
+        {
+            message = "YOU LOST";
+        }
+        else
+        {
+            message = endgameStatus == 'W' ? "YOU WON!" : "YOU TIED";
+        }
+
+        networkGameOverMessage.text = message;
+        networkGameOverPanel.SetActive(true);
+    }
+
+    public void hideNetworkGameOverPanel()
+    {
+        networkGameOverPanel.SetActive(false);
     }
 
     public void showSettingsPanel()
