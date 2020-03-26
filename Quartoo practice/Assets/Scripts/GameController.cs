@@ -321,7 +321,30 @@ public class GameController : MonoBehaviour
         // Player should not be able to click on any gamepiece or boardspace
         DisableEverything();
 
+        switch(tutorialManager.popupIndex)
+        {
+            case 3:
+                // Have player select piece for opponent
+                break;
+            case 4:
+                // Have opponent place piece and give user a piece
+                break;
+            case 6:
+                // Update gameboard so their is a win condition and have user select piece to send opponent
+                break;
+            case 7:
+                // Have opponenet give player a winning piece and let user place it on certain boardspot
+                break;
+            case 8:
+                // Display win popup maybe
+                break;
 
+        }
+        if (tutorialManager.popupIndex == 3)
+        {
+            // Have Player Select piece for opponent
+        }
+        else if (tut)
     }
 
     #endregion

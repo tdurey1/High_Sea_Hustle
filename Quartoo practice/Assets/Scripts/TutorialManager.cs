@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     public GameObject[] popups;
-    private int popupIndex = 0;
+    public int popupIndex = 0;
 
     //these are temporary:
     public Text caption;
