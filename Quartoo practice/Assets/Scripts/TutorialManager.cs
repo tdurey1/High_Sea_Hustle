@@ -7,10 +7,9 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     public GameObject[] popups;
-    private int popupIndex = 0;
+    public int popupIndex = 0;
 
     //these are temporary:
-    public Text caption;
     private string[] captions = 
     {
         "Hello, I'm Peter Parrot and I'll be showing you how to play.",
@@ -23,41 +22,43 @@ public class TutorialManager : MonoBehaviour
         "If you look at the board now, there is a place for a potential win if a piece is _____ or _____. Make sure you don't give your" +
            "opponent a piece with these characteristics!",
         "Your opponent has given you a winning piece! Place it in the hilighted board space to win by ______ (characteristic).",
-        "You've just completed your first game of Quarto!"
+        "Congratulations, you've just completed your first game of Quarto!"
     };
 
-    public void StepCompleted()
+    public int GetPopupIndex()
     {
-        popupIndex++;
-        ShowNextStep();
+        return popupIndex;
     }
 
-    private void ShowNextStep()
+    public string ShowNextStep()
     {
+        popupIndex++;
+
         //
-        caption.text = captions[popupIndex];
+        return getCurrentCaption();
         //
 
-        for (int i = 0; i < popups.Length; i++)
-        {
-            if (i == popupIndex)
-            {
-                popups[i].SetActive(true);
-            }
-            else
-            {
-                popups[i].SetActive(false);
-            }
-        }
+        //for (int i = 0; i < popups.Length; i++)
+        //{
+        //    if (i == popupIndex)
+        //    {
+        //        popups[i].SetActive(true);
+        //    }
+        //    else
+        //    {
+        //        popups[i].SetActive(false);
+        //    }
+        //}
+    }
+
+    public string getCurrentCaption()
+    {
+        return captions[popupIndex];
     }
 
     void Start()
     {
         //Show the initial step
-
-        //
-        caption.text = captions[popupIndex];
-        //
     }
 
 

@@ -10,13 +10,15 @@ public class GameController : MonoBehaviour
     private static NetworkController networkController = new NetworkController();
     private AIv1 aiController = new AIv1();
     private GameCore gameCore = new GameCore();
-
-    // Unit Objects
+    private TutorialManager tutorialManager = new TutorialManager();
+   
+    // Unity Objects
     public List<GamePiece> gamePieces;
     public Button[] buttonList;
     public GamePiece selectedPiece;
     public Button recentMove;
-    public GameObject GameSceneManagerObject;
+    public GameObject gameSceneManagerObject;
+    public Text tutorialCaption;
     public Vector3 oldPosition;
 
     // GameController specific variables
@@ -28,6 +30,10 @@ public class GameController : MonoBehaviour
         SetGameControllerReferenceOnGamePieces();
         SetGameControllerReferenceOnNetwork();
         playerTurn = GameInfo.selectPieceAtStart;
+
+        // Peter Parrot is just a popup like settings/help, hide it at start so he only shows for a
+        // tutorial and not for ai or network game.
+        gameSceneManagerObject.GetComponent<GameSceneManager>().hideTutorialParrot();
     }
 
     void Start()
@@ -36,8 +42,12 @@ public class GameController : MonoBehaviour
             StartAIGame();
         else if (GameInfo.gameType == 'N')
             StartNetworkingGame();
-        else
+        else if (GameInfo.gameType == 'S')
             StartStoryModeGame();
+        else if (GameInfo.gameType == 'T')
+            StartTutorialModeGame();
+        else
+            Debug.Log("Houston we have a problem");
     }
     #endregion
 
@@ -301,6 +311,56 @@ public class GameController : MonoBehaviour
         string boardSpaceString = "Board Space " + aiBoardSpaceChosen;
         return GameObject.Find(boardSpaceString).GetComponent<Button>();
     }
+    #endregion
+
+    #region Tutorial Functions
+    void StartTutorialModeGame()
+    {
+        // Get the first caption from the array in tutorial manager
+        tutorialCaption.text = tutorialManager.getCurrentCaption();
+
+        // Enable Peter Parrot
+        gameSceneManagerObject.GetComponent<GameSceneManager>().showTutorialParrot();
+
+        // Player should not be able to click on any gamepiece or boardspace
+        DisableEverything();
+    }
+
+    public void TutorialModeGame()
+    {
+        int popupIndex = tutorialManager.GetPopupIndex();
+
+        switch (popupIndex)
+        {
+            case 3:
+                // Have player select piece for opponent
+                Debug.Log("select piece");
+                break;
+            case 4:
+                // Have opponent place piece and give user a piece
+                Debug.Log("opponent place piece");
+                break;
+            case 6:
+                // Update gameboard so their is a win condition and have user select piece to send opponent
+                Debug.Log("Update gameboard");
+                break;
+            case 7:
+                // Have opponenet give player a winning piece and let user place it on certain boardspot
+                Debug.Log("give player winning piece");
+                break;
+            case 8:
+                // Display win popup maybe
+                Debug.Log("display win popup maybe");
+                break;
+
+        }
+    }
+
+    public void StepCompleted()
+    {
+        tutorialCaption.text = tutorialManager.ShowNextStep();
+    }
+
     #endregion
 
     #region Turn-Based Functions
