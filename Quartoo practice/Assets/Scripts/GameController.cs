@@ -389,7 +389,8 @@ public class GameController : MonoBehaviour
                 EnableTutorialBoardSpace();
                 break;
             case 12:
-                // Maybe include popup or something, for now ensure the next arrow is disabled
+                // Maybe include popup or something, for now this ensures the nextArrow is disabled
+                break;
             default:
                 // Enable arrow to go next
                 Debug.Log("enable arrow");
