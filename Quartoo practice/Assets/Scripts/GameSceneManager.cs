@@ -8,7 +8,7 @@ public class GameSceneManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject darkenBackground;
     public GameObject networkGameOverPanel;
-    public GameObject tutorialParrot;
+    public GameObject tutorial;
     public UnityEngine.UI.Text gameOverMessage;
     public UnityEngine.UI.Text networkGameOverMessage;
 
@@ -91,12 +91,12 @@ public class GameSceneManager : MonoBehaviour
 
     public void showTutorialParrot()
     {
-        tutorialParrot.SetActive(true);
+        tutorial.SetActive(true);
     }
 
     public void hideTutorialParrot()
     {
-        tutorialParrot.SetActive(false);
+        tutorial.SetActive(false);
     }
 
     public void returnToMainMenu()
