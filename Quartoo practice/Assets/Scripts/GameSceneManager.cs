@@ -8,6 +8,7 @@ public class GameSceneManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject darkenBackground;
     public GameObject networkGameOverPanel;
+    public GameObject tutorialParrot;
     public UnityEngine.UI.Text gameOverMessage;
     public UnityEngine.UI.Text networkGameOverMessage;
 
@@ -20,7 +21,6 @@ public class GameSceneManager : MonoBehaviour
 
     public void hideHelpPanel()
     {
-        //Panel helpPanel = GameObject.Find("helpPanel").GetComponent<Panel>();
         helpPanel.SetActive(false);
         darkenBackground.SetActive(false);
     }
@@ -77,7 +77,6 @@ public class GameSceneManager : MonoBehaviour
 
     public void hideSettingsPanel()
     {
-        //Panel helpPanel = GameObject.Find("helpPanel").GetComponent<Panel>();
         settingsPanel.SetActive(false);
         darkenBackground.SetActive(false);
     }
@@ -88,6 +87,16 @@ public class GameSceneManager : MonoBehaviour
             hideSettingsPanel();
         else
             hideHelpPanel();
+    }
+
+    public void showTutorialParrot()
+    {
+        tutorialParrot.SetActive(true);
+    }
+
+    public void hideTutorialParrot()
+    {
+        tutorialParrot.SetActive(false);
     }
 
     public void returnToMainMenu()

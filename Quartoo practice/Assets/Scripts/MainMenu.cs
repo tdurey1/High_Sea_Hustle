@@ -7,6 +7,18 @@ public class MainMenu : MonoBehaviour
     public GameObject settingsPanel;
     public GameObject darkBackground;
 
+    public void multiplayerGame()
+    {
+        GameInfo.gameType = 'N';
+        SceneManager.LoadScene("GameLobby");
+    }
+
+    public void storyModeGame()
+    {
+        GameInfo.gameType = 'S';
+        SceneManager.LoadScene("StoryMode");
+    }
+
     public void quickGame()
     {
         // NOTE: Sets every quickplay to an easy game. Change this to be either easy or hard
@@ -16,23 +28,13 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("UserPreferences");
     }
 
-    public void multiplayerGame()
+    public void tutorial()
     {
-        GameInfo.gameType = 'N';
-        SceneManager.LoadScene("GameLobby");
-    }
+        GameInfo.gameType = 'T';
 
-    public void settings()
-    {
-        SceneManager.LoadScene("Settings");
+        SceneManager.LoadScene("GameScene");
     }
-
-    public void storyModeGame()
-    {
-        GameInfo.gameType = 'S';
-        SceneManager.LoadScene("StoryMode");
-    }
-
+       
     public void showHelpPanel()
     {
         darkBackground.SetActive(true);
