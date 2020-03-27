@@ -12,12 +12,13 @@ public class GameController : MonoBehaviour
     private GameCore gameCore = new GameCore();
     private TutorialManager tutorialManager = new TutorialManager();
    
-    // Unit Objects
+    // Unity Objects
     public List<GamePiece> gamePieces;
     public Button[] buttonList;
     public GamePiece selectedPiece;
     public Button recentMove;
     public GameObject gameSceneManagerObject;
+    public Text tutorialCaption;
     public Vector3 oldPosition;
 
     // GameController specific variables
@@ -315,36 +316,49 @@ public class GameController : MonoBehaviour
     #region Tutorial Functions
     void StartTutorialModeGame()
     {
+        // Get the first caption from the array in tutorial manager
+        tutorialCaption.text = tutorialManager.getCurrentCaption();
+
         // Enable Peter Parrot
         gameSceneManagerObject.GetComponent<GameSceneManager>().showTutorialParrot();
 
         // Player should not be able to click on any gamepiece or boardspace
         DisableEverything();
+    }
 
-        switch(tutorialManager.popupIndex)
+    public void TutorialModeGame()
+    {
+        int popupIndex = tutorialManager.GetPopupIndex();
+
+        switch (popupIndex)
         {
             case 3:
                 // Have player select piece for opponent
+                Debug.Log("select piece");
                 break;
             case 4:
                 // Have opponent place piece and give user a piece
+                Debug.Log("opponent place piece");
                 break;
             case 6:
                 // Update gameboard so their is a win condition and have user select piece to send opponent
+                Debug.Log("Update gameboard");
                 break;
             case 7:
                 // Have opponenet give player a winning piece and let user place it on certain boardspot
+                Debug.Log("give player winning piece");
                 break;
             case 8:
                 // Display win popup maybe
+                Debug.Log("display win popup maybe");
                 break;
 
         }
-        if (tutorialManager.popupIndex == 3)
-        {
-            // Have Player Select piece for opponent
-        }
-        else if (tut)
+    }
+
+    public void StepCompleted()
+    {
+        tutorialCaption.text = tutorialManager.ShowNextStep();
     }
 
     #endregion
