@@ -24,6 +24,8 @@ public class GameController : MonoBehaviour
     // GameController specific variables
     private int playerTurn;
     private bool placingPiece = false;
+    private int tutorialPieceIndex = 0;
+    private int tutorialBoardSpaceIndex = 5;
 
     void Awake()
     {
@@ -329,28 +331,63 @@ public class GameController : MonoBehaviour
     public void TutorialModeGame()
     {
         int popupIndex = tutorialManager.GetPopupIndex();
+        Button nextArrow = GameObject.Find("NextButton").GetComponent<Button>();
+        Button boardSpace;
+
+        DisableTutorialNextArrow(nextArrow);
 
         switch (popupIndex)
         {
             case 3:
                 // Have player select piece for opponent
-                Debug.Log("select piece");
+                Debug.Log("player selecting first piece");
+                EnableTutorialPiece();
                 break;
             case 4:
-                // Have opponent place piece and give user a piece
-                Debug.Log("opponent place piece");
+                // Inform player opponent will now place piece
+                Debug.Log("inform player");
+                EnableTutorialNextArrow(nextArrow);
+                tutorialPieceIndex = 14;
+                break;
+            case 5:
+                // Have opponent place piece
+                Debug.Log("opponent placing piece");
+                boardSpace = GameObject.Find("Board Space A1").GetComponent<Button>();
+                TutorialPlacePieceOnBoard(boardSpace);
+                EnableTutorialNextArrow(nextArrow);
                 break;
             case 6:
-                // Update gameboard so their is a win condition and have user select piece to send opponent
-                Debug.Log("Update gameboard");
+                // Have opponent give piece and player place piece
+                Debug.Log("opponent giving piece and player placing piece");
+                GamePiece gamePiece = gamePieces[tutorialPieceIndex];
+                TutorialSetPiece(gamePiece);
+                EnableTutorialBoardSpace();
                 break;
             case 7:
-                // Have opponenet give player a winning piece and let user place it on certain boardspot
-                Debug.Log("give player winning piece");
+                // Jump ahead a few turns
+                Debug.Log("Jump ahead a few turns");
+                EnableTutorialNextArrow(nextArrow);
                 break;
             case 8:
+                // Update gameboard so their is a win condition and have user select piece to send opponent
+                Debug.Log("give player winning piece");
+                break;
+            case 9:
+                // Have opponent place piece
+                Debug.Log("opponenet place piece");
+                break;
+            case 10:
+                // Have opponent select piece and player place piece
+                Debug.Log("opponent selecting piece and player place piece");
+                break;
+            case 11:
                 // Display win popup maybe
                 Debug.Log("display win popup maybe");
+                break;
+            default:
+                // Enable arrow to go next
+                Debug.Log("enable arrow");
+                EnableTutorialNextArrow(nextArrow);
                 break;
 
         }
@@ -359,11 +396,48 @@ public class GameController : MonoBehaviour
     public void StepCompleted()
     {
         tutorialCaption.text = tutorialManager.ShowNextStep();
+        TutorialModeGame();
+    }
+
+    public void TutorialSetPiece(GamePiece gamePiece)
+    {
+        Button StagePiece = GameObject.Find("StagePiece").GetComponent<Button>();
+  
+        selectedPiece = gamePiece;
+        Vector3 newPosition = StagePiece.transform.position;
+        selectedPiece.transform.position = newPosition;
+
+
+        DisableTutorialPiece();
+
+        if (tutorialPieceIndex == 0)
+        {
+            EnableChooseOptions();
+        }
+    }
+
+    public void TutorialPlacePieceOnBoard(Button button)
+    {
+        Vector3 newPosition = button.transform.position;
+        selectedPiece.transform.position = newPosition;
     }
 
     #endregion
 
     #region Turn-Based Functions
+
+    public void IsTutorial(Button button)
+    {
+        if (GameInfo.gameType != 'T')
+            PlacePieceOnBoard(button);
+        else
+        {
+            DisableTutorialBoardSpace();
+            TutorialPlacePieceOnBoard(button);
+            StepCompleted();
+        }
+    }
+
     public void PlacePieceOnBoard(Button button)
     {
         string debug = (playerTurn == 1) ? "Player 1 placed a piece" : "Player 2 placed a piece";
@@ -397,8 +471,14 @@ public class GameController : MonoBehaviour
 
     public void SelectOpponentsPiece()
     {
-        if (selectedPiece)
+        if (GameInfo.gameType != 'T')
             EndTurn();
+        else
+        {
+            DisableChooseOptions();
+            StepCompleted();
+        }
+
     }
 
     private void PiecePlaced()
@@ -492,9 +572,9 @@ public class GameController : MonoBehaviour
         }
 
         if (GameInfo.gameType == 'N')
-            GameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus);
+            gameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus);
         else
-            GameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
+            gameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
     }
 
     private void ChangeSides()
@@ -515,6 +595,23 @@ public class GameController : MonoBehaviour
                 }
     }
 
+    private void EnableAvailableBoardSpaces()
+    {
+        foreach (GameCore.BoardSpace availableButton in gameCore.availableBoardSpaces)
+            foreach (Button button in buttonList)
+                if (availableButton.id == button.name.Substring(12))
+                {
+                    button.interactable = true;
+                    break;
+                }
+    }
+
+    public void EnablePiecesIfTurn()
+    {
+        if (playerTurn == 1 && placingPiece == false)
+            EnableAvailablePieces();
+    }
+
     private void EnableChooseOptions()
     {
         Button ChoosePiece = GameObject.Find("ChoosePiece").GetComponent<Button>();
@@ -525,15 +622,19 @@ public class GameController : MonoBehaviour
 
     }
 
-    private void EnableAvailableBoardSpaces()
+    private void EnableTutorialNextArrow(Button nextArrow)
     {
-        foreach (GameCore.BoardSpace availableButton in gameCore.availableBoardSpaces)
-            foreach (Button button in buttonList)
-                if (availableButton.id == button.name.Substring(12))
-                {
-                    button.interactable = true;
-                    break;
-                }
+        nextArrow.interactable = true;
+    }
+
+    private void EnableTutorialBoardSpace()
+    {
+        buttonList[tutorialBoardSpaceIndex].GetComponent<Button>().interactable = true;
+    }
+
+    private void EnableTutorialPiece()
+    {
+        gamePieces[tutorialPieceIndex].GetComponent<BoxCollider2D>().enabled = true;
     }
 
     public void DisableAllPieces()
@@ -567,10 +668,19 @@ public class GameController : MonoBehaviour
         DisableChooseOptions();
     }
 
-    public void EnablePiecesIfTurn()
+    private void DisableTutorialNextArrow(Button nextArrow)
     {
-        if (playerTurn == 1 && placingPiece == false)
-            EnableAvailablePieces();
+        nextArrow.interactable = false;
+    }
+
+    private void DisableTutorialBoardSpace()
+    {
+        buttonList[tutorialBoardSpaceIndex].GetComponent<Button>().interactable = false;
+    }
+
+    private void DisableTutorialPiece()
+    {
+        gamePieces[tutorialPieceIndex].GetComponent<BoxCollider2D>().enabled = false;
     }
     #endregion
 
