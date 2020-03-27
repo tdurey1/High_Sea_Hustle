@@ -3875,7 +3875,7 @@ PrefabInstance:
     - target: {fileID: 1196519263992867350, guid: 363b07037f5609f489f33ba8ce093c57,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PlacePieceOnBoard
+      value: IsTutorial
       objectReference: {fileID: 0}
     - target: {fileID: 1196519263992867350, guid: 363b07037f5609f489f33ba8ce093c57,
         type: 3}
