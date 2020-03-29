@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     private AIv1 aiController = new AIv1();
     private GameCore gameCore = new GameCore();
     private TutorialManager tutorialManager = new TutorialManager();
+    private ChatLog chatLog;
    
     // Unity Objects
     public List<GamePiece> gamePieces;
@@ -32,7 +33,8 @@ public class GameController : MonoBehaviour
         SetGameControllerReferenceOnGamePieces();
         SetGameControllerReferenceOnNetwork();
         playerTurn = GameInfo.selectPieceAtStart;
-
+        chatLog = GameObject.Find("ChatLog").GetComponent<ChatLog>();
+        Debug.Log("chat log =" + chatLog);
         // Peter Parrot is just a popup like settings/help, hide it at start so he only shows for a
         // tutorial and not for ai or network game.
         gameSceneManagerObject.GetComponent<GameSceneManager>().hideTutorialParrot();
@@ -50,6 +52,15 @@ public class GameController : MonoBehaviour
             StartTutorialModeGame();
         else
             Debug.Log("Houston we have a problem");
+    }
+
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.LeftArrow))
+            chatLog.AddEvent("Player Moves Left");
+
+        if (Input.GetKey(KeyCode.RightArrow))
+            chatLog.AddEvent("Player Moves Right");
     }
     #endregion
 
