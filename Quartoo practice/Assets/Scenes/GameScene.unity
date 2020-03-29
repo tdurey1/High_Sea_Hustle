@@ -6899,7 +6899,7 @@ MonoBehaviour:
   networkGameOverPanel: {fileID: 5290810926767904975}
   tutorial: {fileID: 1577241506}
   gameOverMessage: {fileID: 1362199549}
-  networkGameOverMessage: {fileID: 0}
+  networkGameOverMessage: {fileID: 4596021187119419477}
 --- !u!4 &1762013804
 Transform:
   m_ObjectHideFlags: 0
@@ -10129,6 +10129,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6f89532396db4042b2c455988c3b3f2, type: 3}
+--- !u!114 &4596021187119419477 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8549209139990365556, guid: d6f89532396db4042b2c455988c3b3f2,
+    type: 3}
+  m_PrefabInstance: {fileID: 4596021187119419476}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5290810926767904975 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8549209139688867995, guid: d6f89532396db4042b2c455988c3b3f2,
