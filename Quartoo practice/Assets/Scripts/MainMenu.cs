@@ -15,7 +15,11 @@ public class MainMenu : MonoBehaviour
 
     public void storyModeGame()
     {
+        // Human Player will always go first
+        GameInfo.selectPieceAtStart = 1;
+
         GameInfo.gameType = 'S';
+        GameInfo.storyModeType = 'E';
         SceneManager.LoadScene("StoryMode");
     }
 
@@ -24,6 +28,8 @@ public class MainMenu : MonoBehaviour
         // NOTE: Sets every quickplay to an easy game. Change this to be either easy or hard
         // whenever that functionality is set in unity
         GameInfo.gameType = 'E';
+
+        GameInfo.storyModeType = 'T';
 
         SceneManager.LoadScene("UserPreferences");
     }

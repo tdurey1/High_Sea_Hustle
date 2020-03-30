@@ -42,12 +42,10 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        if (GameInfo.gameType == 'E' || GameInfo.gameType == 'H')
+        if (GameInfo.gameType == 'E' || GameInfo.gameType == 'H' || GameInfo.gameType == 'S')
             StartAIGame();
         else if (GameInfo.gameType == 'N')
             StartNetworkingGame();
-        else if (GameInfo.gameType == 'S')
-            StartStoryModeGame();
         else if (GameInfo.gameType == 'T')
             StartTutorialModeGame();
         else
@@ -157,11 +155,6 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region Story Mode Functions
-    void StartStoryModeGame()
-    {
-
-    }
-
     void StoryModeGame()
     {
         // do stuff
@@ -172,6 +165,11 @@ public class GameController : MonoBehaviour
     // NOTE: Do we want to add a short (three - five seconds) opening at start of an ai gamescreen?
     private void StartAIGame()
     {
+        if (GameInfo.storyModeType == 'E')
+            Debug.Log("easy ai game");
+        else if (GameInfo.storyModeType == 'H')
+            Debug.Log("hard ai game");
+
         Debug.Log("Start ai game");
 
         // Player 1 (human) selects first piece
@@ -527,9 +525,9 @@ public class GameController : MonoBehaviour
         placingPiece = false;
         selectedPiece = null;
 
-        if (GameInfo.gameType == 'E')
+        if (GameInfo.gameType == 'E' || GameInfo.storyModeType == 'E')
             EasyAIGame();
-        else if (GameInfo.gameType == 'H')
+        else if (GameInfo.gameType == 'H' || GameInfo.storyModeType == 'H')
             HardAIGame();
         else if (GameInfo.gameType == 'N')
             NetworkGame();
@@ -578,9 +576,9 @@ public class GameController : MonoBehaviour
         ChangeSides();
         placingPiece = true;
 
-        if (GameInfo.gameType == 'E')
+        if (GameInfo.gameType == 'E' || GameInfo.storyModeType == 'E')
             EasyAIGame();
-        else if (GameInfo.gameType == 'H')
+        else if (GameInfo.gameType == 'H' || GameInfo.storyModeType == 'H')
             HardAIGame();
         else if (GameInfo.gameType == 'N')
         {
@@ -612,7 +610,14 @@ public class GameController : MonoBehaviour
                 playerWinStatus = 'T';
         }
 
-        if (GameInfo.gameType == 'N')
+        if (GameInfo.gameType == 'S')
+        {
+            if (playerWinStatus == 'W')
+                gameSceneManagerObject.GetComponent<GameSceneManager>().showStoryModeWinPanel();
+            else
+                gameSceneManagerObject.GetComponent<GameSceneManager>().showStoryModeLosePanel();
+        }
+        else if (GameInfo.gameType == 'N')
             gameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus);
         else
             gameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);

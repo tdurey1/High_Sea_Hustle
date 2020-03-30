@@ -8,9 +8,77 @@ public class GameSceneManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject darkenBackground;
     public GameObject networkGameOverPanel;
+    public GameObject storyModeLosePanel;
+    public GameObject storyModeWinPanel;
     public GameObject tutorial;
     public UnityEngine.UI.Text gameOverMessage;
     public UnityEngine.UI.Text networkGameOverMessage;
+
+    #region GameOver Panels
+    public void showGameOverPanel(char endgameStatus)
+    {
+        string endgameMessage = getGameOverMessage(endgameStatus);
+
+        gameOverMessage.text = endgameMessage;
+        gameOverPanel.SetActive(true);
+    }
+
+    public void hideGameOverPanel()
+    {
+        gameOverPanel.SetActive(false);
+    }
+
+    public void showNetworkGameOverPanel(char endgameStatus)
+    {
+
+        string endgameMessage = getGameOverMessage(endgameStatus);
+
+        networkGameOverMessage.text = endgameMessage;
+        networkGameOverPanel.SetActive(true);
+    }
+
+    public void hideNetworkGameOverPanel()
+    {
+        networkGameOverPanel.SetActive(false);
+    }
+
+    public void showStoryModeWinPanel()
+    {
+        Debug.Log("Inside showStoryModeWinPanel()");
+        storyModeWinPanel.SetActive(true);
+        storyModeWinPanel.GetComponentInChildren<UnityEngine.UI.Text>().text = "Congratulations!";
+    }
+
+    public void hideStoryModeWinPanel()
+    {
+        storyModeWinPanel.SetActive(false);
+    }
+
+    public void showStoryModeLosePanel()
+    {
+        Debug.Log("Inside showStoryModeLosePanel()");
+        storyModeLosePanel.SetActive(true);
+        storyModeLosePanel.GetComponentInChildren<UnityEngine.UI.Text>().text = "Bummer!";
+    }
+
+    public void hideStoryModeLosePanel()
+    {
+        storyModeLosePanel.SetActive(false);
+    }
+    #endregion
+
+    #region Settings/Help Panels
+    public void showSettingsPanel()
+    {
+        darkenBackground.SetActive(true);
+        settingsPanel.SetActive(true);
+    }
+
+    public void hideSettingsPanel()
+    {
+        settingsPanel.SetActive(false);
+        darkenBackground.SetActive(false);
+    }
 
     public void showHelpPanel()
     {
@@ -25,62 +93,6 @@ public class GameSceneManager : MonoBehaviour
         darkenBackground.SetActive(false);
     }
 
-    public void showGameOverPanel(char endgameStatus)
-    {
-        string message;
-
-        if (endgameStatus == 'L')
-        {
-            message = "YOU LOST";
-        }
-        else
-        {
-            message = endgameStatus == 'W' ? "YOU WON!" : "YOU TIED";
-        }
-
-        gameOverMessage.text = message;
-        gameOverPanel.SetActive(true);
-    }
-
-    public void hideGameOverPanel()
-    {
-        gameOverPanel.SetActive(false);
-    }
-
-    public void showNetworkGameOverPanel(char endgameStatus)
-    {
-        string message;
-
-        if (endgameStatus == 'L')
-        {
-            message = "YOU LOST";
-        }
-        else
-        {
-            message = endgameStatus == 'W' ? "YOU WON!" : "YOU TIED";
-        }
-
-        networkGameOverMessage.text = message;
-        networkGameOverPanel.SetActive(true);
-    }
-
-    public void hideNetworkGameOverPanel()
-    {
-        networkGameOverPanel.SetActive(false);
-    }
-
-    public void showSettingsPanel()
-    {
-        darkenBackground.SetActive(true);
-        settingsPanel.SetActive(true);
-    }
-
-    public void hideSettingsPanel()
-    {
-        settingsPanel.SetActive(false);
-        darkenBackground.SetActive(false);
-    }
-
     public void closeCurrentPanel()
     {
         if (settingsPanel.activeSelf)
@@ -88,7 +100,9 @@ public class GameSceneManager : MonoBehaviour
         else
             hideHelpPanel();
     }
+    #endregion
 
+    #region Tutorial
     public void showTutorialParrot()
     {
         tutorial.SetActive(true);
@@ -98,7 +112,9 @@ public class GameSceneManager : MonoBehaviour
     {
         tutorial.SetActive(false);
     }
+    #endregion
 
+    #region SceneChanges
     public void returnToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
@@ -115,4 +131,36 @@ public class GameSceneManager : MonoBehaviour
         GameInfo.selectPieceAtStart = 2;
         SceneManager.LoadScene("GameScene");
     }
+
+    public void playAgain()
+    {
+        SceneManager.LoadScene("GameScene");
+    }
+
+    public void continueStoryMode()
+    {
+        if (GameInfo.storyModeType == 'E')
+        {
+            GameInfo.storyModeType = 'H';
+        }
+
+        SceneManager.LoadScene("StoryMode2");
+    }
+
+    private string getGameOverMessage(char endgameStatus)
+    {
+        string message;
+
+        if (endgameStatus == 'L')
+        {
+            message = "YOU LOST";
+        }
+        else
+        {
+            message = endgameStatus == 'W' ? "YOU WON!" : "YOU TIED";
+        }
+
+        return message;
+    }
+    #endregion
 }
