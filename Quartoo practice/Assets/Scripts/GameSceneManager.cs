@@ -8,23 +8,13 @@ public class GameSceneManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject darkenBackground;
     public GameObject networkGameOverPanel;
+    public GameObject storyModeLosePanel;
+    public GameObject storyModeWinPanel;
     public GameObject tutorial;
     public UnityEngine.UI.Text gameOverMessage;
     public UnityEngine.UI.Text networkGameOverMessage;
 
-    public void showHelpPanel()
-    {
-        darkenBackground.SetActive(true);
-        helpPanel.SetActive(true);
-        Debug.Log("make panel visible");
-    }
-
-    public void hideHelpPanel()
-    {
-        helpPanel.SetActive(false);
-        darkenBackground.SetActive(false);
-    }
-
+    #region GameOver Panels
     public void showGameOverPanel(char endgameStatus)
     {
         string message;
@@ -69,6 +59,28 @@ public class GameSceneManager : MonoBehaviour
         networkGameOverPanel.SetActive(false);
     }
 
+    public void showStoryModeWinPanel()
+    {
+        storyModeWinPanel.SetActive(true);
+    }
+
+    public void hideStoryModeWinPanel()
+    {
+        storyModeWinPanel.SetActive(false);
+    }
+
+    public void showStoryModeLosePanel()
+    {
+        storyModeLosePanel.SetActive(true);
+    }
+
+    public void hideStoryModeLosePanel()
+    {
+        storyModeLosePanel.SetActive(false);
+    }
+    #endregion
+
+    #region Settings/Help Panels
     public void showSettingsPanel()
     {
         darkenBackground.SetActive(true);
@@ -81,6 +93,19 @@ public class GameSceneManager : MonoBehaviour
         darkenBackground.SetActive(false);
     }
 
+    public void showHelpPanel()
+    {
+        darkenBackground.SetActive(true);
+        helpPanel.SetActive(true);
+        Debug.Log("make panel visible");
+    }
+
+    public void hideHelpPanel()
+    {
+        helpPanel.SetActive(false);
+        darkenBackground.SetActive(false);
+    }
+
     public void closeCurrentPanel()
     {
         if (settingsPanel.activeSelf)
@@ -88,7 +113,9 @@ public class GameSceneManager : MonoBehaviour
         else
             hideHelpPanel();
     }
+    #endregion
 
+    #region Tutorial
     public void showTutorialParrot()
     {
         tutorial.SetActive(true);
@@ -98,7 +125,9 @@ public class GameSceneManager : MonoBehaviour
     {
         tutorial.SetActive(false);
     }
+    #endregion
 
+    #region SceneChanges
     public void returnToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
@@ -115,4 +144,20 @@ public class GameSceneManager : MonoBehaviour
         GameInfo.selectPieceAtStart = 2;
         SceneManager.LoadScene("GameScene");
     }
+
+    public void playAgain()
+    {
+        SceneManager.LoadScene("GameScene");
+    }
+
+    public void continueStoryMode()
+    {
+        if (GameInfo.storyModeType == 'E')
+        {
+            GameInfo.storyModeType = 'H';
+        }
+        else
+            SceneManager.LoadScene("StoryMode");
+    }
+    #endregion
 }
