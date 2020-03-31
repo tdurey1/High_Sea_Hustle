@@ -14,6 +14,7 @@ public class NetworkController : MonoBehaviour
     private GameController gameController;
     private static char networkMessage;
     private static bool networkMessageReceived = false;
+    private static int rematch = 0;
 
     #endregion
 
@@ -62,6 +63,23 @@ public class NetworkController : MonoBehaviour
         Debug.Log("Got out of loop");
         networkMessageReceived = false;
         gameController.NetworkMessageReceived();
+    }
+
+    public IEnumerator WaitForRematch()
+    {
+        // create room here, assign current host as next host and current other player as other player
+
+        while (rematch != 2)
+            yield return null;
+
+        // if room already created
+        // code from start room
+
+
+
+        // if number of players in the room < 2
+        // remaining player gets message, and in someway is forced back to main menu
+
     }
 
     #region Public Functions

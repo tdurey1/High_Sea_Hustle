@@ -157,11 +157,9 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
         Debug.Log("Local Player master client? " + PhotonNetwork.LocalPlayer.IsMasterClient);
 
-        if (!PhotonNetwork.LocalPlayer.IsMasterClient)
-        {
-            FindGamesButton.gameObject.SetActive(true);
-            roomListingPanel.gameObject.SetActive(true);
-        }
+        FindGamesButton.gameObject.SetActive(true);
+        roomListingPanel.gameObject.SetActive(true);
+  
         GameInfo.selectPieceAtStart = 2;
     }
 

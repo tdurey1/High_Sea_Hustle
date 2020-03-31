@@ -64,6 +64,15 @@ public class NetworkPlayer : MonoBehaviour
         networkController.SetNetworkMessageReceived(true);
     }
 
+    [PunRPC]
+    public void RPC_SendRestartChoice(bool choice)
+    {
+        if (!photonView.IsMine)
+            return;
+
+
+    }
+
     #endregion
 
     #region Functions
