@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class AIHard
 {
     private GameCore gameCore = new GameCore();
+    private GameCore.Piece pieceAIPlaced;
 
     /*********************************************
             Phase 1 (Pick a place for piece given)
@@ -15,10 +16,16 @@ public class AIHard
                         the possibility for a win or prevent as many possible losses?
                         I play aggressive, leaving those areas open, but I am open to suggestions on this.
     */
+    void Awake()
+    {
+        pieceAIPlaced = ConvertGamePiece("AI", gameCore.availablePieces);
+    }
 
-    public string ChooseLocation(List<GameCore.BoardSpace> availableBoardSpaces, GameCore.Piece pieceGivenToAI, string recentMoveID)
+    public string ChooseLocation(List<GameCore.BoardSpace> availableBoardSpaces, List<GameCore.Piece> availablePieces, string pieceGivenToAIID, string recentMoveID)
     {
         GameCore.BoardSpace chosenLocation = ConvertPosition(recentMoveID, availableBoardSpaces);
+        GameCore.Piece pieceGivenToAI = ConvertGamePiece(pieceGivenToAIID, availablePieces);
+        pieceAIPlaced = pieceGivenToAI;
         string chosenLocationString;
         int numOfAvailablePositions = availableBoardSpaces.Count;
 
@@ -239,7 +246,7 @@ public class AIHard
         //believe this is the minimax algorithm that I described.
     */
 
-    public string ChooseGamePiece(List<GameCore.Piece> availablePieces, GameCore.Piece pieceAIPlaced)
+    public string ChooseGamePiece(List<GameCore.Piece> availablePieces)
     {
         GameCore.Piece chosenPiece = pieceAIPlaced;
         List<GameCore.Piece> viablePieces = new List<GameCore.Piece>();
@@ -1086,5 +1093,16 @@ Extra Necessary Functions
                 convertedBoardSpace = space;
 
         return convertedBoardSpace;
+    }
+
+    private GameCore.Piece ConvertGamePiece(string gamePieceID, List<GameCore.Piece> availablePieces)
+    {
+        GameCore.Piece convertedGamePiece = new GameCore.Piece();
+
+        foreach (GameCore.Piece piece in availablePieces)
+            if (gamePieceID == piece.id)
+                convertedGamePiece = piece;
+
+        return convertedGamePiece;
     }
 }

@@ -123,12 +123,17 @@ public class NetworkController : MonoBehaviour
 
     }
 
-    public void IncrementRematch(int rematchChoice)
+    public void SendIncrementRematch()
     {
         // Increment rematch var here and send to other players networkcontroller using rpc
 
-        rematch = rematchChoice;
+        rematch++;
         NetworkPlayer.networkPlayer.SendIncrementedRematch(rematch);
+    }
+
+    public void IncrementRematch()
+    {
+        rematch++;
     }
 
     public void SendMove()

@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     // Controllers
     private static NetworkController networkController = new NetworkController();
     private AIv1 aiController = new AIv1();
+    private AIHard hardAIController = new AIHard();
     private GameCore gameCore = new GameCore();
     private TutorialManager tutorialManager;
 
@@ -187,14 +188,20 @@ public class GameController : MonoBehaviour
         if (playerTurn == 1)
         {
             Debug.Log("player started");
-            EasyAIGame();
+            if (GameInfo.gameType == 'E' || GameInfo.storyModeType == 'E')
+                EasyAIGame();
+            else
+                HardAIGame();
             // NOTE: Include some UI to inform user to select a piece
         }
         // Player 2 (ai) selects first piece
         else
         {
             Debug.Log("Ai started");
-            EasyAIGame();
+            if (GameInfo.gameType == 'E' || GameInfo.storyModeType == 'E')
+                EasyAIGame();
+            else
+                HardAIGame();
             // NOTE: Include some UI to inform user that the ai has already selected a piece
         }
     }
@@ -289,7 +296,7 @@ public class GameController : MonoBehaviour
             {
                 Debug.Log("AI placing a piece");
 
-                string aiBoardSpaceChosen = aiController.choosePosition(gameCore.availableBoardSpaces);
+                string aiBoardSpaceChosen = hardAIController.ChooseLocation(gameCore.availableBoardSpaces, gameCore.usedPieces, selectedPiece.id, recentMove.name);
                 Button boardSpace = ConvertAIBoardSpace(aiBoardSpaceChosen);
                 StartCoroutine("DelayAIMove", boardSpace);
             }
@@ -299,7 +306,7 @@ public class GameController : MonoBehaviour
                 Debug.Log("AI choosing opponents piece");
 
                 // Have ai pick piece
-                string aiPieceChosen = aiController.chooseGamePiece(gameCore.availablePieces);
+                string aiPieceChosen = hardAIController.ChooseGamePiece(gameCore.availablePieces);
                 ConvertAIPiece(aiPieceChosen);
                 EndTurn();
             }
