@@ -188,14 +188,20 @@ public class GameController : MonoBehaviour
         if (playerTurn == 1)
         {
             Debug.Log("player started");
-            EasyAIGame();
+            if (GameInfo.gameType == 'E' || GameInfo.storyModeType == 'E')
+                EasyAIGame();
+            else
+                HardAIGame();
             // NOTE: Include some UI to inform user to select a piece
         }
         // Player 2 (ai) selects first piece
         else
         {
             Debug.Log("Ai started");
-            EasyAIGame();
+            if (GameInfo.gameType == 'E' || GameInfo.storyModeType == 'E')
+                EasyAIGame();
+            else
+                HardAIGame();
             // NOTE: Include some UI to inform user that the ai has already selected a piece
         }
     }
