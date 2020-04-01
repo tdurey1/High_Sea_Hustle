@@ -21,6 +21,7 @@ public class GameCore : MonoBehaviour
             this.id = id;
         }
     }
+
     public struct BoardSpace
     {
         public string id;
