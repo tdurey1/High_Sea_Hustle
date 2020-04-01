@@ -74,13 +74,10 @@ public class NetworkController : MonoBehaviour
         while (rematch != 2)
             yield return null;
 
-        // if room already created
-        // code from start room
+        if (PhotonNetwork.AutomaticallySyncScene == false)
+            PhotonNetwork.AutomaticallySyncScene = true;
 
-
-
-        // if number of players in the room < 2
-        // remaining player gets message, and in someway is forced back to main menu
+        PhotonNetwork.LoadLevel("GameScene");
 
     }
 
