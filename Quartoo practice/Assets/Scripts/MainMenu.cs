@@ -25,9 +25,9 @@ public class MainMenu : MonoBehaviour
 
     public void quickGame()
     {
-        // NOTE: Sets every quickplay to an easy game. Change this to be either easy or hard
+        // NOTE: Sets every quickplay to a hard game. Change this to be either easy or hard
         // whenever that functionality is set in unity
-        GameInfo.gameType = 'E';
+        GameInfo.gameType = 'H';
 
         GameInfo.storyModeType = 'T';
 
