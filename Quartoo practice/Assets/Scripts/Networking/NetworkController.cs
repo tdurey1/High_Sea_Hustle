@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class NetworkController : MonoBehaviour
     public static NetworkController NetController;
     public static string movePiece;
     public static string moveLocation;
+    public string roomName;
 
     [SerializeField] private PhotonView photonView;
     private GameController gameController;
@@ -95,11 +97,38 @@ public class NetworkController : MonoBehaviour
     public void CreateNewRoom()
     {
         // Create new room; current host is the host and whoever joined is the joiner or whatever
+
+
+        // Previous host will be host of new room
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            PhotonNetwork.LeaveRoom();
+
+            RoomOptions roomOps = new RoomOptions()
+            {
+                IsVisible = false,                  // don't show this one in the room list
+                IsOpen = true,
+                MaxPlayers = 2
+            };
+
+            roomName = Random.Range(0, 10000).ToString();
+            PhotonNetwork.CreateRoom(roomName, roomOps);
+        }
+
+        // !!! Maybe add a delay here to make sure the room is created before trying to join it?
+
+        // other player will join the room stored in the str var roomName
+        if (!PhotonNetwork.LocalPlayer.IsMasterClient)
+            PhotonNetwork.JoinRoom(roomName);
+
     }
 
-    public void IncrementRematch()
+    public void IncrementRematch(int rematchChoice)
     {
         // Increment rematch var here and send to other players networkcontroller using rpc
+
+        rematch = rematchChoice;
+        NetworkPlayer.networkPlayer.SendIncrementedRematch(rematch);
     }
 
     public void SendMove()

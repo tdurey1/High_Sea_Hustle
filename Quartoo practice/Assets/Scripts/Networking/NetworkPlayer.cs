@@ -64,13 +64,23 @@ public class NetworkPlayer : MonoBehaviour
         networkController.SetNetworkMessageReceived(true);
     }
 
+    //[PunRPC]
+    //public void RPC_SendRestartChoice(bool choice)
+    //{
+    //    if (!photonView.IsMine)
+    //        return;
+
+
+    //}
+
     [PunRPC]
-    public void RPC_SendRestartChoice(bool choice)
+    public void RPC_SendIncrementedRematch(int rematch)
     {
         if (!photonView.IsMine)
             return;
 
-
+        rematch++;
+        networkController.IncrementRematch(rematch);
     }
 
     #endregion
@@ -87,6 +97,11 @@ public class NetworkPlayer : MonoBehaviour
     {
         Debug.Log("NetworkPlayer.cs/SendPiece(string movePiece)");
         photonView.RPC("RPC_SendPiece", RpcTarget.All, movePiece);
+    }
+
+    public void SendIncrementedRematch(int rematch)
+    {
+        photonView.RPC("RPC_SendIncrementedRematch", RpcTarget.All, rematch);
     }
 
     #endregion
