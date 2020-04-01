@@ -5,34 +5,21 @@ public class AIHard
 {
     private GameCore gameCore = new GameCore();
 
-/*********************************************
-        Phase 1 (Pick a place for piece given)
-**********************************************
-        1. Check for Win, if there is, place piece in winning location
-        //1 is Unnecessary while available pieces > 12
-        2. Picking Piece:
-            A. If AI goes second (places piece first), pick location randomly, then follow 2.B
-            B. If AI goes first (picks piece first), place opposite of opponent
-                I. If location is occupied, check list of available spaces for location one bit off
-                    (example: if opp piece is in 1111, and location 0000 is occupied, 
-                                choose available location 0111,1011,1101,or 1110 if available)
-                II. If locations from 2.B.I is occupied, check list of available spaces for location 
-                    two bits off (1100,1001,0011,0110,0101,1010)
-                III. If locations from 2.B.II is occupied, check list of available spaces for location 
-                    three bits off (1000,0100,0010,0001)
-        3. Else, place piece
-                //Valid placement and covers Ties
-
-        //Question: If the AI notices a possible win, but the piece it was given does not satisfy
-                    condition, should the AI place the piece there as to prevent a win for the 
-                    opponent?
-                    It is the question of should the AI be aggressive or defensive? Should it leave
-                    the possibility for a win or prevent as many possible losses?
-                    I play aggressive, leaving those areas open, but I am open to suggestions on this.
+    /*********************************************
+            Phase 1 (Pick a place for piece given)
+    **********************************************
+           //Question: If the AI notices a possible win, but the piece it was given does not satisfy
+                        condition, should the AI place the piece there as to prevent a win for the 
+                        opponent?
+                        It is the question of should the AI be aggressive or defensive? Should it leave
+                        the possibility for a win or prevent as many possible losses?
+                        I play aggressive, leaving those areas open, but I am open to suggestions on this.
     */
-    public string ChoosePosition(List<GameCore.BoardSpace> availableBoardSpaces, GameCore.Piece pieceGivenToAI)
+
+    public string ChooseLocation(List<GameCore.BoardSpace> availableBoardSpaces, GameCore.Piece pieceGivenToAI, string recentMoveID)
     {
-        string chosenLocation = null;
+        GameCore.BoardSpace chosenLocation = ConvertPosition(recentMoveID, availableBoardSpaces);
+        string chosenLocationString;
         int numOfAvailablePositions = availableBoardSpaces.Count;
 
         //Check for Win
@@ -40,25 +27,192 @@ public class AIHard
         {
             //Check to see if peice given leads to win
             string winningLocation = CheckForWinPosition(pieceGivenToAI, availableBoardSpaces);
-            if(winningLocation != null)
+            if (winningLocation != null)
             {
-                chosenLocation = winningLocation;
-                return chosenLocation;
+                chosenLocationString = winningLocation;
+                return chosenLocationString;
             }
         }
 
         //When AI goes second, choosing very first location
         if (numOfAvailablePositions == 16)
         {
-            int option = Random.Range(0, numOfAvailablePositions);
-            chosenLocation = availableBoardSpaces[option].id;
+            int rand = Random.Range(0, numOfAvailablePositions);
+            chosenLocationString = availableBoardSpaces[rand].id;
 
-            return chosenLocation;
+            return chosenLocationString;
         }
 
-        //Choose Location for other conditions
 
-        return chosenLocation;
+        int numericLocationofRecentMove = (4 * chosenLocation.row) + chosenLocation.col;
+        int numericLocationofChosenLocation = 15 - numericLocationofRecentMove;
+        chosenLocation.row = numericLocationofChosenLocation / 4;
+        chosenLocation.col = numericLocationofChosenLocation % 4;
+
+        foreach (GameCore.BoardSpace a in availableBoardSpaces)
+        {
+            if (chosenLocation.row == a.row &&
+                chosenLocation.col == a.col)
+            {
+                chosenLocation.id = a.id;
+                chosenLocationString = chosenLocation.id;
+                return chosenLocationString;
+            }
+        }
+
+        int decision = Random.Range(0, 2);
+        int tempDecision = decision;
+        do
+        {
+            if (tempDecision == 0)
+            {
+                int cornerDecision = Random.Range(0, 3);
+                int tempCornerDecision = cornerDecision;
+                do
+                {
+                    switch (tempCornerDecision)
+                    {
+                        case 1:
+                            chosenLocation.row = 0;
+                            chosenLocation.col = 0;
+                            break;
+                        case 2:
+                            chosenLocation.row = 0;
+                            chosenLocation.col = 3;
+                            break;
+                        case 3:
+                            chosenLocation.row = 3;
+                            chosenLocation.col = 0;
+                            break;
+                        case 0:
+                            chosenLocation.row = 3;
+                            chosenLocation.col = 3;
+                            break;
+                    }
+
+                    foreach (GameCore.BoardSpace a in availableBoardSpaces)
+                    {
+                        if (chosenLocation.row == a.row &&
+                            chosenLocation.col == a.col)
+                        {
+                            chosenLocation.id = a.id;
+                            chosenLocationString = chosenLocation.id;
+                            return chosenLocationString;
+                        }
+                    }
+
+                    tempCornerDecision = (tempCornerDecision + 3) % 4;
+
+                } while (tempCornerDecision != cornerDecision);
+            }
+            else if (tempDecision == 1)
+            {
+                int internalDecision = Random.Range(0, 3);
+                int tempInternalDecision = internalDecision;
+                do
+                {
+                    switch (tempInternalDecision)
+                    {
+                        case 1:
+                            chosenLocation.row = 1;
+                            chosenLocation.col = 1;
+                            break;
+                        case 2:
+                            chosenLocation.row = 1;
+                            chosenLocation.col = 2;
+                            break;
+                        case 3:
+                            chosenLocation.row = 2;
+                            chosenLocation.col = 1;
+                            break;
+                        case 4:
+                            chosenLocation.row = 2;
+                            chosenLocation.col = 2;
+                            break;
+                    }
+
+                    foreach (GameCore.BoardSpace a in availableBoardSpaces)
+                    {
+                        if (chosenLocation.row == a.row &&
+                            chosenLocation.col == a.col)
+                        {
+                            chosenLocation.id = a.id;
+                            chosenLocationString = chosenLocation.id;
+                            return chosenLocationString;
+                        }
+                    }
+
+                    tempInternalDecision = (tempInternalDecision + 3) % 4;
+
+                } while (tempInternalDecision != internalDecision);
+            }
+            else
+            {
+                int externalDecision = Random.Range(0, 8);
+                int tempExternalDecision = externalDecision;
+                do
+                {
+                    switch (tempExternalDecision)
+                    {
+                        case 1:
+                            chosenLocation.row = 0;
+                            chosenLocation.col = 1;
+                            break;
+                        case 2:
+                            chosenLocation.row = 0;
+                            chosenLocation.col = 2;
+                            break;
+                        case 3:
+                            chosenLocation.row = 1;
+                            chosenLocation.col = 0;
+                            break;
+                        case 4:
+                            chosenLocation.row = 2;
+                            chosenLocation.col = 0;
+                            break;
+                        case 5:
+                            chosenLocation.row = 1;
+                            chosenLocation.col = 3;
+                            break;
+                        case 6:
+                            chosenLocation.row = 2;
+                            chosenLocation.col = 3;
+                            break;
+                        case 7:
+                            chosenLocation.row = 3;
+                            chosenLocation.col = 1;
+                            break;
+                        case 8:
+                            chosenLocation.row = 3;
+                            chosenLocation.col = 2;
+                            break;
+                    }
+
+                    foreach (GameCore.BoardSpace a in availableBoardSpaces)
+                    {
+                        if (chosenLocation.row == a.row &&
+                            chosenLocation.col == a.col)
+                        {
+                            chosenLocation.id = a.id;
+                            chosenLocationString = chosenLocation.id;
+                            return chosenLocationString;
+                        }
+                    }
+
+                    tempExternalDecision = (tempExternalDecision + 3) % 8;
+
+                } while (tempExternalDecision != externalDecision);
+            }
+
+            tempDecision = (tempDecision + 2) % 3;
+
+        } while (tempDecision != decision);
+
+        //Catch-All Default
+        int option = Random.Range(0, numOfAvailablePositions);
+        chosenLocationString = availableBoardSpaces[option].id;
+
+        return chosenLocationString;
     }
 
 
@@ -87,7 +241,7 @@ public class AIHard
 
     public string ChooseGamePiece(List<GameCore.Piece> availablePieces, GameCore.Piece pieceAIPlaced)
     {
-        string chosenPiece = null;
+        GameCore.Piece chosenPiece = pieceAIPlaced;
         List<GameCore.Piece> viablePieces = new List<GameCore.Piece>();
         GameCore.Piece[][] AITempBoard = gameCore.GetGameBoard();
         int numOfAvailablePieces = availablePieces.Count;
@@ -301,18 +455,406 @@ public class AIHard
             }
         }
 
-        if (numOfViablePieces == 0)
+        string chosenPieceString;
+
+        //Chooses a losing piece at random if there is no non-losing piece
+        if (numOfViablePieces == 0 || numOfAvailablePieces == 16)
         {
             int option = Random.Range(0, numOfAvailablePieces);
-            chosenPiece = availablePieces[option].id;
+            chosenPieceString = availablePieces[option].id;
 
-            return chosenPiece;
+            return chosenPieceString;
         }
 
-        //chosenPiece = viable piece one bit off from pieceAIPlaced that is in viablePieces
+        //************************************
+        //Checks (and chooses) piece 1-bit off
+        int firstOption = Random.Range(0, 3);
+        int tempFirstOption = firstOption;
 
-        viablePieces.Clear();
-        return chosenPiece;
+        do
+        {
+            switch (tempFirstOption)
+            {
+                case 1:
+                    if (chosenPiece.color == 0)
+                        chosenPiece.color = 1;
+                    else
+                        chosenPiece.color = 0;
+                    break;
+                case 2:
+                    if (chosenPiece.height == 0)
+                        chosenPiece.height = 1;
+                    else
+                        chosenPiece.height = 0;
+                    break;
+                case 3:
+                    if (chosenPiece.shape == 0)
+                        chosenPiece.shape = 1;
+                    else
+                        chosenPiece.shape = 0;
+                    break;
+                case 0:
+                    if (chosenPiece.emblem == 0)
+                        chosenPiece.emblem = 1;
+                    else
+                        chosenPiece.emblem = 0;
+                    break;
+            }
+
+            foreach (GameCore.Piece a in viablePieces)
+            {
+                if (chosenPiece.color == a.color &&
+                   chosenPiece.height == a.height &&
+                   chosenPiece.shape == a.shape &&
+                   chosenPiece.emblem == a.emblem)
+                {
+                    chosenPiece.id = a.id;
+                    chosenPieceString = chosenPiece.id;
+                    return chosenPieceString;
+                }
+            }
+
+            chosenPiece = pieceAIPlaced;
+            tempFirstOption = (tempFirstOption + 1) % 4;
+
+        }while (tempFirstOption != firstOption);
+
+        //************************************
+        //Checks (and chooses) piece 2-bit off
+        int secondOption = Random.Range(0, 3);
+        while (secondOption != firstOption)
+            secondOption = Random.Range(0, 3);
+        int tempSecondOption = secondOption;
+
+        do
+        {
+            switch (tempFirstOption)
+            {
+                case 1:
+                    if (chosenPiece.color == 0)
+                        chosenPiece.color = 1;
+                    else
+                        chosenPiece.color = 0;
+                    break;
+                case 2:
+                    if (chosenPiece.height == 0)
+                        chosenPiece.height = 1;
+                    else
+                        chosenPiece.height = 0;
+                    break;
+                case 3:
+                    if (chosenPiece.shape == 0)
+                        chosenPiece.shape = 1;
+                    else
+                        chosenPiece.shape = 0;
+                    break;
+                case 0:
+                    if (chosenPiece.emblem == 0)
+                        chosenPiece.emblem = 1;
+                    else
+                        chosenPiece.emblem = 0;
+                    break;
+            }
+
+            do
+            {
+                switch (tempSecondOption)
+                {
+                    case 1:
+                        if (chosenPiece.color == 0)
+                            chosenPiece.color = 1;
+                        else
+                            chosenPiece.color = 0;
+                        break;
+                    case 2:
+                        if (chosenPiece.height == 0)
+                            chosenPiece.height = 1;
+                        else
+                            chosenPiece.height = 0;
+                        break;
+                    case 3:
+                        if (chosenPiece.shape == 0)
+                            chosenPiece.shape = 1;
+                        else
+                            chosenPiece.shape = 0;
+                        break;
+                    case 0:
+                        if (chosenPiece.emblem == 0)
+                            chosenPiece.emblem = 1;
+                        else
+                            chosenPiece.emblem = 0;
+                        break;
+                }
+
+                foreach (GameCore.Piece a in viablePieces)
+                {
+                    if (chosenPiece.color == a.color &&
+                       chosenPiece.height == a.height &&
+                       chosenPiece.shape == a.shape &&
+                       chosenPiece.emblem == a.emblem)
+                    {
+                        chosenPiece.id = a.id;
+                        chosenPieceString = chosenPiece.id;
+                        return chosenPieceString;
+                    }
+                }
+
+                switch (tempSecondOption)
+                {
+                    case 1:
+                        if (chosenPiece.color == 0)
+                            chosenPiece.color = 1;
+                        else
+                            chosenPiece.color = 0;
+                        break;
+                    case 2:
+                        if (chosenPiece.height == 0)
+                            chosenPiece.height = 1;
+                        else
+                            chosenPiece.height = 0;
+                        break;
+                    case 3:
+                        if (chosenPiece.shape == 0)
+                            chosenPiece.shape = 1;
+                        else
+                            chosenPiece.shape = 0;
+                        break;
+                    case 0:
+                        if (chosenPiece.emblem == 0)
+                            chosenPiece.emblem = 1;
+                        else
+                            chosenPiece.emblem = 0;
+                        break;
+                }
+
+                tempSecondOption = (tempSecondOption + 1) % 4;
+
+            } while (tempSecondOption != secondOption);
+
+            chosenPiece = pieceAIPlaced;
+            tempFirstOption = (tempFirstOption + 1) % 4;
+
+        } while (tempFirstOption != firstOption);
+
+        //************************************
+        //Checks (and chooses) piece 3-bit off
+        int thirdOption = Random.Range(0, 3);
+        while (thirdOption != firstOption && thirdOption != secondOption)
+            thirdOption = Random.Range(0, 3);
+        int tempThirdOption = thirdOption;
+
+        do
+        {
+            switch (tempFirstOption)
+            {
+                case 1:
+                    if (chosenPiece.color == 0)
+                        chosenPiece.color = 1;
+                    else
+                        chosenPiece.color = 0;
+                    break;
+                case 2:
+                    if (chosenPiece.height == 0)
+                        chosenPiece.height = 1;
+                    else
+                        chosenPiece.height = 0;
+                    break;
+                case 3:
+                    if (chosenPiece.shape == 0)
+                        chosenPiece.shape = 1;
+                    else
+                        chosenPiece.shape = 0;
+                    break;
+                case 0:
+                    if (chosenPiece.emblem == 0)
+                        chosenPiece.emblem = 1;
+                    else
+                        chosenPiece.emblem = 0;
+                    break;
+            }
+
+            do
+            {
+                switch (tempSecondOption)
+                {
+                    case 1:
+                        if (chosenPiece.color == 0)
+                            chosenPiece.color = 1;
+                        else
+                            chosenPiece.color = 0;
+                        break;
+                    case 2:
+                        if (chosenPiece.height == 0)
+                            chosenPiece.height = 1;
+                        else
+                            chosenPiece.height = 0;
+                        break;
+                    case 3:
+                        if (chosenPiece.shape == 0)
+                            chosenPiece.shape = 1;
+                        else
+                            chosenPiece.shape = 0;
+                        break;
+                    case 0:
+                        if (chosenPiece.emblem == 0)
+                            chosenPiece.emblem = 1;
+                        else
+                            chosenPiece.emblem = 0;
+                        break;
+                }
+
+                do
+                {
+                    switch (tempThirdOption)
+                    {
+                        case 1:
+                            if (chosenPiece.color == 0)
+                                chosenPiece.color = 1;
+                            else
+                                chosenPiece.color = 0;
+                            break;
+                        case 2:
+                            if (chosenPiece.height == 0)
+                                chosenPiece.height = 1;
+                            else
+                                chosenPiece.height = 0;
+                            break;
+                        case 3:
+                            if (chosenPiece.shape == 0)
+                                chosenPiece.shape = 1;
+                            else
+                                chosenPiece.shape = 0;
+                            break;
+                        case 0:
+                            if (chosenPiece.emblem == 0)
+                                chosenPiece.emblem = 1;
+                            else
+                                chosenPiece.emblem = 0;
+                            break;
+                    }
+
+                    foreach (GameCore.Piece a in viablePieces)
+                    {
+                        if (chosenPiece.color == a.color &&
+                           chosenPiece.height == a.height &&
+                           chosenPiece.shape == a.shape &&
+                           chosenPiece.emblem == a.emblem)
+                        {
+                            chosenPiece.id = a.id;
+                            chosenPieceString = chosenPiece.id;
+                            return chosenPieceString;
+                        }
+                    }
+
+                    switch (tempThirdOption)
+                    {
+                        case 1:
+                            if (chosenPiece.color == 0)
+                                chosenPiece.color = 1;
+                            else
+                                chosenPiece.color = 0;
+                            break;
+                        case 2:
+                            if (chosenPiece.height == 0)
+                                chosenPiece.height = 1;
+                            else
+                                chosenPiece.height = 0;
+                            break;
+                        case 3:
+                            if (chosenPiece.shape == 0)
+                                chosenPiece.shape = 1;
+                            else
+                                chosenPiece.shape = 0;
+                            break;
+                        case 0:
+                            if (chosenPiece.emblem == 0)
+                                chosenPiece.emblem = 1;
+                            else
+                                chosenPiece.emblem = 0;
+                            break;
+                    }
+                    tempThirdOption = (tempThirdOption + 1) % 4;
+
+                } while (tempThirdOption != thirdOption);
+
+                switch (tempSecondOption)
+                {
+                    case 1:
+                        if (chosenPiece.color == 0)
+                            chosenPiece.color = 1;
+                        else
+                            chosenPiece.color = 0;
+                        break;
+                    case 2:
+                        if (chosenPiece.height == 0)
+                            chosenPiece.height = 1;
+                        else
+                            chosenPiece.height = 0;
+                        break;
+                    case 3:
+                        if (chosenPiece.shape == 0)
+                            chosenPiece.shape = 1;
+                        else
+                            chosenPiece.shape = 0;
+                        break;
+                    case 0:
+                        if (chosenPiece.emblem == 0)
+                            chosenPiece.emblem = 1;
+                        else
+                            chosenPiece.emblem = 0;
+                        break;
+                }
+
+                tempSecondOption = (tempSecondOption + 1) % 4;
+
+            } while (tempSecondOption != secondOption);
+
+            chosenPiece = pieceAIPlaced;
+            tempFirstOption = (tempFirstOption + 1) % 4;
+
+        } while (tempFirstOption != firstOption);
+
+        //*****************************************************
+        //chooses piece completely opposite from what AI placed
+
+        if (chosenPiece.color == 0)
+            chosenPiece.color = 1;
+        else
+            chosenPiece.color = 0;
+
+        if (chosenPiece.height == 0)
+            chosenPiece.height = 1;
+        else
+            chosenPiece.height = 0;
+
+        if (chosenPiece.shape == 0)
+            chosenPiece.shape = 1;
+        else
+            chosenPiece.shape = 0;
+
+        if (chosenPiece.emblem == 0)
+            chosenPiece.emblem = 1;
+        else
+            chosenPiece.emblem = 0;
+
+        foreach (GameCore.Piece a in viablePieces)
+        {
+            if (chosenPiece.color == a.color &&
+               chosenPiece.height == a.height &&
+               chosenPiece.shape == a.shape &&
+               chosenPiece.emblem == a.emblem)
+            {
+                chosenPiece.id = a.id;
+                chosenPieceString = chosenPiece.id;
+                return chosenPieceString;
+            }
+        }
+
+        //Catch-All Default
+        int rand = Random.Range(0, numOfAvailablePieces);
+        chosenPieceString = availablePieces[rand].id;
+
+        return chosenPieceString;
     }
 
 
@@ -532,5 +1074,17 @@ Extra Necessary Functions
         }
         // if there arent any conditions met, that means that there isn't a winner
         return false;
+    }
+
+    private GameCore.BoardSpace ConvertPosition(string position, List<GameCore.BoardSpace> availableBoardSpaces)
+    {
+        GameCore.BoardSpace convertedBoardSpace = new GameCore.BoardSpace();
+        string subStringPosition = position.Substring(12);
+
+        foreach (GameCore.BoardSpace space in availableBoardSpaces)
+            if (subStringPosition == space.id)
+                convertedBoardSpace = space;
+
+        return convertedBoardSpace;
     }
 }
