@@ -82,7 +82,25 @@ public class NetworkController : MonoBehaviour
 
     }
 
+    public IEnumerator WaitForLeaveRoom()
+    {
+        while (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            yield return null;
+
+        gameController.PlayerLeft();
+    }
+
     #region Public Functions
+
+    public void CreateNewRoom()
+    {
+        // Create new room; current host is the host and whoever joined is the joiner or whatever
+    }
+
+    public void IncrementRematch()
+    {
+        // Increment rematch var here and send to other players networkcontroller using rpc
+    }
 
     public void SendMove()
     {

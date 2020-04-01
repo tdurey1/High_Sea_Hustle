@@ -152,6 +152,17 @@ public class GameController : MonoBehaviour
         if (gameState == 'W' || gameState == 'T')
             GameOver(gameState);
     }
+
+    public void PlayerLeft()
+    {
+        // Show in chat log that player disconnected. Maybe have a popup?
+        // Disable Rematch button
+    }
+
+    public void NetworkRematch()
+    {
+        networkController.IncrementRematch();
+    }
     #endregion
 
     #region Story Mode Functions
@@ -517,7 +528,6 @@ public class GameController : MonoBehaviour
             DisableChooseOptions();
             StepCompleted();
         }
-
     }
 
     private void PiecePlaced()
@@ -618,7 +628,12 @@ public class GameController : MonoBehaviour
                 gameSceneManagerObject.GetComponent<GameSceneManager>().showStoryModeLosePanel();
         }
         else if (GameInfo.gameType == 'N')
+        {
+            networkController.CreateNewRoom();
             gameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus);
+            StartCoroutine(networkController.WaitForRematch());
+            StartCoroutine(networkController.WaitForLeaveRoom());
+        }
         else
             gameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
     }
