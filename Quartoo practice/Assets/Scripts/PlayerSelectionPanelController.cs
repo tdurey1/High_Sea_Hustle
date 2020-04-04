@@ -24,11 +24,20 @@ public class PlayerSelectionPanelController : MonoBehaviour
             username = usernameInput.text;
 
         //Save the username and other relevant data somewhere
+        GameInfo.username = username;
+        GameInfo.avatar = selectedAvatar;
 
-        Debug.Log("Username: " + username);
-        Debug.Log("User goes first: " + userGoesFirst.ToString());
-        Debug.Log("Using the easy AI: " + easyAI.ToString());
-        Debug.Log("Selected avatar: " + selectedAvatar);
+        // Set who goes first
+        if (userGoesFirst)
+            GameInfo.selectPieceAtStart = 1;
+        else
+            GameInfo.selectPieceAtStart = 2;
+
+        // Set ai
+        if (easyAI)
+            GameInfo.gameType = 'E';
+        else
+            GameInfo.gameType = 'H';
 
         SceneManager.LoadScene("GameScene");
     }

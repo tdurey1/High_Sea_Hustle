@@ -1,5 +1,10 @@
 ﻿public class GameInfo
 {
+    // User related variables
+    public static string username;
+
+    public static string avatar;
+
     // N = Network, E = Easy AI Game, H = Hard AI Game, S = Story Mode
     public static char gameType;
 
@@ -12,14 +17,4 @@
     public static float musicVolume = .5f;
 
     public static float soundFXVolume = .5f;
-
-    public void meFirst()
-    {
-        selectPieceAtStart = 1;
-    }
-
-    public void themFirst()
-    {
-        selectPieceAtStart = 2;
-    }
 }
