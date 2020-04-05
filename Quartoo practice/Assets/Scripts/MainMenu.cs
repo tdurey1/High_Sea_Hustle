@@ -38,6 +38,9 @@ public class MainMenu : MonoBehaviour
 
     public void quickGame()
     {
+        // Set to Easy so correct player prefs screen shows (ask Tristan if you dont understand) 
+        GameInfo.gameType = 'E';
+
         GameInfo.storyModeType = 'T';
 
         StartCoroutine(LoadSceneAsync("UserPreferences"));
