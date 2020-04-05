@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,10 +11,16 @@ public class PlayerPrefsManager : MonoBehaviour
     public InputField networkUsername;
     public Text toast;
 
+    private int randomUserNameIndex;
+
+    private string[] randomUsernames = { "Long John Silver", "Lord Beckett", "Captain Hook", "Admiral Norington",
+        "Captain Morgan", "Jack Sparrow", "Mr. Smee", "Captain Nemo", "Pirate Roberts", "William Turner", "Patchy the Pirate",
+        "Captain Barbossa", "Blackheart", "Billy Bones", "Cap'n Crunch", "Admiral Ackbar", "Captain Haddock" };
+
     void Awake()
     {
-        Debug.Log(GameInfo.username);
         toast.enabled = false;
+        randomUserNameIndex = Random.Range(0, randomUsernames.Length);
 
         if (GameInfo.gameType != 'N')
         {
@@ -31,36 +38,25 @@ public class PlayerPrefsManager : MonoBehaviour
         }
     }
 
-    public void checkUserNameLength ()
+    public void CheckUserNameLength ()
     {
         if (quickPlayPanel.activeSelf)
         {
-            Debug.Log(quickPlayUsername.text.Length);
-            if (quickPlayUsername.text.Trim().Length > GameInfo.usernameLength)
-            {
-                if (GameInfo.username != null)
-                    quickPlayUsername.text = GameInfo.username;
-                else
-                    quickPlayUsername.text = "";
-           
-                showToast("Username must be less than " + GameInfo.usernameLength + " letters", 3);
-            }
+            if (quickPlayUsername.text.Trim().Length > GameInfo.usernameLength)    
+                ShowToast("Username must be " + GameInfo.usernameLength + " letters or less", 3);
+            else
+                quickPlayUsername.text = CheckForBadLanguage(quickPlayUsername.text.Trim());
         }
         else
         {
             if (networkUsername.text.Trim().Length > GameInfo.usernameLength)
-            {
-                if (GameInfo.username != null)
-                    networkUsername.text = GameInfo.username;
-                else
-                    networkUsername.text = "";
-
-                showToast("Username must be less than " + GameInfo.usernameLength + " letters", 3);
-            }
+                ShowToast("Username must be " + GameInfo.usernameLength + " letters or less", 3);
+            else
+                networkUsername.text = CheckForBadLanguage(networkUsername.text.Trim());
         }
     }
 
-    public void showToast(string text, int duration)
+    public void ShowToast(string text, int duration)
     {
         StartCoroutine(showToastCOR(text, duration));
     }
@@ -123,5 +119,33 @@ public class PlayerPrefsManager : MonoBehaviour
             targetText.color = new Color(currentColor.r, currentColor.g, currentColor.b, alpha);
             yield return null;
         }
+    }
+
+    public void RandomizeUserName()
+    {
+        if (quickPlayPanel.activeSelf)
+            quickPlayUsername.text = randomUsernames[randomUserNameIndex];
+        else
+            networkUsername.text = randomUsernames[randomUserNameIndex];
+
+        randomUserNameIndex++;
+
+        if (randomUserNameIndex == randomUsernames.Length)
+            randomUserNameIndex = 0;
+    }
+
+    public string CheckForBadLanguage(string username)
+    {
+        string usernameCopy = username;
+        string[] badWords = { "shit", "fuck", "damn", "bitch", "ass", "whore", "bastard", "piss", "cunt", "tocompletion", "chach" };
+        string[] goodWords = { "ahoy", "argh", "blimey", "scallywag", "booty", "lass", "landlubber", "grog", "seadog", "Caleb", "Emelia Thomas" };
+
+        for (int i = 0; i < badWords.Length; i++)
+            username = Regex.Replace(username, badWords[i], goodWords[i], RegexOptions.IgnoreCase);
+
+        if (usernameCopy != username)
+            ShowToast("Watch your mouth sailor", 3);
+
+        return username;
     }
 }
