@@ -1,10 +1,8 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
@@ -23,6 +21,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public Canvas CreateOrJoinCanvas;
     public Canvas RoomLobbyCanvas;
     public Canvas WaitingLoadingCanvas;
+    public Canvas LoadingCanvas;
 
     public GameObject StatusText;
     public GameObject StartButton;
@@ -135,27 +134,30 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void OnCreateGameButtonClicked()
     {
         Debug.Log("F: StartRoom.cs/ public void OnCreateGameButtonClicked - Create button clicked");
+
+        while (!PhotonNetwork.IsConnectedAndReady)
+            LoadingCanvas.gameObject.SetActive(true);
+
+        LoadingCanvas.gameObject.SetActive(false);
+
         CreateRoom();
+
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
             Debug.Log("You are master client");
+
         CreateOrJoinCanvas.gameObject.SetActive(false);
-        Debug.Log("Hiding CreateOrJoinCanvas");
         WaitingLoadingCanvas.gameObject.SetActive(true);
-        Debug.Log("Showing WaitingLoadingCanvas");
         StartButton.gameObject.SetActive(true);
-        Debug.Log("StartButton setActive");
+
         GameInfo.selectPieceAtStart = 1;
     }
 
     public void OnJoinGameButtonClicked()
     {
         Debug.Log("F: StartRoom.cs/ OnJoinGameButtonClicked");
-        CreateOrJoinCanvas.gameObject.SetActive(false);
-        Debug.Log("Hiding CreateOrJoinCanvas");
-        RoomLobbyCanvas.gameObject.SetActive(true);
-        Debug.Log("Showing RoomLobbyCanvas");
 
-        Debug.Log("Local Player master client? " + PhotonNetwork.LocalPlayer.IsMasterClient);
+        CreateOrJoinCanvas.gameObject.SetActive(false);
+        RoomLobbyCanvas.gameObject.SetActive(true);
 
         FindGamesButton.gameObject.SetActive(true);
         roomListingPanel.gameObject.SetActive(true);

@@ -62,7 +62,6 @@ public class NetworkController : MonoBehaviour
         while (networkMessageReceived == false)
             yield return null;
         
-        Debug.Log("Got out of loop");
         networkMessageReceived = false;
         gameController.NetworkMessageReceived();
     }
@@ -95,11 +94,13 @@ public class NetworkController : MonoBehaviour
     {
         // Create new room; current host is the host and whoever joined is the joiner or whatever
 
-
         // Previous host will be host of new room
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
             PhotonNetwork.LeaveRoom();
+
+            while (!PhotonNetwork.IsConnectedAndReady)
+                return;
 
             RoomOptions roomOps = new RoomOptions()
             {
@@ -112,7 +113,11 @@ public class NetworkController : MonoBehaviour
             PhotonNetwork.CreateRoom(roomName, roomOps);
         }
 
+
+
         // !!! Maybe add a delay here to make sure the room is created before trying to join it?
+        while (!PhotonNetwork.IsConnectedAndReady)
+            return;
 
         // other player will join the room stored in the str var roomName
         if (!PhotonNetwork.LocalPlayer.IsMasterClient)
