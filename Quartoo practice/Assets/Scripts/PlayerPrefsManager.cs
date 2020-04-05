@@ -11,10 +11,16 @@ public class PlayerPrefsManager : MonoBehaviour
     public InputField networkUsername;
     public Text toast;
 
+    private int randomUserNameIndex;
+
+    private string[] randomUsernames = { "Long John Silver", "Lord Beckett", "Captain Hook", "Admiral Norington",
+        "Captain Morgan", "Jack Sparrow", "Mr. Smee", "Captain Nemo", "Pirate Roberts", "William Turner", "Patchy the Pirate",
+        "Captain Barbossa", "Blackheart", "Billy Bones", "Cap'n Crunch", "Admiral Ackbar", "Captain Haddock" };
+
     void Awake()
     {
-        Debug.Log(GameInfo.username);
         toast.enabled = false;
+        randomUserNameIndex = Random.Range(0, randomUsernames.Length);
 
         if (GameInfo.gameType != 'N')
         {
@@ -32,25 +38,25 @@ public class PlayerPrefsManager : MonoBehaviour
         }
     }
 
-    public void checkUserNameLength ()
+    public void CheckUserNameLength ()
     {
         if (quickPlayPanel.activeSelf)
         {
             if (quickPlayUsername.text.Trim().Length > GameInfo.usernameLength)    
-                showToast("Username must be " + GameInfo.usernameLength + " letters or less", 3);
+                ShowToast("Username must be " + GameInfo.usernameLength + " letters or less", 3);
             else
-                quickPlayUsername.text = checkForBadLanguage(quickPlayUsername.text.Trim());
+                quickPlayUsername.text = CheckForBadLanguage(quickPlayUsername.text.Trim());
         }
         else
         {
             if (networkUsername.text.Trim().Length > GameInfo.usernameLength)
-                showToast("Username must be " + GameInfo.usernameLength + " letters or less", 3);
+                ShowToast("Username must be " + GameInfo.usernameLength + " letters or less", 3);
             else
-                networkUsername.text = checkForBadLanguage(networkUsername.text.Trim());
+                networkUsername.text = CheckForBadLanguage(networkUsername.text.Trim());
         }
     }
 
-    public void showToast(string text, int duration)
+    public void ShowToast(string text, int duration)
     {
         StartCoroutine(showToastCOR(text, duration));
     }
@@ -115,7 +121,20 @@ public class PlayerPrefsManager : MonoBehaviour
         }
     }
 
-    public string checkForBadLanguage(string username)
+    public void RandomizeUserName()
+    {
+        if (quickPlayPanel.activeSelf)
+            quickPlayUsername.text = randomUsernames[randomUserNameIndex];
+        else
+            networkUsername.text = randomUsernames[randomUserNameIndex];
+
+        randomUserNameIndex++;
+
+        if (randomUserNameIndex == randomUsernames.Length)
+            randomUserNameIndex = 0;
+    }
+
+    public string CheckForBadLanguage(string username)
     {
         string usernameCopy = username;
         string[] badWords = { "shit", "fuck", "damn", "bitch", "ass", "whore", "bastard", "piss", "cunt", "tocompletion", "chach" };
@@ -125,7 +144,7 @@ public class PlayerPrefsManager : MonoBehaviour
             username = Regex.Replace(username, badWords[i], goodWords[i], RegexOptions.IgnoreCase);
 
         if (usernameCopy != username)
-            showToast("Watch your mouth sailor", 3);
+            ShowToast("Watch your mouth sailor", 3);
 
         return username;
     }

@@ -41,9 +41,9 @@ public class PlayerSelectionPanelController : MonoBehaviour
             SceneManager.LoadScene("GameScene");
         }
         else if (usernameInput.text.Trim() == "")
-            playerPrefsManager.showToast("Please provide a username", 3);
+            playerPrefsManager.ShowToast("Please provide a username", 3);
         else if (usernameInput.text.Trim().Length > GameInfo.usernameLength && !playerPrefsManager.isToastActive())
-            playerPrefsManager.showToast("Username must be " + GameInfo.usernameLength + " letters or less", 3);
+            playerPrefsManager.ShowToast("Username must be " + GameInfo.usernameLength + " letters or less", 3);
     }
 
     public void backButton()

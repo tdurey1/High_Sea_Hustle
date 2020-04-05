@@ -3,7 +3,7 @@
     // User related variables
     public static string username;
 
-    public static int usernameLength = 15;
+    public static int usernameLength = 20;
 
     public static string avatar;
 
