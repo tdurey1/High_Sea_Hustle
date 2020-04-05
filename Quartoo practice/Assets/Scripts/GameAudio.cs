@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
 public class GameAudio : MonoBehaviour
 {
     private AudioSource gameMusic;
     public AudioSource[] audioSources;
-    public int songIndex;
+    public Text songTitle;
+    private int songIndex;
    
 
     void Start()
@@ -19,6 +20,7 @@ public class GameAudio : MonoBehaviour
         CancelInvoke();
         gameMusic = audioSources[songIndex];
         gameMusic.Play();
+        songTitle.text = gameMusic.clip.name;
         Invoke ("PlayNextSong", gameMusic.clip.length);
     }
 
