@@ -178,9 +178,9 @@ public class GameController : MonoBehaviour
     // NOTE: Do we want to add a short (three - five seconds) opening at start of an ai gamescreen?
     private void StartAIGame()
     {
-        if (GameInfo.storyModeType == 'E')
+        if (GameInfo.storyModeType == 'E' || GameInfo.gameType == 'E')
             Debug.Log("easy ai game");
-        else if (GameInfo.storyModeType == 'H')
+        else if (GameInfo.storyModeType == 'H' || GameInfo.gameType == 'H')
             Debug.Log("hard ai game");
 
         Debug.Log("Start ai game");
