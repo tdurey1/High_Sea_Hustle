@@ -237,7 +237,7 @@ public class GameController : MonoBehaviour
             // AI is placing a piece by the user
             if (placingPiece == true)
             {
-                Debug.Log("AI placing a piece");
+                Debug.Log("Easy AI placing a piece");
 
                 string aiBoardSpaceChosen = aiController.choosePosition(gameCore.availableBoardSpaces);
                 Button boardSpace = ConvertAIBoardSpace(aiBoardSpaceChosen);
@@ -246,7 +246,7 @@ public class GameController : MonoBehaviour
             // AI is choosing a piece for the Player to place
             else
             {
-                Debug.Log("AI choosing opponents piece");
+                Debug.Log("Easy AI choosing opponents piece");
 
                 // Have ai pick piece
                 string aiPieceChosen = aiController.chooseGamePiece(gameCore.availablePieces);
@@ -289,16 +289,16 @@ public class GameController : MonoBehaviour
             // AI is placing a piece by the user
             if (placingPiece == true)
             {
-                Debug.Log("AI placing a piece");
+                Debug.Log("Hard AI placing a piece");
 
-                string aiBoardSpaceChosen = hardAIController.ChooseLocation(gameCore.GetGameBoard(), gameCore.availableBoardSpaces, gameCore.availablePieces, selectedPiece.id, recentMove.name);
+                string aiBoardSpaceChosen = hardAIController.ChooseLocation(gameCore.GetGameBoard(), gameCore.availableBoardSpaces, gameCore.usedBoardSpaces, gameCore.availablePieces, selectedPiece.id, recentMove.name);
                 Button boardSpace = ConvertAIBoardSpace(aiBoardSpaceChosen);
                 StartCoroutine("DelayAIMove", boardSpace);
             }
             // AI is choosing a piece for the Player to place
             else
             {
-                Debug.Log("AI choosing opponents piece");
+                Debug.Log("Hard AI choosing opponents piece");
 
                 // Have ai pick piece
                 string aiPieceChosen = hardAIController.ChooseGamePiece(gameCore.availablePieces);
