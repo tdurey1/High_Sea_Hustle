@@ -12,11 +12,10 @@ public class GamePiece : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (GameInfo.gameType != 'T')
-            gameController.SetSelectedPiece(this);
-        else
+        gameController.SetSelectedPiece(this);
+
+        if (GameInfo.gameType == 'T')
         {
-            gameController.TutorialSetPiece(this);
             gameController.HighlightClicked();
         }
     }

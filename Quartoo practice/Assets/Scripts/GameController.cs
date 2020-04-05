@@ -82,7 +82,6 @@ public class GameController : MonoBehaviour
             {
                 Debug.Log("Host choosing opponents piece");
                 EnableAvailablePieces();
-                EnableChooseOptions();
             }
         }
 
@@ -218,7 +217,6 @@ public class GameController : MonoBehaviour
                 Debug.Log("User placing a piece");
 
                 //Make gameboard interactable, gamepieces not interactable
-                DisableChooseOptions();
                 EnableAvailableBoardSpaces();
                 DisableAllPieces();
             }
@@ -229,13 +227,11 @@ public class GameController : MonoBehaviour
 
                 DisableAllBoardSpaces();
                 EnableAvailablePieces();
-                EnableChooseOptions();
             }
         }
         // AI's turn
         else
         {
-            DisableChooseOptions();
             DisableAllPieces();
 
             // AI is placing a piece by the user
@@ -273,7 +269,6 @@ public class GameController : MonoBehaviour
                 Debug.Log("User placing a piece");
 
                 //Make gameboard interactable, gamepieces not interactable
-                DisableChooseOptions();
                 EnableAvailableBoardSpaces();
                 DisableAllPieces();
             }
@@ -284,13 +279,11 @@ public class GameController : MonoBehaviour
 
                 DisableAllBoardSpaces();
                 EnableAvailablePieces();
-                EnableChooseOptions();
             }
         }
         // AI's turn
         else
         {
-            DisableChooseOptions();
             DisableAllPieces();
 
             // AI is placing a piece by the user
@@ -425,7 +418,6 @@ public class GameController : MonoBehaviour
                 Debug.Log("enable arrow");
                 EnableTutorialNextArrow(nextArrow);
                 break;
-
         }
     }
 
@@ -438,18 +430,11 @@ public class GameController : MonoBehaviour
     public void TutorialSetPiece(GamePiece gamePiece)
     {
         Button StagePiece = GameObject.Find("StagePiece").GetComponent<Button>();
-
         selectedPiece = gamePiece;
+
         Vector3 newPosition = StagePiece.transform.position;
         selectedPiece.transform.position = newPosition;
-
-
-        DisableTutorialPiece();
-
-        if (tutorialPieceIndex == 1 || tutorialPieceIndex == 9)
-        {
-            EnableChooseOptions();
-        }
+        StepCompleted();
     }
 
     public void TutorialPlacePieceOnBoard(Button button)
@@ -559,7 +544,6 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            DisableChooseOptions();
             StepCompleted();
         }
     }
@@ -714,16 +698,6 @@ public class GameController : MonoBehaviour
             EnableAvailablePieces();
     }
 
-    private void EnableChooseOptions()
-    {
-        Button ChoosePiece = GameObject.Find("ChoosePiece").GetComponent<Button>();
-        Button ChooseAnother = GameObject.Find("ChooseAnother").GetComponent<Button>();
-
-        ChooseAnother.interactable = true;
-        ChoosePiece.interactable = true;
-
-    }
-
     private void EnableTutorialNextArrow(Button nextArrow)
     {
         nextArrow.interactable = true;
@@ -747,16 +721,6 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void DisableChooseOptions()
-    {
-        Button ChoosePiece = GameObject.Find("ChoosePiece").GetComponent<Button>();
-        Button ChooseAnother = GameObject.Find("ChooseAnother").GetComponent<Button>();
-
-        ChooseAnother.interactable = false;
-        ChoosePiece.interactable = false;
-
-    }
-
     private void DisableAllBoardSpaces()
     {
         foreach (Button button in buttonList)
@@ -767,7 +731,6 @@ public class GameController : MonoBehaviour
     {
         DisableAllBoardSpaces();
         DisableAllPieces();
-        DisableChooseOptions();
     }
 
     private void DisableTutorialNextArrow(Button nextArrow)
