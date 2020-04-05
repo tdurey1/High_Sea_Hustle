@@ -3,6 +3,8 @@
     // User related variables
     public static string username;
 
+    public static int usernameLength = 15;
+
     public static string avatar;
 
     // N = Network, E = Easy AI Game, H = Hard AI Game, S = Story Mode

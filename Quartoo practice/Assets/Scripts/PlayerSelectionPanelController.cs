@@ -8,38 +8,47 @@ using UnityEngine.EventSystems;
 public class PlayerSelectionPanelController : MonoBehaviour
 {
     public EventSystem eventSystem;
+    public PlayerPrefsManager playerPrefsManager;
     public InputField usernameInput;
     public Button[] avatarOptions;
     public GameObject[] avatarHighlights;
 
-    private string username = "Player1";
     private bool userGoesFirst = true;
     private bool easyAI = true;
     private string selectedAvatar = "PirateCaptain";
 
     public void playButton()
     {
-        //Not sure if this is the right way, but need some kind of check to provide a default name
-        if (usernameInput.text != "")
-            username = usernameInput.text;
+        if (usernameInput.text.Trim() != "" && !playerPrefsManager.isToastActive())
+        {
+            GameInfo.username = usernameInput.text.Trim();
 
-        //Save the username and other relevant data somewhere
-        GameInfo.username = username;
-        GameInfo.avatar = selectedAvatar;
+            // Save the selected avater
+            GameInfo.avatar = selectedAvatar;
 
-        // Set who goes first
-        if (userGoesFirst)
-            GameInfo.selectPieceAtStart = 1;
-        else
-            GameInfo.selectPieceAtStart = 2;
+            // Set who goes first
+            if (userGoesFirst)
+                GameInfo.selectPieceAtStart = 1;
+            else
+                GameInfo.selectPieceAtStart = 2;
 
-        // Set ai
-        if (easyAI)
-            GameInfo.gameType = 'E';
-        else
-            GameInfo.gameType = 'H';
+            // Set ai
+            if (easyAI)
+                GameInfo.gameType = 'E';
+            else
+                GameInfo.gameType = 'H';
 
-        SceneManager.LoadScene("GameScene");
+            SceneManager.LoadScene("GameScene");
+        }
+        else if (usernameInput.text.Trim() == "" && !playerPrefsManager.isToastActive())
+        {
+            if (GameInfo.username != null)
+                usernameInput.text = GameInfo.username;
+            else
+                usernameInput.text = "";
+
+            playerPrefsManager.showToast("Please provide a username", 3);
+        }
     }
 
     public void backButton()
