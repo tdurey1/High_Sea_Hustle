@@ -16,8 +16,7 @@ public class TutorialManager : MonoBehaviour
         /*0 -*/ "Hello! I'm Peter Parrot and I'll be showing you how to play Quarto. Click the arrow on the bottom right to continue.",
         /*1 -*/ "The objective of this game is to create a line of four pieces which share at least one common characteristic.",
         /*2 -*/ "These characteristics are color, height, shape, and stamp. The line can be vertical, horizontal, or diagonal.",
-        /*3 HS*/ "The game begins with the first player selecting a piece for their opponent to place. Click the hilighted piece and then the " +
-                "check to confirm that's the piece you'd like to send.",
+        /*3 HS*/ "The game begins with the first player selecting a piece for their opponent to place. Click the hilighted piece to select it, then click it again to confirm that's the piece you want.",
         /*4 CP*/ "Great! Now, each turn will have two parts: placing a piece and selecting your opponents piece. I will start my turn by first placing the piece you gave me.",
         /*5 CS*/ "Now that I've placed the piece you gave to me, I will give you a piece to place.",
         /*6 HP*/ "Here you go! Now, place the piece on the highlighted board space.",

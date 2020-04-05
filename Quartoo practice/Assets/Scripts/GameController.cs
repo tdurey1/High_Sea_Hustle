@@ -362,6 +362,7 @@ public class GameController : MonoBehaviour
                 break;
             case 4:
                 // Inform player opponent will now place piece
+                DisableTutorialPiece();
                 EnableTutorialNextArrow(nextArrow);
                 tutorialPieceIndex = 14;
                 break;
@@ -396,6 +397,7 @@ public class GameController : MonoBehaviour
                 break;
             case 10:
                 // Have opponent place piece and select player piece
+                DisableTutorialPiece();
                 boardSpace = GameObject.Find("Board Space A2").GetComponent<Button>();
                 TutorialPlacePieceOnBoard(boardSpace);
                 tutorialPieceIndex = 3;
@@ -429,14 +431,11 @@ public class GameController : MonoBehaviour
 
     public void TutorialSetPiece(GamePiece gamePiece)
     {
-        DisableTutorialPiece();
-
         Button StagePiece = GameObject.Find("StagePiece").GetComponent<Button>();
         selectedPiece = gamePiece;
 
         Vector3 newPosition = StagePiece.transform.position;
         selectedPiece.transform.position = newPosition;
-        StepCompleted();
     }
 
     public void TutorialPlacePieceOnBoard(Button button)
