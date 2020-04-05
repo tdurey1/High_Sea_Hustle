@@ -429,6 +429,8 @@ public class GameController : MonoBehaviour
 
     public void TutorialSetPiece(GamePiece gamePiece)
     {
+        DisableTutorialPiece();
+
         Button StagePiece = GameObject.Find("StagePiece").GetComponent<Button>();
         selectedPiece = gamePiece;
 
@@ -490,11 +492,11 @@ public class GameController : MonoBehaviour
 
         if (selectedPiece != null)
         {
+            selectedPiece.GetComponent<BoxCollider2D>().enabled = false;
             Vector3 newPosition = button.transform.position;
             selectedPiece.transform.position = newPosition;
             recentMove = button;
             button.interactable = false;
-            selectedPiece.GetComponent<BoxCollider2D>().enabled = false;
 
             if (GameInfo.gameType == 'N')
             {
@@ -565,7 +567,6 @@ public class GameController : MonoBehaviour
 
     public void SetSelectedPiece(GamePiece gamePiece)
     {
-
         if (selectedPiece == gamePiece)
         {
             SelectOpponentsPiece();
