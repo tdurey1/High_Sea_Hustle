@@ -43,5 +43,6 @@ MonoBehaviour:
   - RPC_SendPiece
   - RPC_SendRestartChoice
   - RPC_SendIncrementedRematch
+  - SendChat
   DisableAutoOpenWizard: 1
   ShowSettings: 1
