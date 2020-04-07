@@ -358,7 +358,6 @@ public class GameController : MonoBehaviour
             case 3:
                 // Have player select piece for opponent
                 EnableTutorialPiece();
-                tutorialManager.ShowNextHilight();
                 break;
             case 4:
                 // Inform player opponent will now place piece
@@ -377,11 +376,9 @@ public class GameController : MonoBehaviour
                 gamePiece = gamePieces[tutorialPieceIndex];
                 TutorialSetPiece(gamePiece);
                 EnableTutorialBoardSpace();
-                tutorialManager.ShowNextHilight();
                 break;
             case 7:
                 // Jump ahead a few turns
-                tutorialManager.HideCurrentHilight();
                 EnableTutorialNextArrow(nextArrow);
                 break;
             case 8:
@@ -393,7 +390,6 @@ public class GameController : MonoBehaviour
                 // Have user select piece to send opponent
                 tutorialPieceIndex = 9;
                 EnableTutorialPiece();
-                tutorialManager.ShowNextHilight();
                 break;
             case 10:
                 // Have opponent place piece and select player piece
@@ -409,11 +405,10 @@ public class GameController : MonoBehaviour
                 gamePiece = gamePieces[tutorialPieceIndex];
                 TutorialSetPiece(gamePiece);
                 EnableTutorialBoardSpace();
-                tutorialManager.ShowNextHilight();
                 break;
             case 12:
-                // Maybe include popup or something, for now this ensures the nextArrow is disabled
-                tutorialManager.HideCurrentHilight();
+                // Maybe include popup or something, for now clicking the next arrow causes an error so dont enable it
+                //EnableTutorialNextArrow(nextArrow);
                 break;
             default:
                 // Enable arrow to go next
@@ -442,12 +437,6 @@ public class GameController : MonoBehaviour
     {
         Vector3 newPosition = button.transform.position;
         selectedPiece.transform.position = newPosition;
-    }
-
-    public void HighlightClicked()
-    {
-        Debug.Log("Inside HilightClicked()");
-        tutorialManager.HideCurrentHilight();
     }
 
     private void UpdateGameBoard()
@@ -519,17 +508,8 @@ public class GameController : MonoBehaviour
     {
         Button StagePiece = GameObject.Find("StagePiece").GetComponent<Button>();
 
-        foreach (GameCore.Piece availablePiece in gameCore.availablePieces)
-        {
-            foreach (GamePiece piece in gamePieces)
-            {
-                if (availablePiece.id == piece.name.Substring(10))
-                {
-                    piece.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
-                    break;
-                }
-            }
-        }
+        selectedPiece.transform.GetChild(0).gameObject.SetActive(false);
+
         Vector3 newPosition = StagePiece.transform.position;
         selectedPiece.transform.position = newPosition;
 
@@ -572,23 +552,17 @@ public class GameController : MonoBehaviour
         }
         else
         {
+            if (selectedPiece != null)
+                selectedPiece.transform.GetChild(0).gameObject.SetActive(false);
+
             selectedPiece = gamePiece;
 
-            foreach (GameCore.Piece availablePiece in gameCore.availablePieces)
-                foreach (GamePiece piece in gamePieces)
-                    if (availablePiece.id == piece.name.Substring(10))
-                    {
-                        if (piece != selectedPiece)
-                        {
-                            piece.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, .5f);
-                            break;
-                        }
-                        else if (piece == selectedPiece)
-                        {
-                            piece.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
-                            break;
-                        }
-                    }
+            foreach (GamePiece piece in gamePieces)
+                if (gamePiece.id == piece.name.Substring(10))
+                {
+                    piece.transform.GetChild(0).gameObject.SetActive(true);
+                    break;
+                }
         }
     }
 
@@ -706,11 +680,13 @@ public class GameController : MonoBehaviour
     private void EnableTutorialBoardSpace()
     {
         buttonList[tutorialBoardSpaceIndex].GetComponent<Button>().interactable = true;
+        buttonList[tutorialBoardSpaceIndex].transform.GetChild(0).gameObject.SetActive(true);
     }
 
     private void EnableTutorialPiece()
     {
         gamePieces[tutorialPieceIndex].GetComponent<BoxCollider2D>().enabled = true;
+        gamePieces[tutorialPieceIndex].transform.GetChild(0).gameObject.SetActive(true);
     }
 
     public void DisableAllPieces()
@@ -741,11 +717,13 @@ public class GameController : MonoBehaviour
     private void DisableTutorialBoardSpace()
     {
         buttonList[tutorialBoardSpaceIndex].GetComponent<Button>().interactable = false;
+        buttonList[tutorialBoardSpaceIndex].transform.GetChild(0).gameObject.SetActive(false);
     }
 
     private void DisableTutorialPiece()
     {
         gamePieces[tutorialPieceIndex].GetComponent<BoxCollider2D>().enabled = false;
+        gamePieces[tutorialPieceIndex].transform.GetChild(0).gameObject.SetActive(false);
     }
     #endregion
 
