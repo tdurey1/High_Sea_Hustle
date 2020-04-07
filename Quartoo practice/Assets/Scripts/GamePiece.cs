@@ -13,10 +13,5 @@ public class GamePiece : MonoBehaviour
     private void OnMouseDown()
     {
         gameController.SetSelectedPiece(this);
-
-        if (GameInfo.gameType == 'T')
-        {
-            gameController.HighlightClicked();
-        }
     }
 }

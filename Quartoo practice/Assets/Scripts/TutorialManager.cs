@@ -43,36 +43,4 @@ public class TutorialManager : MonoBehaviour
     {
         return captions[popupIndex];
     }
-
-    public void HideCurrentHilight()
-    {
-        Debug.Log("Hiding hilight #" + (hilightIndex - 1));
-        if(hilightIndex - 1 >= 0)
-            hilights[hilightIndex - 1].SetActive(false);
-    }
-
-    public void ShowNextHilight()
-    {
-        Debug.Log("Showing hilight #" + hilightIndex);
-        if (hilightIndex < hilights.Length)
-        {
-            if (hilightIndex > 0)
-            {
-                hilights[hilightIndex - 1].SetActive(false);
-                hilights[hilightIndex].SetActive(true);
-            }
-            else
-            {
-                hilights[hilightIndex].SetActive(true);
-
-            }
-            hilightIndex++;
-        }
-        else
-        {
-            Debug.Log("No more tutorial hilights left to show.");
-            return;
-
-        }
-    }
 }
