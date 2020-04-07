@@ -9,20 +9,11 @@ public class MainMenu : MonoBehaviour
     public GameObject settingsPanel;
     public GameObject darkBackground;
 
-    //These are for the scene transition
-    public Image greyFade;
-    public Animator fadeAnimation;
-
-    public void Start()
-    {
-        StartCoroutine(FadeIn());
-    }
-
     public void multiplayerGame()
     {
         GameInfo.gameType = 'N';
 
-        StartCoroutine(LoadSceneAsync("GameLobby"));
+        Initiate.Fade("GameLobby", Color.black, 4.0f);
     }
 
     public void storyModeGame()
@@ -33,7 +24,7 @@ public class MainMenu : MonoBehaviour
         GameInfo.gameType = 'S';
         GameInfo.storyModeType = 'E';
 
-        StartCoroutine(LoadSceneAsync("StoryMode"));
+        Initiate.Fade("StoryMode", Color.black, 4.0f);
     }
 
     public void quickGame()
@@ -43,14 +34,14 @@ public class MainMenu : MonoBehaviour
 
         GameInfo.storyModeType = 'T';
 
-        StartCoroutine(LoadSceneAsync("UserPreferences"));
+        Initiate.Fade("UserPreferences", Color.black, 4.0f);
     }
 
     public void tutorial()
     {
         GameInfo.gameType = 'T';
 
-        StartCoroutine(LoadSceneAsync("GameScene"));
+        Initiate.Fade("GameScene", Color.black, 4.0f);
     }
        
     public void showHelpPanel()
@@ -83,25 +74,5 @@ public class MainMenu : MonoBehaviour
             hideSettingsPanel();
         else
             hideHelpPanel();
-    }
-
-    //These functions are for the fade transitions between scenes
-    private IEnumerator LoadSceneAsync(string sceneName)
-    {
-        yield return FadeOut();
-        SceneManager.LoadScene(sceneName);
-    }
-
-    // Reference: https://youtu.be/iV-igTT5yE4
-    IEnumerator FadeIn()
-    {
-        fadeAnimation.SetBool("Fade", false);
-        yield return new WaitUntil(() => greyFade.color.a == 0);
-    }
-
-    IEnumerator FadeOut()
-    {
-        fadeAnimation.SetBool("Fade", true);
-        yield return new WaitUntil(() => greyFade.color.a == 1);
     }
 }
