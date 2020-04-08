@@ -35,7 +35,7 @@ public class PlayerSelectionPanelController : MonoBehaviour
             // Set ai
             if (easyAI)
                 GameInfo.gameType = 'E';
-            else if (easyAI == false)
+            else
                 GameInfo.gameType = 'H';
 
             Initiate.Fade("GameScene", Color.black, 4.0f);
