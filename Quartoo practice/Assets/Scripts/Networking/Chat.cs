@@ -29,11 +29,11 @@ public class Chat : MonoBehaviourPun
         if (gameObject.GetComponent<PhotonView>() == null)
         {
             PhotonView photonView = gameObject.AddComponent<PhotonView>();
-            photonView.ViewID = 1;
+            photonView.ViewID = 11;
         }
         else
         {
-            photonView.ViewID = 1;
+            photonView.ViewID = 11;
         }
     }
 
