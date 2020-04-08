@@ -546,6 +546,7 @@ public class GameController : MonoBehaviour
 
     public void SetSelectedPiece(GamePiece gamePiece)
     {
+        Debug.Log("got into set selected piece");
         // This is always == true unless user changes it in settings
         if (GameInfo.doubleClickConfirm == true)
         {
@@ -733,6 +734,7 @@ public class GameController : MonoBehaviour
 
     private void DisableTutorialPiece()
     {
+        Debug.Log("piece disabled");
         gamePieces[tutorialPieceIndex].GetComponent<BoxCollider2D>().enabled = false;
         gamePieces[tutorialPieceIndex].transform.GetChild(0).gameObject.SetActive(false);
     }

@@ -20,7 +20,6 @@ public class SettingsMenu : MonoBehaviour
 
         musicSlider.value = savedMusicVol;
         soundEffectsSlider.value = savedSoundFXVol;
-        Debug.Log("start " + GameInfo.doubleClickConfirm);
         doubleClickConfirm.isOn = GameInfo.doubleClickConfirm ? true : false;
     }
 
@@ -46,6 +45,5 @@ public class SettingsMenu : MonoBehaviour
     public void ChangeConfirmOption()
     {
         GameInfo.doubleClickConfirm = doubleClickConfirm.isOn ? true : false;
-        Debug.Log("confirm clicked " + GameInfo.doubleClickConfirm);
     }
 }
