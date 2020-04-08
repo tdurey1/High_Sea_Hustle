@@ -17,7 +17,7 @@ public class PlayerSelectionPanelController : MonoBehaviour
     private bool easyAI = true;
     private string selectedAvatar = "PirateCaptain";
 
-    public void playButton()
+    public void playButtonQPPanel()
     {
         if (usernameInput.text.Trim() != "" && !playerPrefsManager.isToastActive() && usernameInput.text.Trim().Length <= GameInfo.usernameLength)
         {
@@ -39,6 +39,23 @@ public class PlayerSelectionPanelController : MonoBehaviour
                 GameInfo.gameType = 'H';
 
             Initiate.Fade("GameScene", Color.black, 4.0f);
+        }
+        else if (usernameInput.text.Trim() == "")
+            playerPrefsManager.ShowToast("Please provide a username", 3);
+        else if (usernameInput.text.Trim().Length > GameInfo.usernameLength && !playerPrefsManager.isToastActive())
+            playerPrefsManager.ShowToast("Username must be " + GameInfo.usernameLength + " letters or less", 3);
+    }
+
+    public void playButtonNetworkPanel()
+    {
+        if (usernameInput.text.Trim() != "" && !playerPrefsManager.isToastActive() && usernameInput.text.Trim().Length <= GameInfo.usernameLength)
+        {
+            GameInfo.username = usernameInput.text.Trim();
+
+            // Save the selected avater
+            GameInfo.avatar = selectedAvatar;
+
+            Initiate.Fade("GameLobby", Color.black, 4.0f);
         }
         else if (usernameInput.text.Trim() == "")
             playerPrefsManager.ShowToast("Please provide a username", 3);

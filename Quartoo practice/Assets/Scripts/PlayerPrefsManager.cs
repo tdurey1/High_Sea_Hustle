@@ -137,8 +137,8 @@ public class PlayerPrefsManager : MonoBehaviour
     public string CheckForBadLanguage(string username)
     {
         string usernameCopy = username;
-        string[] badWords = { "shit", "fuck", "damn", "bitch", "dick", "ass", "whore", "bastard", "piss", "cunt", "tocompletion", "chach" };
-        string[] goodWords = { "ahoy", "argh", "blimey", "scallywag", "booty", "lass", "landlubber", "grog", "seadog", "Caleb", "Emelia Thomas" };
+        string[] badWords = { "shit", "fuck", "damn", "bitch", "ass", "whore", "bastard", "piss", "cunt", "tocompletion", "chach" };
+        string[] goodWords = { "ahoy", "argh", "blimey", "scallywag", "booty", "lass", "landlubber", "grog", "seadog", "Caleb", "Doris" };
 
         for (int i = 0; i < badWords.Length; i++)
             username = Regex.Replace(username, badWords[i], goodWords[i], RegexOptions.IgnoreCase);

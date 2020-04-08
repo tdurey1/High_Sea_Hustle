@@ -728,6 +728,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.41666663
       objectReference: {fileID: 0}
+    - target: {fileID: 3957240556463883565, guid: 57b13bd1080503e448b1cdb062c89b78,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: playButtonQPPanel
+      objectReference: {fileID: 0}
     - target: {fileID: 3957240556562676461, guid: 57b13bd1080503e448b1cdb062c89b78,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -1824,7 +1829,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 931783272037188057}
-        m_MethodName: playButton
+        m_MethodName: playButtonNetworkPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
