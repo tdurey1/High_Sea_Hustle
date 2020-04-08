@@ -13,7 +13,7 @@ public class MainMenu : MonoBehaviour
     {
         GameInfo.gameType = 'N';
 
-        Initiate.Fade("GameLobby", Color.black, 4.0f);
+        Initiate.Fade("UserPreferences", Color.black, 4.0f);
     }
 
     public void storyModeGame()
