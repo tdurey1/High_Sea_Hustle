@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
     private bool placingPiece = false;
     private int tutorialPieceIndex = 1;
     private int tutorialBoardSpaceIndex = 3;
+    private int tooltipsIndex = 0;
 
     void Awake()
     {
@@ -36,10 +37,6 @@ public class GameController : MonoBehaviour
         SetGameControllerReferenceOnNetwork();
         playerTurn = GameInfo.selectPieceAtStart;
         recentMove = buttonList[0];
-
-        // Peter Parrot is just a popup like settings/help, hide it at start so he only shows for a
-        // tutorial and not for ai or network game.
-        gameSceneManagerObject.GetComponent<GameSceneManager>().hideTutorialParrot();
     }
 
     void Start()
@@ -81,6 +78,7 @@ public class GameController : MonoBehaviour
             else
             {
                 Debug.Log("Host choosing opponents piece");
+                FirstGameTooltip();
                 EnableAvailablePieces();
             }
         }
@@ -319,7 +317,7 @@ public class GameController : MonoBehaviour
     public void ConvertAIPiece(string aiPieceChosen)
     {
         string gamePieceString = "GamePiece " + aiPieceChosen;
-        SetSelectedPiece(GameObject.Find(gamePieceString).GetComponent<GamePiece>());
+        selectedPiece = GameObject.Find(gamePieceString).GetComponent<GamePiece>();
     }
 
     public Button ConvertAIBoardSpace(string aiBoardSpaceChosen)
@@ -507,8 +505,10 @@ public class GameController : MonoBehaviour
     public void StagePiece()
     {
         Button StagePiece = GameObject.Find("StagePiece").GetComponent<Button>();
+        FirstGameTooltip();
 
-        selectedPiece.transform.GetChild(0).gameObject.SetActive(false);
+        if (GameInfo.doubleClickConfirm == true)
+            selectedPiece.transform.GetChild(0).gameObject.SetActive(false);
 
         Vector3 newPosition = StagePiece.transform.position;
         selectedPiece.transform.position = newPosition;
@@ -546,9 +546,24 @@ public class GameController : MonoBehaviour
 
     public void SetSelectedPiece(GamePiece gamePiece)
     {
-        if (selectedPiece == gamePiece)
+        Debug.Log("got into set selected piece");
+        // This is always == true unless user changes it in settings
+        if (GameInfo.doubleClickConfirm == true)
         {
-            SelectOpponentsPiece();
+            if (selectedPiece == gamePiece)
+            {
+                SelectOpponentsPiece();
+            }
+            else
+            {
+                if (selectedPiece != null)
+                    selectedPiece.transform.GetChild(0).gameObject.SetActive(false);
+
+                selectedPiece = gamePiece;
+
+                gamePiece.transform.GetChild(0).gameObject.SetActive(true);
+                FirstGameTooltip();
+            }
         }
         else
         {
@@ -556,13 +571,7 @@ public class GameController : MonoBehaviour
                 selectedPiece.transform.GetChild(0).gameObject.SetActive(false);
 
             selectedPiece = gamePiece;
-
-            foreach (GamePiece piece in gamePieces)
-                if (gamePiece.id == piece.name.Substring(10))
-                {
-                    piece.transform.GetChild(0).gameObject.SetActive(true);
-                    break;
-                }
+            SelectOpponentsPiece();
         }
     }
 
@@ -635,6 +644,9 @@ public class GameController : MonoBehaviour
         }
         else
             gameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
+
+        // Disable tooltips for next game
+        GameInfo.firstGame = false;
     }
 
     private void ChangeSides()
@@ -722,6 +734,7 @@ public class GameController : MonoBehaviour
 
     private void DisableTutorialPiece()
     {
+        Debug.Log("piece disabled");
         gamePieces[tutorialPieceIndex].GetComponent<BoxCollider2D>().enabled = false;
         gamePieces[tutorialPieceIndex].transform.GetChild(0).gameObject.SetActive(false);
     }
@@ -739,6 +752,14 @@ public class GameController : MonoBehaviour
     void SetGameControllerReferenceOnNetwork()
     {
         networkController.SetGameControllerReference(this);
+    }
+
+    void FirstGameTooltip()
+    {
+        if (GameInfo.firstGame)
+        {
+
+        }
     }
     #endregion
 }

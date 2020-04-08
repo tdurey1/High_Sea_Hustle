@@ -7,11 +7,15 @@ public class GameAudio : MonoBehaviour
     public AudioSource[] audioSources;
     public Text songTitle;
     private int songIndex;
+    private int easterEgg;
    
 
     void Start()
     {
-        songIndex = Random.Range(0, audioSources.Length - 1);
+        songIndex = Random.Range(0, audioSources.Length);
+        if (songIndex == 5)
+            PlayEasterEgg(true);
+
         CallAudio();
     }
 
@@ -31,6 +35,9 @@ public class GameAudio : MonoBehaviour
         else
             songIndex++;
 
+        if (songIndex == 5)
+            PlayEasterEgg(true);
+
         gameMusic.Stop();
         CallAudio();
     }
@@ -42,7 +49,23 @@ public class GameAudio : MonoBehaviour
         else
             songIndex--;
 
+        if (songIndex == 5)
+            PlayEasterEgg(false);
+
         gameMusic.Stop();
         CallAudio();
+    }
+
+    public void PlayEasterEgg(bool isNext)
+    {
+        easterEgg = Random.Range(0, 50);
+
+        if (easterEgg != 22)
+        {
+            if (isNext == true)
+                songIndex = 0;
+            else
+                songIndex--;
+        }
     }
 }
