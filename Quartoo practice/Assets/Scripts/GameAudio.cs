@@ -11,7 +11,7 @@ public class GameAudio : MonoBehaviour
 
     void Start()
     {
-        songIndex = Random.Range(0, audioSources.Length - 1);
+        songIndex = Random.Range(0, audioSources.Length);
         CallAudio();
     }
 

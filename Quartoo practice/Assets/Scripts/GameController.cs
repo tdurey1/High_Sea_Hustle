@@ -36,10 +36,6 @@ public class GameController : MonoBehaviour
         SetGameControllerReferenceOnNetwork();
         playerTurn = GameInfo.selectPieceAtStart;
         recentMove = buttonList[0];
-
-        // Peter Parrot is just a popup like settings/help, hide it at start so he only shows for a
-        // tutorial and not for ai or network game.
-        gameSceneManagerObject.GetComponent<GameSceneManager>().hideTutorialParrot();
     }
 
     void Start()

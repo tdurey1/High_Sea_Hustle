@@ -1,5 +1,7 @@
 ﻿public class GameInfo
 {
+    public static bool firstGame = true;
+
     // User related variables
     public static string username;
 
