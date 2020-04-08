@@ -58,7 +58,7 @@ public class GameAudio : MonoBehaviour
 
     public void PlayEasterEgg(bool isNext)
     {
-        easterEgg = Random.Range(0, 100);
+        easterEgg = Random.Range(0, 50);
 
         if (easterEgg != 22)
         {

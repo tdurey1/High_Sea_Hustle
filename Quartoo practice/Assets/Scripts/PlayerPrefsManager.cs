@@ -130,7 +130,7 @@ public class PlayerPrefsManager : MonoBehaviour
 
         randomUserNameIndex++;
 
-        if (randomUserNameIndex == randomUsernames.Length)
+        if (randomUserNameIndex >= randomUsernames.Length)
             randomUserNameIndex = 0;
     }
 

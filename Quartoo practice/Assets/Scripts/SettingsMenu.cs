@@ -6,6 +6,7 @@ public class SettingsMenu : MonoBehaviour
 {
     public Slider musicSlider;
     public Slider soundEffectsSlider;
+    public Toggle doubleClickConfirm;
     public AudioMixer masterMixer;
 
     void Awake()
@@ -19,6 +20,8 @@ public class SettingsMenu : MonoBehaviour
 
         musicSlider.value = savedMusicVol;
         soundEffectsSlider.value = savedSoundFXVol;
+        Debug.Log("start " + GameInfo.doubleClickConfirm);
+        doubleClickConfirm.isOn = GameInfo.doubleClickConfirm ? true : false;
     }
 
     public void SetMusicVolume(float volume)
@@ -38,5 +41,11 @@ public class SettingsMenu : MonoBehaviour
     public float ConvertToDecibel(float volume)
     {
         return Mathf.Log10(Mathf.Max(volume, 0.0001f)) * 20f;
+    }
+
+    public void ChangeConfirmOption()
+    {
+        GameInfo.doubleClickConfirm = doubleClickConfirm.isOn ? true : false;
+        Debug.Log("confirm clicked " + GameInfo.doubleClickConfirm);
     }
 }

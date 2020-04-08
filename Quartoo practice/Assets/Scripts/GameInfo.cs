@@ -2,6 +2,8 @@
 {
     public static bool firstGame = true;
 
+    public static bool doubleClickConfirm = true;
+
     // User related variables
     public static string username;
 
