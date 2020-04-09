@@ -2322,7 +2322,7 @@ MonoBehaviour:
   BackButton: {fileID: 1272152582}
   StartGameButton: {fileID: 844147184}
   FindGamesButton: {fileID: 1544203124}
-  roomListingPrefab: {fileID: 741517705915594753, guid: 175d6755acdca3d4180a6c3be846499f,
+  roomListingPrefab: {fileID: 3969504414296479445, guid: 175d6755acdca3d4180a6c3be846499f,
     type: 3}
   roomListingPanel: {fileID: 178570173}
   CreateOrJoinCanvas: {fileID: 633190171}

@@ -2,7 +2,6 @@
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
@@ -41,10 +40,12 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     private void Start()
     {
-        PhotonNetwork.ConnectUsingSettings();
-        Debug.Log("F: StartRoom.cs/private void Start - Connected to photon servers");
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+        
         CreateOrJoinCanvas.gameObject.SetActive(true);
-        Debug.Log("CreateOrJoinCanvas showing");
     }
 
     #endregion
@@ -53,9 +54,9 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnConnectedToMaster()
     {
-        Debug.Log("F: StartRoom.cs/public override void OnConnectedToMaster - Connected to photon master server");
         PhotonNetwork.AutomaticallySyncScene = true;
-        Debug.Log("AutSyncScene turned on");
+
+        PhotonNetwork.JoinLobby();
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -84,6 +85,19 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
             PhotonNetwork.CurrentRoom.IsOpen = false;
             Debug.Log("Two players connected, ready to start");
         }
+    }
+
+    public override void OnJoinedRoom()
+    {
+        CreateOrJoinCanvas.gameObject.SetActive(false);
+        RoomLobbyCanvas.gameObject.SetActive(false);
+
+        WaitingLoadingCanvas.gameObject.SetActive(true);
+
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+            StartButton.gameObject.SetActive(true);
+        else
+            StartButton.gameObject.SetActive(false);
     }
 
     #endregion
@@ -145,9 +159,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
             Debug.Log("You are master client");
 
-        CreateOrJoinCanvas.gameObject.SetActive(false);
-        WaitingLoadingCanvas.gameObject.SetActive(true);
-        StartButton.gameObject.SetActive(true);
+        
 
         GameInfo.selectPieceAtStart = 1;
     }
@@ -171,14 +183,14 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     //    PhotonNetwork.LeaveRoom();
     //}
 
-    public void JoinLobbyOnClick()
-    {
-        Debug.Log("F: StartRoom.cs/public void JoinLobbyOnClick");
-        if (!PhotonNetwork.InLobby)
-        {
-            PhotonNetwork.JoinLobby();
-        }
-    }
+    //public void JoinLobbyOnClick()
+    //{
+    //    Debug.Log("F: StartRoom.cs/public void JoinLobbyOnClick");
+    //    if (!PhotonNetwork.InRoom)
+    //    {
+    //        PhotonNetwork.JoinRoom(roomName);
+    //    }
+    //}
 
     // debug here
     public void OnBackButtonClicked()
