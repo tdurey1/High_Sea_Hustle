@@ -7194,6 +7194,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 205995788180763500, guid: 4f44bdf58866e824eb8f529918bbe3bd,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 28
+      objectReference: {fileID: 0}
     - target: {fileID: 205995788180763507, guid: 4f44bdf58866e824eb8f529918bbe3bd,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -8765,6 +8770,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4daac2eb9b002479a3a0dc01f72b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customSkin: {fileID: 11400000, guid: 877ba4f954c82114593578921bfcaedb, type: 2}
 --- !u!4 &1436695030
 Transform:
   m_ObjectHideFlags: 0
@@ -11682,6 +11688,7 @@ MonoBehaviour:
   gameSceneManagerObject: {fileID: 1762013802}
   tutorialCaption: {fileID: 2068919050}
   oldPosition: {x: 0, y: 0, z: 0}
+  networkChat: {fileID: 1436695028}
   tutorialGameObject: {fileID: 1577241506}
 --- !u!4 &1815130339
 Transform:
@@ -15041,6 +15048,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817228979624289766, guid: 34418eda6aaec26479d809fd052c79c2,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 2817228979624289784, guid: 34418eda6aaec26479d809fd052c79c2,
         type: 3}
