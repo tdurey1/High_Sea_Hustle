@@ -7216,12 +7216,12 @@ PrefabInstance:
     - target: {fileID: 205995788154834455, guid: 4f44bdf58866e824eb8f529918bbe3bd,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 1139
       objectReference: {fileID: 0}
     - target: {fileID: 205995788154834455, guid: 4f44bdf58866e824eb8f529918bbe3bd,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -594
       objectReference: {fileID: 0}
     - target: {fileID: 205995788154834455, guid: 4f44bdf58866e824eb8f529918bbe3bd,
         type: 3}
@@ -9708,8 +9708,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1577241507}
   - component: {fileID: 1577241508}
+  - component: {fileID: 1577241509}
   m_Layer: 5
-  m_Name: Tutorial
+  m_Name: ParotPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9751,11 +9752,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popups: []
-  hilights:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+--- !u!114 &1577241509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577241506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c94c4484eee1705408e546225c89b969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popups: []
 --- !u!4 &1577322008 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8131105892972529168, guid: 8cc87937eabcc104bba7ed2842a255f6,
@@ -11755,10 +11764,10 @@ MonoBehaviour:
   selectedPiece: {fileID: 0}
   recentMove: {fileID: 0}
   gameSceneManagerObject: {fileID: 1762013802}
-  tutorialCaption: {fileID: 2068919050}
+  ParrotCaption: {fileID: 2068919050}
   oldPosition: {x: 0, y: 0, z: 0}
   networkChat: {fileID: 1436695028}
-  tutorialGameObject: {fileID: 1577241506}
+  ParretPopup: {fileID: 1577241506}
 --- !u!4 &1815130339
 Transform:
   m_ObjectHideFlags: 0
@@ -15066,12 +15075,12 @@ PrefabInstance:
     - target: {fileID: 2817228979616782493, guid: 34418eda6aaec26479d809fd052c79c2,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -1176
       objectReference: {fileID: 0}
     - target: {fileID: 2817228979616782493, guid: 34418eda6aaec26479d809fd052c79c2,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 2817228979616782493, guid: 34418eda6aaec26479d809fd052c79c2,
         type: 3}

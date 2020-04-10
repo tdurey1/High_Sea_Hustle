@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     private AIHard hardAIController = new AIHard();
     private GameCore gameCore = new GameCore();
     private TutorialManager tutorialManager;
+    private Tooltips tooltips;
 
     // Unity Objects
     public List<GamePiece> gamePieces;
@@ -19,11 +20,11 @@ public class GameController : MonoBehaviour
     public GamePiece selectedPiece;
     public Button recentMove;
     public GameObject gameSceneManagerObject;
-    public Text tutorialCaption;
+    public Text ParrotCaption;
     public Vector3 oldPosition;
     public GameObject networkChat;
 
-    public GameObject tutorialGameObject;
+    public GameObject ParretPopup;
 
     // GameController specific variables
     private int playerTurn;
@@ -80,7 +81,7 @@ public class GameController : MonoBehaviour
             else
             {
                 Debug.Log("Host choosing opponents piece");
-                FirstGameTooltip();
+                FirstGameTooltip(0);
                 EnableAvailablePieces();
             }
         }
@@ -231,7 +232,7 @@ public class GameController : MonoBehaviour
             else
             {
                 Debug.Log("User choosing opponents piece");
-
+                FirstGameTooltip(3);
                 DisableAllBoardSpaces();
                 EnableAvailablePieces();
             }
@@ -283,7 +284,6 @@ public class GameController : MonoBehaviour
             else
             {
                 Debug.Log("User choosing opponents piece");
-
                 DisableAllBoardSpaces();
                 EnableAvailablePieces();
             }
@@ -339,10 +339,10 @@ public class GameController : MonoBehaviour
     #region Tutorial Functions
     void StartTutorialModeGame()
     {
-        tutorialManager = tutorialGameObject.GetComponent<TutorialManager>();
+        tutorialManager = ParretPopup.GetComponent<TutorialManager>();
 
         // Get the first caption from the array in tutorial manager
-        tutorialCaption.text = tutorialManager.getCurrentCaption();
+        ParrotCaption.text = tutorialManager.getCurrentCaption();
 
         // Enable Peter Parrot
         gameSceneManagerObject.GetComponent<GameSceneManager>().showTutorialParrot();
@@ -414,6 +414,7 @@ public class GameController : MonoBehaviour
                 EnableTutorialBoardSpace();
                 break;
             case 12:
+                GameInfo.firstGame = false;
                 // Maybe include popup or something, for now clicking the next arrow causes an error so dont enable it
                 //EnableTutorialNextArrow(nextArrow);
                 break;
@@ -427,7 +428,7 @@ public class GameController : MonoBehaviour
 
     public void StepCompleted()
     {
-        tutorialCaption.text = tutorialManager.ShowNextStep();
+        ParrotCaption.text = tutorialManager.ShowNextStep();
         TutorialModeGame();
     }
 
@@ -514,7 +515,7 @@ public class GameController : MonoBehaviour
     public void StagePiece()
     {
         Button StagePiece = GameObject.Find("StagePiece").GetComponent<Button>();
-        FirstGameTooltip();
+        FirstGameTooltip(2);
 
         if (GameInfo.doubleClickConfirm == true)
             selectedPiece.transform.GetChild(0).gameObject.SetActive(false);
@@ -559,6 +560,7 @@ public class GameController : MonoBehaviour
         // This is always == true unless user changes it in settings
         if (GameInfo.doubleClickConfirm == true)
         {
+            FirstGameTooltip(0);
             if (selectedPiece == gamePiece)
             {
                 SelectOpponentsPiece();
@@ -571,7 +573,6 @@ public class GameController : MonoBehaviour
                 selectedPiece = gamePiece;
 
                 gamePiece.transform.GetChild(0).gameObject.SetActive(true);
-                FirstGameTooltip();
             }
         }
         else
@@ -601,7 +602,7 @@ public class GameController : MonoBehaviour
     public void EndTurn()
     {
         Debug.Log("here first" + playerTurn);
-
+        FirstGameTooltip(1);
         ChangeSides();
         placingPiece = true;
 
@@ -766,12 +767,21 @@ public class GameController : MonoBehaviour
         networkController.SetGameControllerReference(this);
     }
 
-    void FirstGameTooltip()
+    void FirstGameTooltip(int tooltipIndex)
     {
-        if (GameInfo.firstGame)
-        {
+        //if (!tooltips)
+        //{
+        //    tooltips = ParretPopup.GetComponent<Tooltips>();
 
-        }
+        //    ParrotCaption.text = tooltips.ShowTooltip(tooltipIndex);
+
+        //    // Enable Peter Parrot
+        //    gameSceneManagerObject.GetComponent<GameSceneManager>().showTutorialParrot();
+        //}
+        //if (GameInfo.firstGame)
+        //{
+        //    ParrotCaption.text = tooltips.ShowTooltip(tooltipIndex);
+        //}
     }
     #endregion
 }

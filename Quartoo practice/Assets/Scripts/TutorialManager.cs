@@ -7,9 +7,7 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     public GameObject[] popups;
-    public GameObject[] hilights;
     private int popupIndex = 0;
-    private int hilightIndex = 0;
 
     private string[] captions =
     {
