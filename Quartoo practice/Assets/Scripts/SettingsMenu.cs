@@ -25,13 +25,15 @@ public class SettingsMenu : MonoBehaviour
 
     public void SetMusicVolume(float volume)
     {
-        masterMixer.SetFloat("musicVolume", ConvertToDecibel(volume / musicSlider.maxValue)); //Dividing by max allows arbitrary positive slider maxValue
+        //Dividing by max allows arbitrary positive slider maxValue
+        masterMixer.SetFloat("musicVolume", ConvertToDecibel(volume / musicSlider.maxValue)); 
         GameInfo.musicVolume = volume;
     }
 
     public void SetSoundFXVolume(float volume)
     {
-        masterMixer.SetFloat("soundFXVolume", ConvertToDecibel(volume / soundEffectsSlider.maxValue)); //Dividing by max allows arbitrary positive slider maxValue
+        //Dividing by max allows arbitrary positive slider maxValue
+        masterMixer.SetFloat("soundFXVolume", ConvertToDecibel(volume / soundEffectsSlider.maxValue));
         GameInfo.soundFXVolume = volume;
     }
 
