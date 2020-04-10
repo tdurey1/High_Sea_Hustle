@@ -11,6 +11,8 @@ public class Chat : MonoBehaviourPun
 {
     bool isChatting = false;
     string chatInput = "";
+    public GUISkin customSkin;
+    Vector2 currentScrollPos = new Vector2();
 
     [System.Serializable]
     public class ChatMessage
@@ -58,47 +60,54 @@ public class Chat : MonoBehaviourPun
 
     void OnGUI()
     {
-        if (!isChatting)
+        GUI.skin = customSkin;
+
+        //if (!isChatting)
+        //{
+        //    GUI.Label(new Rect(5, Screen.height - 27, 200, 25), "Press 'T' to chat");
+        //}
+        //else
+        //{
+        if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return)
         {
-            GUI.Label(new Rect(5, Screen.height - 25, 200, 25), "Press 'T' to chat");
-        }
-        else
-        {
-            if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return)
+            isChatting = true;
+            if (chatInput.Replace(" ", "") != "")
             {
-                isChatting = false;
-                if (chatInput.Replace(" ", "") != "")
-                {
-                    //Send message
-                    photonView.RPC("SendChat", RpcTarget.All, PhotonNetwork.LocalPlayer, chatInput);
-                }
-                chatInput = "";
+                //Send message
+                photonView.RPC("SendChat", RpcTarget.All, GameInfo.username, chatInput);
             }
-
-            GUI.SetNextControlName("ChatField");
-            GUI.Label(new Rect(5, Screen.height - 25, 200, 25), "Say:");
-            GUIStyle inputStyle = GUI.skin.GetStyle("box");
-            inputStyle.alignment = TextAnchor.MiddleLeft;
-            chatInput = GUI.TextField(new Rect(10 + 25, Screen.height - 27, 400, 22), chatInput, 60, inputStyle);
-
-            GUI.FocusControl("ChatField");
+            chatInput = "";
         }
+
+        GUILayout.BeginVertical();
 
         //Show messages
         for (int i = 0; i < chatMessages.Count; i++)
         {
+            GUILayout.BeginHorizontal();
             if (chatMessages[i].timer > 0 || isChatting)
             {
-                GUI.Label(new Rect(5, Screen.height - 50 - 25 * i, 500, 25), chatMessages[i].sender + ": " + chatMessages[i].message);
+                GUI.Label(new Rect(5, Screen.height - 75 - 40 * i, 250, 50), chatMessages[i].sender + ": " + chatMessages[i].message);
             }
+            GUILayout.EndHorizontal();
+            GUILayout.Space(3);
         }
+        GUILayout.EndVertical();
+
+        GUI.SetNextControlName("ChatField");
+        GUIStyle inputStyle = GUI.skin.GetStyle("box");
+        inputStyle.alignment = TextAnchor.MiddleLeft;
+        chatInput = GUI.TextField(new Rect(5, Screen.height - 27, 250, 30), chatInput, 60);
+
+        GUI.FocusControl("ChatField");
+        //}
     }
 
     [PunRPC]
-    void SendChat(Player sender, string message)
+    void SendChat(string username, string message)
     {
         ChatMessage m = new ChatMessage();
-        m.sender = sender.NickName;
+        m.sender = username;
         m.message = message;
         m.timer = 15.0f;
 

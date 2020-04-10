@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
     public GameObject gameSceneManagerObject;
     public Text tutorialCaption;
     public Vector3 oldPosition;
+    public GameObject networkChat;
 
     public GameObject tutorialGameObject;
 
@@ -56,6 +57,7 @@ public class GameController : MonoBehaviour
     void StartNetworkingGame()
     {
         placingPiece = (GameInfo.selectPieceAtStart == 1) ? false : true;
+        networkChat.SetActive(true);
         NetworkGame();
     }
 
