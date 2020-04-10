@@ -143,70 +143,70 @@ public class NetworkController : MonoBehaviour
 
     public void SendMove()
     {
-        Debug.Log("NetworkController.cs/SendMove()");
-        Debug.Log("moveLocation: " + moveLocation);
+        //Debug.Log("NetworkController.cs/SendMove()");
+        //Debug.Log("moveLocation: " + moveLocation);
         NetworkPlayer.networkPlayer.SendMove(moveLocation, movePiece);
     }
 
     public void SendPiece()
     {
-        Debug.Log("NetworkController.cs/SendPiece()");
-        Debug.Log("Sending piece: " + movePiece);
+        //Debug.Log("NetworkController.cs/SendPiece()");
+        //Debug.Log("Sending piece: " + movePiece);
         NetworkPlayer.networkPlayer.SendPiece(movePiece);
     }
 
     public void SetMovePiece(string id)
     {
-        Debug.Log("NetworkController.cs/SetMovePiece(string id)");
+        //Debug.Log("NetworkController.cs/SetMovePiece(string id)");
         movePiece = id;
-        Debug.Log("Network movePiece: " + movePiece);
+        //Debug.Log("Network movePiece: " + movePiece);
     }
 
     public string GetMovePiece()
     {
-        Debug.Log("NetworkController.cs/GetMovePiece()");
-        Debug.Log("Returning movePiece: " + movePiece);
+        //Debug.Log("NetworkController.cs/GetMovePiece()");
+        //Debug.Log("Returning movePiece: " + movePiece);
         return movePiece;
     }
 
     public void SetMoveLocation(string name)
     {
-        Debug.Log("NetworkController.cs/SetMoveLocation(string name)");
-        Debug.Log("Setting move location: " + name);
+        //Debug.Log("NetworkController.cs/SetMoveLocation(string name)");
+        //Debug.Log("Setting move location: " + name);
         moveLocation = name;
     }
     public string GetMoveLocation()
     {
-        Debug.Log("NetworkController.cs/GetMoveLocation()");
-        Debug.Log("Returning moveLocation: " + moveLocation);
+        //Debug.Log("NetworkController.cs/GetMoveLocation()");
+        //Debug.Log("Returning moveLocation: " + moveLocation);
         return moveLocation;
     }
 
     public void SetNetworkMessage(char message)
     {
-        Debug.Log("NetworkController.cs/SetNetworkMesage");
-        Debug.Log("Setting networkMessage to: " + message);
+        //Debug.Log("NetworkController.cs/SetNetworkMesage");
+        //Debug.Log("Setting networkMessage to: " + message);
         networkMessage = message;
     }
 
     public char GetNetworkMessage()
     {
-        Debug.Log("NetworkController.cs/GetNetworkMessage()");
-        Debug.Log("Returning networkMessage: " + networkMessage);
+        //Debug.Log("NetworkController.cs/GetNetworkMessage()");
+        //Debug.Log("Returning networkMessage: " + networkMessage);
         return networkMessage;
     }
 
     public void SetNetworkMessageReceived(bool boolean)
     {
-        Debug.Log("NetworkController.cs/SetNetworkMessageReceived(bool boolean)");
+        //Debug.Log("NetworkController.cs/SetNetworkMessageReceived(bool boolean)");
         networkMessageReceived = boolean;
-        Debug.Log("SetNetworkMessageReceived = " + networkMessageReceived);
+        //Debug.Log("SetNetworkMessageReceived = " + networkMessageReceived);
     }
 
     public bool GetNetworkMessageRecieved()
     {
-        Debug.Log("NetworkController.cs/GetNetworkMessageReceived");
-        Debug.Log("Returning networkMessageReceived: " + networkMessageReceived);
+        //Debug.Log("NetworkController.cs/GetNetworkMessageReceived");
+        //Debug.Log("Returning networkMessageReceived: " + networkMessageReceived);
         return networkMessageReceived;
     }
 

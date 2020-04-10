@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
     {
         // Disable everything at the start. They will be enabled later in the function as needed
         DisableEverything();
-
+        Debug.Log(playerTurn);
         // Host's turn
         if (playerTurn == 1)
         {
@@ -120,8 +120,15 @@ public class GameController : MonoBehaviour
         }
 
         selectedPiece = null;
-        SetSelectedPiece(pieceSelected);
-        ChangeSides();
+        Debug.Log("befor set selected piece func = " + playerTurn);
+        SetSelectedPieceFromNetwork(pieceSelected);
+    }
+
+    public void SetSelectedPieceFromNetwork(GamePiece gamePiece)
+    {
+        selectedPiece = gamePiece;
+        selectedPiece.transform.GetChild(0).gameObject.SetActive(false);
+        SelectOpponentsPiece();
     }
 
     public void ReceiveMoveFromNetwork()
@@ -593,6 +600,8 @@ public class GameController : MonoBehaviour
 
     public void EndTurn()
     {
+        Debug.Log("here first" + playerTurn);
+
         ChangeSides();
         placingPiece = true;
 
@@ -606,6 +615,7 @@ public class GameController : MonoBehaviour
             networkController.SetMovePiece(selectedPiece.id);
             networkController.SendPiece();
             NetworkGame();
+            Debug.Log("got here" + playerTurn);
         }
         else
             StoryModeGame();
