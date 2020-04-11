@@ -40,7 +40,7 @@ public class MainMenu : MonoBehaviour
     public void tutorial()
     {
         GameInfo.gameType = 'T';
-
+        GameInfo.firstGame = false;
         Initiate.Fade("GameScene", Color.black, 4.0f);
     }
        
