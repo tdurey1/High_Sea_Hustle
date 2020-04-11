@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Tooltips : MonoBehaviour
 {
-    public GameObject[] popups;
+    private List<int> usedTooltips = new List<int>();
     private int popupIndex = 0;
-
-    private string[] tooltips =
+    private int tooltipIndex;
+    public string[] tooltips =
     {
         /*0: Double click */"Click the piece once to select, and a second time to confirm you want to send it to your opponent. You can disable this to a single click in settings.",
         /*1: Help */"Forgot the rules or win conditions? Click the question mark above!",
@@ -14,13 +15,20 @@ public class Tooltips : MonoBehaviour
         /*4: Songs */"Tired of this song? Go to settings and skip to the next or previous song."
     };
 
-    public int GetPopupIndex()
+    public int getUsedTooltipLength()
     {
-        return popupIndex;
+        return usedTooltips.Count;
     }
 
-    public string ShowTooltip(int tooltipIndex)
+    public string ShowTooltip()
     {
+        tooltipIndex = Random.Range(0, tooltips.Length);
+
+        while (usedTooltips.Contains(tooltipIndex))
+            tooltipIndex = Random.Range(0, tooltips.Length);
+
+        usedTooltips.Add(tooltipIndex);
+
         return tooltips[tooltipIndex];
     }
 }
