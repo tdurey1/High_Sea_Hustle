@@ -105,12 +105,14 @@ public class GameSceneManager : MonoBehaviour
     #region Parrot
     public void showParrot()
     {
-        tutorial.SetActive(true);
-    }
+        Debug.Log("in show parrot");
+        Animator animator = tutorial.GetComponent<Animator>();
+        if(animator != null)
+        {
+            bool isOpen = animator.GetBool("isActive");
 
-    public void hideParrot()
-    {
-        tutorial.SetActive(false);
+            animator.SetBool("isActive", !isOpen);
+        }
     }
     #endregion
 

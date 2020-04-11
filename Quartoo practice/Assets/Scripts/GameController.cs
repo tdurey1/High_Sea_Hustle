@@ -442,7 +442,7 @@ public class GameController : MonoBehaviour
         {
             StopCoroutine(hideParrot);
             Debug.Log("its stopped");
-            gameSceneManagerObject.GetComponent<GameSceneManager>().hideParrot();
+            gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
         }
     }
 
@@ -782,7 +782,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator FirstGameTooltip()
     {
-        yield return new WaitForSeconds(7);
+        yield return new WaitForSeconds(28);
         ParrotCaption.text = tooltips.ShowTooltip();
 
         gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
@@ -796,9 +796,9 @@ public class GameController : MonoBehaviour
     IEnumerator HideParrot()
     {
         Debug.Log("still goin");
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(10);
 
-        gameSceneManagerObject.GetComponent<GameSceneManager>().hideParrot();
+        gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
     }
 
     private void DisableTooltips()
@@ -808,7 +808,7 @@ public class GameController : MonoBehaviour
             // Disable tooltips for next game and from popping up for current game
             GameInfo.firstGame = false;
             StopAllCoroutines();
-            gameSceneManagerObject.GetComponent<GameSceneManager>().hideParrot();
+            gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
         }
     }
     #endregion
