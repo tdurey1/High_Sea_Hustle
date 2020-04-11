@@ -102,13 +102,13 @@ public class GameSceneManager : MonoBehaviour
     }
     #endregion
 
-    #region Tutorial
-    public void showTutorialParrot()
+    #region Parrot
+    public void showParrot()
     {
         tutorial.SetActive(true);
     }
 
-    public void hideTutorialParrot()
+    public void hideParrot()
     {
         tutorial.SetActive(false);
     }

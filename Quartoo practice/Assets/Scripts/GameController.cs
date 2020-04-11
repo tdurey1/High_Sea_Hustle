@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour
     private bool placingPiece = false;
     private int tutorialPieceIndex = 1;
     private int tutorialBoardSpaceIndex = 3;
-    private int tooltipsIndex = 0;
+    private Coroutine hideParrot;
 
     void Awake()
     {
@@ -43,7 +43,13 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        if (GameInfo.gameType == 'E' || GameInfo.gameType == 'H' || GameInfo.gameType == 'S')
+        if (GameInfo.firstGame)
+        {
+            tooltips = ParretPopup.GetComponent<Tooltips>();
+            StartCoroutine("FirstGameTooltip");
+        }
+
+            if (GameInfo.gameType == 'E' || GameInfo.gameType == 'H' || GameInfo.gameType == 'S')
             StartAIGame();
         else if (GameInfo.gameType == 'N')
             StartNetworkingGame();
@@ -81,7 +87,6 @@ public class GameController : MonoBehaviour
             else
             {
                 Debug.Log("Host choosing opponents piece");
-                FirstGameTooltip(0);
                 EnableAvailablePieces();
             }
         }
@@ -232,7 +237,6 @@ public class GameController : MonoBehaviour
             else
             {
                 Debug.Log("User choosing opponents piece");
-                FirstGameTooltip(3);
                 DisableAllBoardSpaces();
                 EnableAvailablePieces();
             }
@@ -345,7 +349,7 @@ public class GameController : MonoBehaviour
         ParrotCaption.text = tutorialManager.getCurrentCaption();
 
         // Enable Peter Parrot
-        gameSceneManagerObject.GetComponent<GameSceneManager>().showTutorialParrot();
+        gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
 
         // Player should not be able to click on any gamepiece or boardspace
         DisableEverything();
@@ -428,8 +432,18 @@ public class GameController : MonoBehaviour
 
     public void StepCompleted()
     {
-        ParrotCaption.text = tutorialManager.ShowNextStep();
-        TutorialModeGame();
+        // If its tutorial, show next tutorial text; else its a tooltip
+        if (GameInfo.gameType == 'T')
+        {
+            ParrotCaption.text = tutorialManager.ShowNextStep();
+            TutorialModeGame();
+        }
+        else
+        {
+            StopCoroutine(hideParrot);
+            Debug.Log("its stopped");
+            gameSceneManagerObject.GetComponent<GameSceneManager>().hideParrot();
+        }
     }
 
     public void TutorialSetPiece(GamePiece gamePiece)
@@ -515,7 +529,6 @@ public class GameController : MonoBehaviour
     public void StagePiece()
     {
         Button StagePiece = GameObject.Find("StagePiece").GetComponent<Button>();
-        FirstGameTooltip(2);
 
         if (GameInfo.doubleClickConfirm == true)
             selectedPiece.transform.GetChild(0).gameObject.SetActive(false);
@@ -560,7 +573,6 @@ public class GameController : MonoBehaviour
         // This is always == true unless user changes it in settings
         if (GameInfo.doubleClickConfirm == true)
         {
-            FirstGameTooltip(0);
             if (selectedPiece == gamePiece)
             {
                 SelectOpponentsPiece();
@@ -602,7 +614,6 @@ public class GameController : MonoBehaviour
     public void EndTurn()
     {
         Debug.Log("here first" + playerTurn);
-        FirstGameTooltip(1);
         ChangeSides();
         placingPiece = true;
 
@@ -767,21 +778,25 @@ public class GameController : MonoBehaviour
         networkController.SetGameControllerReference(this);
     }
 
-    void FirstGameTooltip(int tooltipIndex)
+    IEnumerator FirstGameTooltip()
     {
-        //if (!tooltips)
-        //{
-        //    tooltips = ParretPopup.GetComponent<Tooltips>();
+        yield return new WaitForSeconds(10);
+        ParrotCaption.text = tooltips.ShowTooltip();
 
-        //    ParrotCaption.text = tooltips.ShowTooltip(tooltipIndex);
+        gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
 
-        //    // Enable Peter Parrot
-        //    gameSceneManagerObject.GetComponent<GameSceneManager>().showTutorialParrot();
-        //}
-        //if (GameInfo.firstGame)
-        //{
-        //    ParrotCaption.text = tooltips.ShowTooltip(tooltipIndex);
-        //}
+        if (tooltips.getUsedTooltipLength() != tooltips.tooltips.Length)
+            StartCoroutine("FirstGameTooltip");
+
+        hideParrot = StartCoroutine("HideParrot");
+    }
+
+    IEnumerator HideParrot()
+    {
+        Debug.Log("still goin");
+        yield return new WaitForSeconds(5);
+
+        gameSceneManagerObject.GetComponent<GameSceneManager>().hideParrot();
     }
     #endregion
 }
