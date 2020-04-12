@@ -24,7 +24,7 @@
 
     public static float soundFXVolume = .5f;
 
-    public static int aiDelayBoardSpace = 3;
+    public static int aiDelayBoardSpace = 0;
 
-    public static int aiDelayPiece = 3;
+    public static int aiDelayPiece = 0;
 }
