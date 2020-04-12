@@ -10,7 +10,7 @@ public class Tooltips : MonoBehaviour
     {
         /*0: Double click */"Click the piece once to select, and a second time to confirm you want to send it to your opponent. You can disable this to a single click in settings.",
         /*1: Help */"Forgot the rules or win conditions? Click the question mark above!",
-        /*2: Staging*/"After you or your opponent has selected a piece, it is placed at the bottom of the bored.",
+        /*2: Staging*/"After you or your opponent has selected a piece, it is placed at the bottom of the board.",
         /*3: Any piece */"You can select any piece (gold or silver) to send to your opponent.",
         /*4: Songs */"Tired of this song? Go to settings and skip to the next or previous song."
     };
