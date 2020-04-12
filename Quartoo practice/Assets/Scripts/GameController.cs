@@ -266,8 +266,7 @@ public class GameController : MonoBehaviour
                 // Have ai pick piece
                 string aiPieceChosen = easyAIController.ChooseGamePiece(gameCore.availablePieces);
                 ConvertAIPiece(aiPieceChosen);
-                StagePiece();
-                EndTurn();
+                StartCoroutine("DelayAIGivePiece");
             }
         }
     }
@@ -326,9 +325,16 @@ public class GameController : MonoBehaviour
     // NOTE: Remove this delay after Levi gets a legit AI integrated
     IEnumerator DelayAIMove(Button boardSpace)
     {
-        yield return new WaitForSeconds(0);
+        yield return new WaitForSeconds(GameInfo.aiDelayBoardSpace);
         PlacePieceOnBoard(boardSpace);
         HighlightBoardspace();
+    }
+
+    IEnumerator DelayAIGivePiece()
+    {
+        yield return new WaitForSeconds(GameInfo.aiDelayPiece);
+        StagePiece();
+        EndTurn();
     }
 
     public void ConvertAIPiece(string aiPieceChosen)
