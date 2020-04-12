@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 
-public class NetworkPlayer : MonoBehaviour
+public class NetworkPlayer : MonoBehaviourPunCallbacks
 {
     #region Variables
 
@@ -95,3 +95,5 @@ public class NetworkPlayer : MonoBehaviour
     }
     #endregion
 }
+
+

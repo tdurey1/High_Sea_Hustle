@@ -3,7 +3,7 @@ using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
 
-public class NetworkController : MonoBehaviour
+public class NetworkController : MonoBehaviourPunCallbacks
 {
     #region Variables
 
@@ -102,8 +102,6 @@ public class NetworkController : MonoBehaviour
         {
             PhotonNetwork.LeaveRoom();
 
-            while (!PhotonNetwork.IsConnectedAndReady)
-                return;
 
             RoomOptions roomOps = new RoomOptions()
             {
@@ -117,10 +115,6 @@ public class NetworkController : MonoBehaviour
         }
 
 
-
-        // !!! Maybe add a delay here to make sure the room is created before trying to join it?
-        while (!PhotonNetwork.IsConnectedAndReady)
-            return;
 
         // other player will join the room stored in the str var roomName
         if (!PhotonNetwork.LocalPlayer.IsMasterClient)
@@ -214,6 +208,21 @@ public class NetworkController : MonoBehaviour
     {
         netOpponentsAvatar = avatar;
         netOpponentsName = name;
+    }
+
+    public override void OnLeftRoom()
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 0)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+            PhotonNetwork.CurrentRoom.EmptyRoomTtl = 10;
+        }
+    }
+
+    public override void OnJoinedRoom()
+    {
+        base.OnJoinedRoom();
     }
     #endregion
 }
