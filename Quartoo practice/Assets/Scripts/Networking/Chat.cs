@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 using Photon.Realtime;
 
 /*
@@ -12,6 +13,11 @@ public class Chat : MonoBehaviourPun
     bool isChatting = false;
     string chatInput = "";
     public GUISkin customSkin;
+    public Button startChat;
+    public Text chatBtnText;
+    private string clickToChat = "Click to chat";
+    private string clickToClose = "Click to close chat";
+    Vector3 btnPosition = new Vector3();
     Vector2 currentScrollPos = new Vector2();
 
     [System.Serializable]
@@ -37,40 +43,24 @@ public class Chat : MonoBehaviourPun
         {
             photonView.ViewID = 11;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.T) && !isChatting)
-        {
-            isChatting = true;
-            chatInput = "";
-        }
-
-        //Hide messages after timer is expired
-        for (int i = 0; i < chatMessages.Count; i++)
-        {
-            if (chatMessages[i].timer > 0)
-            {
-                chatMessages[i].timer -= Time.deltaTime;
-            }
-        }
+        btnPosition = startChat.transform.position;
+        Button btn = startChat.GetComponent<Button>();
+        btn.onClick.AddListener(TaskOnClick);
     }
 
     void OnGUI()
     {
         GUI.skin = customSkin;
 
-        //if (!isChatting)
+        if (isChatting)
         //{
         //    GUI.Label(new Rect(5, Screen.height - 27, 200, 25), "Press 'T' to chat");
         //}
         //else
-        //{
+        {
         if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return)
         {
-            isChatting = true;
+            //isChatting = false;
             if (chatInput.Replace(" ", "") != "")
             {
                 //Send message
@@ -87,7 +77,7 @@ public class Chat : MonoBehaviourPun
             GUILayout.BeginHorizontal();
             if (chatMessages[i].timer > 0 || isChatting)
             {
-                GUI.Label(new Rect(5, Screen.height - 75 - 40 * i, 250, 50), chatMessages[i].sender + ": " + chatMessages[i].message);
+                GUI.Label(new Rect(5, Screen.height - 86 - 40 * i, 250, 50), chatMessages[i].sender + ": " + chatMessages[i].message);
             }
             GUILayout.EndHorizontal();
             GUILayout.Space(3);
@@ -97,10 +87,19 @@ public class Chat : MonoBehaviourPun
         GUI.SetNextControlName("ChatField");
         GUIStyle inputStyle = GUI.skin.GetStyle("box");
         inputStyle.alignment = TextAnchor.MiddleLeft;
-        chatInput = GUI.TextField(new Rect(5, Screen.height - 27, 250, 30), chatInput, 60);
+        chatInput = GUI.TextField(new Rect(5, Screen.height - 38, 250, 30), chatInput, 60);
 
         GUI.FocusControl("ChatField");
-        //}
+        }
+    }
+
+    void TaskOnClick()
+    {
+        btnPosition.x = (isChatting) ? btnPosition.x - 70f : btnPosition.x + 70f;
+        btnPosition.y = (isChatting) ? btnPosition.y + 4f : btnPosition.y - 4f;
+        startChat.transform.position = btnPosition;
+        isChatting = (isChatting) ? false : true;
+        chatBtnText.text = (chatBtnText.text == clickToChat) ? clickToClose : clickToChat;
     }
 
     [PunRPC]
