@@ -31,9 +31,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     }
 
     private void Start()
-    {        
-        Debug.Log("Instantiated PV");
-
+    {
         GameObject player = PhotonNetwork.Instantiate("NetworkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
     }
 

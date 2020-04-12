@@ -40,12 +40,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     private void Start()
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.ConnectUsingSettings();
-        }
-        
-        CreateOrJoinCanvas.gameObject.SetActive(true);
+        PhotonNetwork.ConnectUsingSettings();   // -> OnConnectedToMaster
     }
 
     #endregion
@@ -54,41 +49,27 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnConnectedToMaster()
     {
-        PhotonNetwork.AutomaticallySyncScene = true;
+        CreateOrJoinCanvas.gameObject.SetActive(true);        
 
-        PhotonNetwork.JoinLobby();
+        PhotonNetwork.JoinLobby();  // -> OnJoinedLobby
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    public override void OnJoinedLobby()
     {
-        Debug.Log("F: StartRoom.cs/public ovveride void OnRoomListUpdate - Change in the rooms available");
-        base.OnRoomListUpdate(roomList);
-        RemoveRoomListings();
+        CreateGameButton.SetActive(true);
+        JoinGameButton.SetActive(true);
+        BackButton.SetActive(true);
+        LoadingCanvas.gameObject.SetActive(false);
+    }
 
-        foreach (RoomInfo room in roomList)
-        {
-            ListRoom(room);
-        }
+    public override void OnCreatedRoom()
+    {
+        PhotonNetwork.AutomaticallySyncScene = true;    // -> OnJoinedRoom
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        Debug.Log("F: StartRoom.cs/public override void OnCreateRoomFailed - Room with same name exists");
-
-        // Users with the same name???
-    }
-
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-        {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-            if (PhotonNetwork.LocalPlayer.IsMasterClient)
-            {
-                StatusText.text = "Player joined, ready to Start Game...";
-                StartButton.SetActive(true);
-            }
-        }
+        base.OnCreateRoomFailed(returnCode, message);
     }
 
     public override void OnJoinedRoom()
@@ -105,14 +86,48 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         StartButton.gameObject.SetActive(false);
     }
 
-    public override void OnCreatedRoom()
+    public override void OnDisconnected(DisconnectCause cause)
     {
-        base.OnCreatedRoom();
+        base.OnDisconnected(cause);
+    }    
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        base.OnRoomListUpdate(roomList);
+        RemoveRoomListings();
+
+        foreach (RoomInfo room in roomList)
+        {
+            ListRoom(room);
+        }
+    }   
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            if (PhotonNetwork.LocalPlayer.IsMasterClient)
+            {
+                StatusText.text = "Player joined, ready to Start Game...";
+                StartButton.SetActive(true);
+            }
+        }
+    }    
+
+    public override void OnLeftLobby()
+    {
+        base.OnLeftLobby();
     }
 
-    public override void OnJoinedLobby()
+    public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        base.OnJoinedLobby();
+        base.OnJoinRoomFailed(returnCode, message);
+    }
+
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
     }
 
     #endregion
@@ -121,22 +136,21 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void CreateRoom()
     {
-        Debug.Log("F: StartRoom.cs/void CreateRoom - Creating new room");
         RoomOptions roomOps = new RoomOptions()
         {
+            EmptyRoomTtl = 1,
             IsVisible = true,
             IsOpen = true,
             MaxPlayers = 2
         };
 
-        // Room name needs to be player name???
         roomName = GameInfo.username;
-        PhotonNetwork.CreateRoom(roomName, roomOps);
+        PhotonNetwork.CreateRoom(roomName, roomOps);    // -> OnCreatedRoom / OnCreateRoomFailed
+        
     }
 
     public void RemoveRoomListings()
     {
-        Debug.Log("F: StartRoom.cs/void RemoveRoomListing");
         while (roomsPanel.childCount != 0)
         {
             Destroy(roomsPanel.GetChild(0).gameObject);
@@ -145,7 +159,6 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void ListRoom(RoomInfo room)
     {
-        Debug.Log("F: StartRoom.cs/void ListRoom");
         if (room.IsOpen && room.IsVisible)
         {
             GameObject tempListing = Instantiate(roomListingPrefab, roomsPanel);
@@ -162,20 +175,13 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void OnCreateGameButtonClicked()
     {
-        Debug.Log("F: StartRoom.cs/ public void OnCreateGameButtonClicked - Create button clicked");
-
         CreateRoom();
-
-        if (PhotonNetwork.LocalPlayer.IsMasterClient)
-            Debug.Log("You are master client");        
 
         GameInfo.selectPieceAtStart = 1;
     }
 
     public void OnJoinGameButtonClicked()
     {
-        Debug.Log("F: StartRoom.cs/ OnJoinGameButtonClicked");
-
         CreateOrJoinCanvas.gameObject.SetActive(false);
         RoomLobbyCanvas.gameObject.SetActive(true);
 
@@ -185,22 +191,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         GameInfo.selectPieceAtStart = 2;
     }
 
-    //public void OnCancelButtonClicked()
-    //{
-    //    Debug.Log("F: StartRoom.cs/public void OnCancelButtonClicked - Cancel button was clicked");
-    //    PhotonNetwork.LeaveRoom();
-    //}
 
-    //public void JoinLobbyOnClick()
-    //{
-    //    Debug.Log("F: StartRoom.cs/public void JoinLobbyOnClick");
-    //    if (!PhotonNetwork.InRoom)
-    //    {
-    //        PhotonNetwork.JoinRoom(roomName);
-    //    }
-    //}
-
-    // debug here
     public void OnBackButtonClicked()
     {
         if (CreateOrJoinCanvas.isActiveAndEnabled)
@@ -212,36 +203,19 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         if (RoomLobbyCanvas.isActiveAndEnabled || WaitingLoadingCanvas.isActiveAndEnabled)
         {
             if (PhotonNetwork.InRoom)
-            {
-                //if (PhotonNetwork.IsMasterClient)
-                //{
-                //    PhotonNetwork.CurrentRoom.IsOpen = false;
-                //    PhotonNetwork.CurrentRoom.IsVisible = false;
-                //}
-                
+            {                
                 PhotonNetwork.LeaveRoom();
             }
+            CreateGameButton.SetActive(false);
+            JoinGameButton.SetActive(false);
+            BackButton.SetActive(false);
+
+            PhotonNetwork.Disconnect();
             CreateOrJoinCanvas.gameObject.SetActive(true);
+            LoadingCanvas.gameObject.SetActive(true);
+            PhotonNetwork.ConnectUsingSettings();
         }
     }
-
-    //public void OnStartGameButtonClicked()
-    //{
-    //    RoomLobbyCanvas.gameObject.SetActive(false);
-    //    WaitingLoadingCanvas.gameObject.SetActive(true);
-
-    //    if (!PhotonNetwork.LocalPlayer.IsMasterClient)
-    //    {
-    //        StartButton.gameObject.SetActive(false);
-    //    }
-    //    else
-    //    { 
-    //        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-    //        {
-    //            StartButton.gameObject.SetActive(true);
-    //        }
-    //    }
-    //}
 
     public void OnStartButtonClicked()
     {
