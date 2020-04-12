@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
     public Text ParrotCaption;
     public Vector3 oldPosition;
     public GameObject networkChat;
+    public GameObject openChat;
 
     public GameObject ParretPopup;
     public Text TurnMessage;
@@ -68,6 +69,7 @@ public class GameController : MonoBehaviour
     {
         placingPiece = (GameInfo.selectPieceAtStart == 1) ? false : true;
         networkChat.SetActive(true);
+        openChat.SetActive(true);
         NetworkGame();
     }
 
