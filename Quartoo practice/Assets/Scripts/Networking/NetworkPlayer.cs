@@ -54,6 +54,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     public void RPC_SendPiece(string piece)
     {
         Debug.Log("NetworkPlayer.cs/RPC_SendPiece(string piece)");
+        Debug.Log(photonView.IsMine);
         if (!photonView.IsMine)
             return;
 
@@ -86,6 +87,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     public void SendPiece(string movePiece)
     {
         Debug.Log("NetworkPlayer.cs/SendPiece(string movePiece)");
+        Debug.Log(photonView.IsMine);
         photonView.RPC("RPC_SendPiece", RpcTarget.All, movePiece);
     }
 

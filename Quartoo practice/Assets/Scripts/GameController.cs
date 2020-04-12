@@ -139,7 +139,15 @@ public class GameController : MonoBehaviour
     {
         selectedPiece = gamePiece;
         selectedPiece.transform.GetChild(0).gameObject.SetActive(false);
-        SelectOpponentsPiece();
+        SelectNetworkOpponentsPiece();
+    }
+
+    public void SelectNetworkOpponentsPiece()
+    {
+        StagePiece();
+        ChangeSides();
+        placingPiece = true;
+        NetworkGame();
     }
 
     public void ReceiveMoveFromNetwork()
@@ -453,7 +461,6 @@ public class GameController : MonoBehaviour
         else
         {
             StopCoroutine(hideParrot);
-            Debug.Log("its stopped");
             gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
         }
     }
@@ -643,7 +650,6 @@ public class GameController : MonoBehaviour
             networkController.SetMovePiece(selectedPiece.id);
             networkController.SendPiece();
             NetworkGame();
-            Debug.Log("got here" + playerTurn);
         }
         else
             StoryModeGame();

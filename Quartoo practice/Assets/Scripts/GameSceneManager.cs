@@ -118,7 +118,6 @@ public class GameSceneManager : MonoBehaviour
     #region Parrot
     public void showParrot()
     {
-        Debug.Log("in show parrot");
         Animator animator = tutorial.GetComponent<Animator>();
         if(animator != null)
         {
