@@ -161,7 +161,7 @@ public class GameController : MonoBehaviour
         selectedPiece.transform.position = newPosition;
         recentMove = networkButton;
         networkButton.interactable = false;
-
+        HighlightBoardspace();
 
         // Returns a specific char if game is over 
         char gameState = gameCore.SetPiece(selectedPiece.id, networkButton.name);
@@ -328,6 +328,7 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(0);
         PlacePieceOnBoard(boardSpace);
+        HighlightBoardspace();
     }
 
     public void ConvertAIPiece(string aiPieceChosen)
@@ -505,6 +506,7 @@ public class GameController : MonoBehaviour
 
         if (selectedPiece != null)
         {
+            RemoveHighlightBoardspace();
             selectedPiece.GetComponent<BoxCollider2D>().enabled = false;
             Vector3 newPosition = button.transform.position;
             selectedPiece.transform.position = newPosition;
@@ -640,6 +642,9 @@ public class GameController : MonoBehaviour
     {
         // Prevent the user(s) from clicking any boardspace or gamepieces
         DisableEverything();
+
+        // This doesnt work for some reason
+        RemoveHighlightBoardspace();
 
         // Disable Main menu button on top since it will say they will forfeit the game (ask tristan)
         GameObject.Find("MainMenuButton").GetComponent<Button>().enabled = false;
@@ -813,13 +818,23 @@ public class GameController : MonoBehaviour
             // Disable tooltips for next game and from popping up for current game
             GameInfo.firstGame = false;
             StopAllCoroutines();
-            gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
         }
     }
 
     private void UpdateTurnMessage()
     {
         TurnMessage.text = playerTurn == 1 ? "Your Turn" : "Opponent's Turn";
+    }
+
+    private void HighlightBoardspace()
+    {
+        recentMove.transform.GetChild(0).gameObject.SetActive(true);
+    }
+
+    private void RemoveHighlightBoardspace()
+    {
+        Debug.Log(recentMove + " state = " + recentMove.transform.GetChild(0).gameObject.activeSelf);
+        recentMove.transform.GetChild(0).gameObject.SetActive(false);
     }
     #endregion
 }
