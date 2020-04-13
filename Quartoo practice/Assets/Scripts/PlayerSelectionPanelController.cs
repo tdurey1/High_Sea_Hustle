@@ -38,6 +38,7 @@ public class PlayerSelectionPanelController : MonoBehaviour
             else
                 GameInfo.gameType = 'H';
 
+            Destroy(GameObject.Find("BackgroundAudio"));
             Initiate.Fade("GameScene", Color.black, 4.0f);
         }
         else if (usernameInput.text.Trim() == "")
@@ -55,6 +56,7 @@ public class PlayerSelectionPanelController : MonoBehaviour
             // Save the selected avater
             GameInfo.avatar = selectedAvatar;
 
+            Destroy(GameObject.Find("BackgroundAudio"));
             Initiate.Fade("GameLobby", Color.black, 4.0f);
         }
         else if (usernameInput.text.Trim() == "")
