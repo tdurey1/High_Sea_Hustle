@@ -57,10 +57,17 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         Debug.Log("OnConnectedToMaster succesfully entered");
 
-        CreateOrJoinCanvas.gameObject.SetActive(true);        
+        if (!CreateOrJoinCanvas.gameObject.activeSelf)
+            CreateOrJoinCanvas.gameObject.SetActive(true);        
 
         PhotonNetwork.JoinLobby();  // -> OnJoinedLobby
     }
+
+    //public override void OnConnected()
+    //{
+    //    CreateOrJoinCanvas.gameObject.SetActive(true);
+    //    PhotonNetwork.JoinLobby();
+    //}
 
     public override void OnJoinedLobby()
     {
@@ -97,12 +104,6 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        Debug.Log("OnDisconnected function succesfully entered");
-        base.OnDisconnected(cause);
-        //Thread.Sleep(3000);
-
-        Debug.Log("PhotonNetwork.ConnectUsingSettings called");
-
         PhotonNetwork.ConnectUsingSettings();
     }    
 
@@ -135,7 +136,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
-            if (!PhotonNetwork.LocalPlayer.IsMasterClient)
+            if (GameInfo.selectPieceAtStart == 2)
             {
                 StatusText.text = "Host has left, press Back to leave...";
             }
@@ -161,20 +162,14 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         CreateOrJoinBackButton.SetActive(false);
         LoadingCanvas.gameObject.SetActive(true);
 
-        Debug.Log("PhotonNetwork.Disconnect() called");
-
-        PhotonNetwork.Disconnect();        
+        //Debug.Log("PhotonNetwork.Disconnect() called");
+        PhotonNetwork.LeaveLobby();     
     }
 
     public override void OnLeftLobby()
     {
-        base.OnLeftLobby();
+        PhotonNetwork.Disconnect();
     }
-
-    public override void OnJoinRoomFailed(short returnCode, string message)
-    {
-        base.OnJoinRoomFailed(returnCode, message);
-    }    
 
     #endregion
 
@@ -257,53 +252,19 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void OnWaitingLoadingBackButtonClicked()
     {
-        if (PhotonNetwork.LocalPlayer.IsMasterClient)
-        {
-            PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.LeaveRoom();  // -> OnLeftRoom  
+        //if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        //{
+        //    PhotonNetwork.CurrentRoom.IsVisible = false;
+        //    PhotonNetwork.CurrentRoom.IsOpen = false;
 
-            Debug.Log("PhotonNetwork.LeaveRoom() called");
+        //    PhotonNetwork.AutomaticallySyncScene = false;
+        //    PhotonNetwork.LeaveRoom();  // -> OnLeftRoom 
+        //}
+        //else        
+        //    PhotonNetwork.LeaveRoom();  // -> OnLeftRoom    
+        PhotonNetwork.Disconnect();
+        Initiate.Fade("MainMenu", Color.black, 4.0f);
 
-            //WaitingLoadingCanvas.gameObject.SetActive(false);
-            //CreateOrJoinCanvas.gameObject.SetActive(true);
-
-            //CreateGameButton.SetActive(false);
-            //JoinGameButton.SetActive(false);
-            //CreateOrJoinBackButton.SetActive(false);
-
-            //LoadingCanvas.gameObject.SetActive(true);
-
-            //PhotonNetwork.Disconnect();
-
-            //PhotonNetwork.ConnectUsingSettings();
-
-
-        }
-        else
-        {
-            PhotonNetwork.LeaveRoom();  // -> OnLeftRoom    
-
-            //WaitingLoadingCanvas.gameObject.SetActive(false);
-            //CreateOrJoinCanvas.gameObject.SetActive(true);
-
-            //CreateGameButton.SetActive(false);
-            //JoinGameButton.SetActive(false);
-            //CreateOrJoinBackButton.SetActive(false);
-
-            //LoadingCanvas.gameObject.SetActive(true);
-
-            //CreateGameButton.SetActive(true);
-            //JoinGameButton.SetActive(true);
-            //CreateOrJoinBackButton.SetActive(true);
-
-            //LoadingCanvas.gameObject.SetActive(false);
-
-            //PhotonNetwork.Disconnect();
-
-            //PhotonNetwork.ConnectUsingSettings();
-
-            
-        }
     }
 
     public void OnStartButtonClicked()
