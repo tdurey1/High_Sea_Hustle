@@ -67,6 +67,7 @@ public class PlayerSelectionPanelController : MonoBehaviour
 
     public void backButton()
     {
+        Destroy(GameObject.Find("BackgroundAudio"));
         Initiate.Fade("MainMenu", Color.black, 4.0f);
     }
 
