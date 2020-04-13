@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
             StartCoroutine("FirstGameTooltip");
         }
 
-            if (GameInfo.gameType == 'E' || GameInfo.gameType == 'H' || GameInfo.gameType == 'S')
+        if (GameInfo.gameType == 'E' || GameInfo.gameType == 'H' || GameInfo.gameType == 'S')
             StartAIGame();
         else if (GameInfo.gameType == 'N')
             StartNetworkingGame();
@@ -60,7 +60,8 @@ public class GameController : MonoBehaviour
         else
             Debug.Log("Houston we have a problem");
 
-        UpdateTurnMessage();
+        if (GameInfo.gameType != 'T')
+            UpdateTurnMessage();
     }
     #endregion
 
@@ -383,7 +384,6 @@ public class GameController : MonoBehaviour
         Button nextArrow = GameObject.Find("NextButton").GetComponent<Button>();
 
         DisableTutorialNextArrow(nextArrow);
-
         switch (popupIndex)
         {
             case 3:
@@ -392,6 +392,7 @@ public class GameController : MonoBehaviour
                 break;
             case 4:
                 // Inform player opponent will now place piece
+                UpdateTutorialTurnMessage();
                 DisableTutorialPiece();
                 EnableTutorialNextArrow(nextArrow);
                 tutorialPieceIndex = 14;
@@ -406,6 +407,7 @@ public class GameController : MonoBehaviour
                 // Have opponent give piece and player place piece
                 gamePiece = gamePieces[tutorialPieceIndex];
                 TutorialSetPiece(gamePiece);
+                UpdateTutorialTurnMessage();
                 EnableTutorialBoardSpace();
                 break;
             case 7:
@@ -425,6 +427,7 @@ public class GameController : MonoBehaviour
             case 10:
                 // Have opponent place piece and select player piece
                 DisableTutorialPiece();
+                UpdateTutorialTurnMessage();
                 boardSpace = GameObject.Find("Board Space A2").GetComponent<Button>();
                 TutorialPlacePieceOnBoard(boardSpace);
                 tutorialPieceIndex = 3;
@@ -432,6 +435,7 @@ public class GameController : MonoBehaviour
                 break;
             case 11:
                 // Have player win
+                UpdateTutorialTurnMessage();
                 tutorialBoardSpaceIndex = 5;
                 gamePiece = gamePieces[tutorialPieceIndex];
                 TutorialSetPiece(gamePiece);
@@ -827,7 +831,6 @@ public class GameController : MonoBehaviour
 
     IEnumerator HideParrot()
     {
-        Debug.Log("still goin");
         yield return new WaitForSeconds(10);
 
         gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
@@ -841,6 +844,11 @@ public class GameController : MonoBehaviour
             GameInfo.firstGame = false;
             StopAllCoroutines();
         }
+    }
+
+    private void UpdateTutorialTurnMessage()
+    {
+        TurnMessage.text = TurnMessage.text == "Your Turn" ? "Opponent's Turn" : "Your Turn";
     }
 
     private void UpdateTurnMessage()
