@@ -327,8 +327,7 @@ public class GameController : MonoBehaviour
                 // Have ai pick piece
                 string aiPieceChosen = hardAIController.ChooseGamePiece(gameCore.availablePieces);
                 ConvertAIPiece(aiPieceChosen);
-                StagePiece();
-                EndTurn();
+                StartCoroutine("DelayAIGivePiece");
             }
         }
     }
