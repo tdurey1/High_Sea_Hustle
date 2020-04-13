@@ -1797,6 +1797,7 @@ MonoBehaviour:
   helpPanel: {fileID: 373453273}
   settingsPanel: {fileID: 668253968}
   darkBackground: {fileID: 2079494906}
+  mainMenuMusic: {fileID: 1097200658}
 --- !u!20 &1285391707
 Camera:
   m_ObjectHideFlags: 0

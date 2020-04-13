@@ -8,11 +8,12 @@ public class MainMenu : MonoBehaviour
     public GameObject helpPanel;
     public GameObject settingsPanel;
     public GameObject darkBackground;
+    public AudioSource mainMenuMusic;
 
     public void multiplayerGame()
     {
         GameInfo.gameType = 'N';
-
+        DontDestroyOnLoad(mainMenuMusic);
         Initiate.Fade("UserPreferences", Color.black, 4.0f);
     }
 
@@ -33,7 +34,7 @@ public class MainMenu : MonoBehaviour
         GameInfo.gameType = 'E';
 
         GameInfo.storyModeType = 'T';
-
+        DontDestroyOnLoad(mainMenuMusic);
         Initiate.Fade("UserPreferences", Color.black, 4.0f);
     }
 
