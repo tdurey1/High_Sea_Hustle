@@ -24,6 +24,8 @@
 
     public static float soundFXVolume = .5f;
 
+    public static bool spinRandomUsernameParrot = true;
+
     public static int aiDelayBoardSpace = 0;
 
     public static int aiDelayPiece = 0;

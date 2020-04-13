@@ -9,6 +9,8 @@ public class PlayerPrefsManager : MonoBehaviour
     public GameObject networkPanel;
     public InputField quickPlayUsername;
     public InputField networkUsername;
+    public GameObject QPRandomUsernameBtn;
+    public GameObject NetworkRanomUsernameBtn;
     public Text toast;
 
     private int randomUserNameIndex;
@@ -36,6 +38,12 @@ public class PlayerPrefsManager : MonoBehaviour
             if (GameInfo.username != null)
                 networkUsername.text = GameInfo.username;
         }
+    }
+
+    void Start()
+    {
+        if (GameInfo.spinRandomUsernameParrot == true)
+            StartCoroutine("SpinRandomUsernameBtn");
     }
 
     public void CheckUserNameLength ()
@@ -132,6 +140,38 @@ public class PlayerPrefsManager : MonoBehaviour
 
         if (randomUserNameIndex >= randomUsernames.Length)
             randomUserNameIndex = 0;
+    }
+
+    public void SpinParrots()
+    {
+        if (quickPlayPanel.activeSelf)
+        {
+            Animator qpAnimator = QPRandomUsernameBtn.GetComponent<Animator>();
+            if (qpAnimator != null)
+            {
+                bool flip = qpAnimator.GetBool("flip");
+
+                qpAnimator.SetBool("flip", !flip);
+            }
+        }
+        else
+        {
+            Animator networkAnimator = NetworkRanomUsernameBtn.GetComponent<Animator>();
+            if (networkAnimator != null)
+            {
+                bool flip = networkAnimator.GetBool("flip");
+
+                networkAnimator.SetBool("flip", !flip);
+            }
+        }
+    }
+
+    IEnumerator SpinRandomUsernameBtn()
+    {
+        yield return new WaitForSeconds(5);
+        GameInfo.spinRandomUsernameParrot = false;
+        SpinParrots();
+        StartCoroutine("SpinRandomUsernameBtn");
     }
 
     public string CheckForBadLanguage(string username)
