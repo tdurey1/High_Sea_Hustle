@@ -9,6 +9,7 @@ public class SplashControl : MonoBehaviour
     public Image gameLogo;
     public Image teamLogo;
     public Image blackBackground;
+    public AudioSource Waves;
 
     // Start is called before the first frame update
     void Start()
@@ -35,10 +36,11 @@ public class SplashControl : MonoBehaviour
         blackBackgroundFadeOut();
         yield return new WaitForSeconds(2);
         gameLogoFadeIn();
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(4);
         gameLogoFadeOut();
         yield return new WaitForSeconds(2);
 
+        DontDestroyOnLoad(Waves);
         Initiate.Fade("MainMenu", Color.black, 4.0f);
     }
 
