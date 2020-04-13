@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading;
 
 public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
@@ -12,7 +13,9 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public GameObject CreateGameButton;
     public GameObject JoinGameButton;
-    public GameObject BackButton;
+    public GameObject CreateOrJoinBackButton;
+    public GameObject RoomLobbyBackButton;
+    public GameObject WaitingLoadingBackButton;
     public GameObject FindGamesButton;
     public GameObject roomListingPrefab;
     public GameObject roomListingPanel;
@@ -40,7 +43,10 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     private void Start()
     {
-        PhotonNetwork.ConnectUsingSettings();   // -> OnConnectedToMaster
+        if (PhotonNetwork.IsConnected)
+            PhotonNetwork.Disconnect();
+        else
+            PhotonNetwork.ConnectUsingSettings();   // -> OnConnectedToMaster
     }
 
     #endregion
@@ -49,6 +55,8 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnConnectedToMaster()
     {
+        Debug.Log("OnConnectedToMaster succesfully entered");
+
         CreateOrJoinCanvas.gameObject.SetActive(true);        
 
         PhotonNetwork.JoinLobby();  // -> OnJoinedLobby
@@ -58,7 +66,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         CreateGameButton.SetActive(true);
         JoinGameButton.SetActive(true);
-        BackButton.SetActive(true);
+        CreateOrJoinBackButton.SetActive(true);
         LoadingCanvas.gameObject.SetActive(false);
     }
 
@@ -83,12 +91,19 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
             StatusText.text = "Connected to room, waiting for host to start game...";
         }
 
+        WaitingLoadingBackButton.gameObject.SetActive(true);
         StartButton.gameObject.SetActive(false);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+        Debug.Log("OnDisconnected function succesfully entered");
         base.OnDisconnected(cause);
+        //Thread.Sleep(3000);
+
+        Debug.Log("PhotonNetwork.ConnectUsingSettings called");
+
+        PhotonNetwork.ConnectUsingSettings();
     }    
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -107,13 +122,49 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
+            PhotonNetwork.CurrentRoom.IsVisible = false;
             if (PhotonNetwork.LocalPlayer.IsMasterClient)
             {
                 StatusText.text = "Player joined, ready to Start Game...";
                 StartButton.SetActive(true);
             }
         }
-    }    
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        {
+            if (!PhotonNetwork.LocalPlayer.IsMasterClient)
+            {
+                StatusText.text = "Host has left, press Back to leave...";
+            }
+            else
+            {
+                StatusText.text = "Player left, waiting for new player to join...";
+                StartButton.SetActive(false);
+                PhotonNetwork.CurrentRoom.IsOpen = true;
+                PhotonNetwork.CurrentRoom.IsVisible = true;
+            }
+        }
+    }
+
+    public override void OnLeftRoom()
+    {
+        Debug.Log("Successfully left room.");
+
+        WaitingLoadingCanvas.gameObject.SetActive(false);
+        CreateOrJoinCanvas.gameObject.SetActive(true);
+
+        CreateGameButton.SetActive(false);
+        JoinGameButton.SetActive(false);
+        CreateOrJoinBackButton.SetActive(false);
+        LoadingCanvas.gameObject.SetActive(true);
+
+        Debug.Log("PhotonNetwork.Disconnect() called");
+
+        PhotonNetwork.Disconnect();        
+    }
 
     public override void OnLeftLobby()
     {
@@ -123,12 +174,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         base.OnJoinRoomFailed(returnCode, message);
-    }
-
-    public override void OnLeftRoom()
-    {
-        base.OnLeftRoom();
-    }
+    }    
 
     #endregion
 
@@ -191,29 +237,72 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         GameInfo.selectPieceAtStart = 2;
     }
 
-
-    public void OnBackButtonClicked()
+    public void OnCreateOrJoinBackButtonClicked()
     {
-        if (CreateOrJoinCanvas.isActiveAndEnabled)
+        PhotonNetwork.Disconnect();
+        Initiate.Fade("MainMenu", Color.black, 4.0f);
+    }
+
+    public void OnRoomLobbyBackButtonClicked()
+    {    
+        RoomLobbyCanvas.gameObject.SetActive(false);
+        CreateOrJoinCanvas.gameObject.SetActive(true);
+
+        CreateGameButton.SetActive(true);
+        JoinGameButton.SetActive(true);
+        CreateOrJoinBackButton.SetActive(true);
+        
+        // don't need to dc here
+    }
+
+    public void OnWaitingLoadingBackButtonClicked()
+    {
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
-            PhotonNetwork.Disconnect();
-            Initiate.Fade("MainMenu", Color.black, 4.0f);
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+            PhotonNetwork.LeaveRoom();  // -> OnLeftRoom  
+
+            Debug.Log("PhotonNetwork.LeaveRoom() called");
+
+            //WaitingLoadingCanvas.gameObject.SetActive(false);
+            //CreateOrJoinCanvas.gameObject.SetActive(true);
+
+            //CreateGameButton.SetActive(false);
+            //JoinGameButton.SetActive(false);
+            //CreateOrJoinBackButton.SetActive(false);
+
+            //LoadingCanvas.gameObject.SetActive(true);
+
+            //PhotonNetwork.Disconnect();
+
+            //PhotonNetwork.ConnectUsingSettings();
+
+
         }
-
-        if (RoomLobbyCanvas.isActiveAndEnabled || WaitingLoadingCanvas.isActiveAndEnabled)
+        else
         {
-            if (PhotonNetwork.InRoom)
-            {                
-                PhotonNetwork.LeaveRoom();
-            }
-            CreateGameButton.SetActive(false);
-            JoinGameButton.SetActive(false);
-            BackButton.SetActive(false);
+            PhotonNetwork.LeaveRoom();  // -> OnLeftRoom    
 
-            PhotonNetwork.Disconnect();
-            CreateOrJoinCanvas.gameObject.SetActive(true);
-            LoadingCanvas.gameObject.SetActive(true);
-            PhotonNetwork.ConnectUsingSettings();
+            //WaitingLoadingCanvas.gameObject.SetActive(false);
+            //CreateOrJoinCanvas.gameObject.SetActive(true);
+
+            //CreateGameButton.SetActive(false);
+            //JoinGameButton.SetActive(false);
+            //CreateOrJoinBackButton.SetActive(false);
+
+            //LoadingCanvas.gameObject.SetActive(true);
+
+            //CreateGameButton.SetActive(true);
+            //JoinGameButton.SetActive(true);
+            //CreateOrJoinBackButton.SetActive(true);
+
+            //LoadingCanvas.gameObject.SetActive(false);
+
+            //PhotonNetwork.Disconnect();
+
+            //PhotonNetwork.ConnectUsingSettings();
+
+            
         }
     }
 
