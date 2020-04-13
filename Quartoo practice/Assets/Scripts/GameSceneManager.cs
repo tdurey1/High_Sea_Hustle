@@ -12,13 +12,15 @@ public class GameSceneManager : MonoBehaviour
     public GameObject storyModeWinPanel;
     public GameObject storyModeWin2Panel;
     public GameObject tutorial;
-    public GameObject PlayerAvatar;
-    public GameObject OpponentAvatar;
+    public GameObject playerAvatar;
+    public GameObject opponentAvatar;
+    public GameObject topBar;
     public UnityEngine.UI.Text gameOverMessage;
     public UnityEngine.UI.Text networkGameOverMessage;
 
     void Start()
     {
+        showTopBar();
         showOpponentAvatar();
         showPlayerAvatar();
     }
@@ -136,7 +138,7 @@ public class GameSceneManager : MonoBehaviour
 
     public void showPlayerAvatar()
     {
-        Animator animator = PlayerAvatar.GetComponent<Animator>();
+        Animator animator = playerAvatar.GetComponent<Animator>();
         if (animator != null)
         {
             bool isOpen = animator.GetBool("open");
@@ -147,7 +149,18 @@ public class GameSceneManager : MonoBehaviour
 
     public void showOpponentAvatar()
     {
-        Animator animator = OpponentAvatar.GetComponent<Animator>();
+        Animator animator = opponentAvatar.GetComponent<Animator>();
+        if (animator != null)
+        {
+            bool isOpen = animator.GetBool("open");
+
+            animator.SetBool("open", !isOpen);
+        }
+    }
+
+    public void showTopBar()
+    {
+        Animator animator = topBar.GetComponent<Animator>();
         if (animator != null)
         {
             bool isOpen = animator.GetBool("open");
