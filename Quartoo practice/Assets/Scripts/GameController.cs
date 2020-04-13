@@ -369,7 +369,7 @@ public class GameController : MonoBehaviour
         ParrotCaption.text = tutorialManager.getCurrentCaption();
 
         // Enable Peter Parrot
-        gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
+        StartCoroutine("TutorialShowParrot");
 
         // Player should not be able to click on any gamepiece or boardspace
         DisableEverything();
@@ -847,6 +847,13 @@ public class GameController : MonoBehaviour
     IEnumerator HideParrot()
     {
         yield return new WaitForSeconds(10);
+
+        gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
+    }
+
+    IEnumerator TutorialShowParrot()
+    {
+        yield return new WaitForSeconds(1);
 
         gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
     }
