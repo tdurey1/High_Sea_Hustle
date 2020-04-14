@@ -193,13 +193,9 @@ public class GameController : MonoBehaviour
     public void PlayerLeft()
     {
         // Show in chat log that player disconnected. Maybe have a popup?
-        // Disable Rematch button
+        
     }
 
-    public void NetworkRematch()
-    {
-        networkController.SendIncrementRematch();
-    }
     #endregion
 
     #region Story Mode Functions
@@ -726,9 +722,7 @@ public class GameController : MonoBehaviour
         }
         else if (GameInfo.gameType == 'N')
         {
-            networkController.CreateNewRoom();
             gameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus);
-            StartCoroutine(networkController.WaitForRematch());
             StartCoroutine(networkController.WaitForLeaveRoom());
         }
         else if (GameInfo.gameType == 'T')

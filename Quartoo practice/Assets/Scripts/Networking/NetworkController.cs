@@ -19,7 +19,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
     private GameController gameController;
     private static char networkMessage;
     private static bool networkMessageReceived = false;
-    private static int rematch = 0;
 
     #endregion
 
@@ -67,19 +66,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
         gameController.NetworkMessageReceived();
     }
 
-    public IEnumerator WaitForRematch()
-    {
-        // create room here, assign current host as next host and current other player as other player
-
-        while (rematch != 2)
-            yield return null;
-
-        if (PhotonNetwork.AutomaticallySyncScene == false)
-            PhotonNetwork.AutomaticallySyncScene = true;
-
-        PhotonNetwork.LoadLevel("GameScene");
-
-    }
 
     public IEnumerator WaitForLeaveRoom()
     {
@@ -90,48 +76,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
     }
 
     #region Public Functions
-
-    public void CreateNewRoom()
-    {
-        // Create new room; current host is the host and whoever joined is the joiner or whatever
-
-        // Previous host will be host of new room
-        if (PhotonNetwork.LocalPlayer.IsMasterClient)
-        {
-            PhotonNetwork.LeaveRoom();
-
-
-            RoomOptions roomOps = new RoomOptions()
-            {
-                IsVisible = false,                  // don't show this one in the room list
-                IsOpen = true,
-                MaxPlayers = 2
-            };
-
-            roomName = Random.Range(0, 10000).ToString();
-            PhotonNetwork.CreateRoom(roomName, roomOps);
-        }
-
-
-
-        // other player will join the room stored in the str var roomName
-        if (!PhotonNetwork.LocalPlayer.IsMasterClient)
-            PhotonNetwork.JoinRoom(roomName);
-
-    }
-
-    public void SendIncrementRematch()
-    {
-        // Increment rematch var here and send to other players networkcontroller using rpc
-
-        //rematch++;
-        NetworkPlayer.networkPlayer.SendIncrementedRematch(rematch);
-    }
-
-    public void IncrementRematch(int rematch)
-    {
-        rematch++;
-    }
 
     public void SendMove()
     {

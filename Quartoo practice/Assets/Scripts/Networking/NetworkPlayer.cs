@@ -65,14 +65,6 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
         networkController.SetNetworkMessageReceived(true);
     }
 
-    [PunRPC]
-    public void RPC_SendIncrementedRematch(int rematch)
-    {
-        if (!photonView.IsMine)
-            return;
-
-        networkController.IncrementRematch(rematch);
-    }
 
     #endregion
 
@@ -91,10 +83,6 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
         photonView.RPC("RPC_SendPiece", RpcTarget.All, movePiece);
     }
 
-    public void SendIncrementedRematch(int rematch)
-    {
-        photonView.RPC("RPC_SendIncrementedRematch", RpcTarget.All, rematch);
-    }
     #endregion
 }
 

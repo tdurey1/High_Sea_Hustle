@@ -46,6 +46,8 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
         cachedRoomList = new Dictionary<string, RoomInfo>();
         roomListEntries = new Dictionary<string, GameObject>();
+
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     private void Start()
@@ -86,7 +88,8 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnCreatedRoom()
     {
-        PhotonNetwork.AutomaticallySyncScene = true;    // -> OnJoinedRoom
+        if (PhotonNetwork.AutomaticallySyncScene == false)
+            PhotonNetwork.AutomaticallySyncScene = true;    // -> OnJoinedRoom
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
