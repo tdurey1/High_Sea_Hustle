@@ -297,7 +297,8 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void OnCreateOrJoinBackButtonClicked()
     {
         PhotonNetwork.Disconnect();
-        Initiate.Fade("MainMenu", Color.black, 4.0f);
+        GameInfo.gameType = 'N';
+        Initiate.Fade("UserPreferences", Color.black, 4.0f);
     }
 
     public void OnRoomLobbyBackButtonClicked()
@@ -325,7 +326,8 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
             PhotonNetwork.LeaveRoom();  // -> OnLeftRoom  
 
         PhotonNetwork.Disconnect();
-        Initiate.Fade("MainMenu", Color.black, 4.0f);
+        GameInfo.gameType = 'N';
+        Initiate.Fade("UserPreferences", Color.black, 4.0f);
     }
 
     public void OnStartButtonClicked()
