@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameSceneManager : MonoBehaviour
+public class GameSceneManager : MonoBehaviourPun
 {
     public GameObject helpPanel;
     public GameObject settingsPanel;
@@ -173,6 +174,14 @@ public class GameSceneManager : MonoBehaviour
     #region SceneChanges
     public void returnToMainMenu()
     {
+        if (GameInfo.gameType == 'N')
+        {
+            PhotonNetwork.AutomaticallySyncScene = false;
+
+            PhotonNetwork.LeaveRoom();
+
+            PhotonNetwork.Disconnect();
+        }
         Initiate.Fade("MainMenu", Color.black, 4.0f);
     }
 

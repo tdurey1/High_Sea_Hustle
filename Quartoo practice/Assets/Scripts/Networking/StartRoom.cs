@@ -55,6 +55,9 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
             PhotonNetwork.Disconnect();
         else
             PhotonNetwork.ConnectUsingSettings();   // -> OnConnectedToMaster
+
+        if (PhotonNetwork.AutomaticallySyncScene == false)
+            PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     #endregion
