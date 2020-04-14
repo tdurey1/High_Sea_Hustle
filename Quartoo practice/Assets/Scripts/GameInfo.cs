@@ -30,7 +30,7 @@
 
     public static bool spinRandomUsernameParrot = true;
 
-    public static int aiDelayBoardSpace = 0;
+    public static int aiDelayBoardSpace = 1;
 
-    public static int aiDelayPiece = 0;
+    public static int aiDelayPiece = 1;
 }
