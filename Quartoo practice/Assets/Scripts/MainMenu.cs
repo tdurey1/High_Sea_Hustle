@@ -9,6 +9,14 @@ public class MainMenu : MonoBehaviour
     public GameObject settingsPanel;
     public GameObject darkBackground;
     public AudioSource mainMenuMusic;
+    public GameObject ParrotPopup;
+    private Coroutine parrot;
+
+    void Start()
+    {
+        if (GameInfo.firstStart)
+            parrot = StartCoroutine("delayParrot");
+    }
 
     public void multiplayerGame()
     {
@@ -75,5 +83,34 @@ public class MainMenu : MonoBehaviour
             hideSettingsPanel();
         else
             hideHelpPanel();
+    }
+
+    IEnumerator delayParrot()
+    {
+        GameInfo.firstStart = false;
+
+        yield return new WaitForSeconds(3);
+        ShowParrot();
+
+        yield return new WaitForSeconds(13);
+        ShowParrot();
+    }
+
+    public void ShowParrot()
+    {
+        Animator animator = ParrotPopup.GetComponent<Animator>();
+        if (animator != null)
+        {
+            bool isOpen = animator.GetBool("isActive");
+
+            animator.SetBool("isActive", !isOpen);
+        }
+    }
+
+    public void parrotArrowClicked()
+    {
+        Debug.Log("got here");
+        ShowParrot();
+        StopCoroutine(parrot);
     }
 }
