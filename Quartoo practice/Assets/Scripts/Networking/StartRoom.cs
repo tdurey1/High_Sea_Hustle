@@ -16,7 +16,6 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public GameObject CreateOrJoinBackButton;
     public GameObject RoomLobbyBackButton;
     public GameObject WaitingLoadingBackButton;
-    public GameObject FindGamesButton;
     public GameObject roomListingPrefab;
     public GameObject roomListingPanel;
     public GameObject StartButton;
@@ -288,7 +287,6 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         CreateOrJoinCanvas.gameObject.SetActive(false);
         RoomLobbyCanvas.gameObject.SetActive(true);
 
-        FindGamesButton.gameObject.SetActive(true);
         roomListingPanel.gameObject.SetActive(true);
   
         GameInfo.selectPieceAtStart = 2;
