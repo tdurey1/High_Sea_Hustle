@@ -407,7 +407,7 @@ public class GameController : MonoBehaviour
             case 5:
                 // Have opponent place piece
                 boardSpace = GameObject.Find("Board Space C2").GetComponent<Button>();
-                TutorialPlacePieceOnBoard(boardSpace);
+                PlacePieceOnBoard(boardSpace);
                 EnableTutorialNextArrow(nextArrow);
                 break;
             case 6:
@@ -436,7 +436,7 @@ public class GameController : MonoBehaviour
                 DisableTutorialPiece();
                 UpdateTutorialTurnMessage();
                 boardSpace = GameObject.Find("Board Space A2").GetComponent<Button>();
-                TutorialPlacePieceOnBoard(boardSpace);
+                PlacePieceOnBoard(boardSpace);
                 tutorialPieceIndex = 3;
                 EnableTutorialNextArrow(nextArrow);
                 break;
@@ -485,28 +485,22 @@ public class GameController : MonoBehaviour
         selectedPiece.transform.position = newPosition;
     }
 
-    public void TutorialPlacePieceOnBoard(Button button)
-    {
-        Vector3 newPosition = button.transform.position;
-        selectedPiece.transform.position = newPosition;
-    }
-
     private void UpdateGameBoard()
     {
         selectedPiece = gamePieces[15];
-        TutorialPlacePieceOnBoard(buttonList[0]);
+        PlacePieceOnBoard(buttonList[0]);
 
         selectedPiece = gamePieces[7];
-        TutorialPlacePieceOnBoard(buttonList[2]);
+        PlacePieceOnBoard(buttonList[2]);
 
         selectedPiece = gamePieces[0];
-        TutorialPlacePieceOnBoard(buttonList[11]);
+        PlacePieceOnBoard(buttonList[11]);
 
         selectedPiece = gamePieces[13];
-        TutorialPlacePieceOnBoard(buttonList[13]);
+        PlacePieceOnBoard(buttonList[13]);
 
         selectedPiece = gamePieces[10];
-        TutorialPlacePieceOnBoard(buttonList[14]);
+        PlacePieceOnBoard(buttonList[14]);
     }
 
     #endregion
@@ -520,7 +514,7 @@ public class GameController : MonoBehaviour
         else
         {
             DisableTutorialBoardSpace();
-            TutorialPlacePieceOnBoard(button);
+            PlacePieceOnBoard(button);
             StepCompleted();
         }
     }
@@ -736,6 +730,10 @@ public class GameController : MonoBehaviour
             gameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus);
             StartCoroutine(networkController.WaitForRematch());
             StartCoroutine(networkController.WaitForLeaveRoom());
+        }
+        else if (GameInfo.gameType == 'T')
+        {
+            GameObject.Find("MainMenuButton").GetComponent<Button>().enabled = true;
         }
         else
             gameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
