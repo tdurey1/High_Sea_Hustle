@@ -193,7 +193,7 @@ public class GameController : MonoBehaviour
     public void PlayerLeft()
     {
         // Show in chat log that player disconnected. Maybe have a popup?
-        
+        Debug.Log("Howdy hoe");
     }
 
     #endregion
@@ -721,14 +721,9 @@ public class GameController : MonoBehaviour
                 gameSceneManagerObject.GetComponent<GameSceneManager>().showStoryModeLosePanel();
         }
         else if (GameInfo.gameType == 'N')
-        {
             gameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus);
-            StartCoroutine(networkController.WaitForLeaveRoom());
-        }
         else if (GameInfo.gameType == 'T')
-        {
             GameObject.Find("MainMenuButton").GetComponent<Button>().enabled = true;
-        }
         else
             gameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
 

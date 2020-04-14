@@ -17177,5 +17177,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkController
       objectReference: {fileID: 0}
+    - target: {fileID: 9066191096952560447, guid: d6856ff4e2f502d48bb00b7eb2bf1495,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1815130338}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6856ff4e2f502d48bb00b7eb2bf1495, type: 3}

@@ -16,9 +16,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public static string netOpponentsName;
 
     [SerializeField] private PhotonView photonView;
-    private GameController gameController;
+    [SerializeField] private GameController gameController;
     private static char networkMessage;
     private static bool networkMessageReceived = false;
+    private static bool playerLeftRoomFunctionCalled = false;
 
     #endregion
 
@@ -34,6 +35,15 @@ public class NetworkController : MonoBehaviourPunCallbacks
         GameObject player = PhotonNetwork.Instantiate("NetworkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
     }
 
+    void Update()
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerCount < 2 && playerLeftRoomFunctionCalled == false)
+        {
+            gameController.PlayerLeft();
+            playerLeftRoomFunctionCalled = true;
+        }
+
+    }
     #endregion
 
     public void SetGameControllerReference(GameController controller)
@@ -64,15 +74,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
         
         networkMessageReceived = false;
         gameController.NetworkMessageReceived();
-    }
-
-
-    public IEnumerator WaitForLeaveRoom()
-    {
-        while (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-            yield return null;
-
-        gameController.PlayerLeft();
     }
 
     #region Public Functions
