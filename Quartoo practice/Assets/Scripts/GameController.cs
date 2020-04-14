@@ -123,7 +123,6 @@ public class GameController : MonoBehaviour
 
     public void ReceivePieceFromNetwork()
     {
-        Debug.Log("piece received from network is " + networkController.GetMovePiece());
         GamePiece pieceSelected = new GamePiece();
 
         foreach (GamePiece piece in gamePieces)
@@ -133,7 +132,6 @@ public class GameController : MonoBehaviour
         }
 
         selectedPiece = null;
-        Debug.Log("befor set selected piece func = " + playerTurn);
         SetSelectedPieceFromNetwork(pieceSelected);
     }
 
@@ -168,11 +166,22 @@ public class GameController : MonoBehaviour
                 networkButton = button;
         }
 
+        RemoveHighlightBoardspace();
         selectedPiece.GetComponent<BoxCollider2D>().enabled = false;
+        GameObject gamePiece = GameObject.Find("GamePiece " + selectedPiece.id);
         Vector3 newPosition = networkButton.transform.position;
-        selectedPiece.transform.position = newPosition;
         recentMove = networkButton;
         networkButton.interactable = false;
+
+        Hashtable pieceAnimationArgs = new Hashtable()
+            {
+                {"position", newPosition},
+                {"time", .9f},
+                {"oncomplete", "boardSpaceSoundAndHilight" },
+                {"oncompletetarget", this.gameObject}
+            };
+
+        iTween.MoveTo(gamePiece, pieceAnimationArgs);
 
         // Returns a specific char if game is over 
         char gameState = gameCore.SetPiece(selectedPiece.id, networkButton.name);
@@ -527,19 +536,18 @@ public class GameController : MonoBehaviour
             selectedPiece.GetComponent<BoxCollider2D>().enabled = false;
             Vector3 newPosition = button.transform.position;
             GameObject gamePiece = GameObject.Find("GamePiece " + selectedPiece.id);
+            recentMove = button;
+            button.interactable = false;
 
             Hashtable pieceAnimationArgs = new Hashtable()
             {
                 {"position", newPosition},
-                {"time", 1.5f},
-                {"oncomplete", "boardSpaceSoundAndHilight"},
+                {"time", .9f},
+                {"oncomplete", "boardSpaceSoundAndHilight" },
                 {"oncompletetarget", this.gameObject}
             };
 
             iTween.MoveTo(gamePiece, pieceAnimationArgs);
-
-            recentMove = button;
-            button.interactable = false;
 
             if (GameInfo.gameType == 'N')
             {
@@ -692,9 +700,6 @@ public class GameController : MonoBehaviour
     {
         // Prevent the user(s) from clicking any boardspace or gamepieces
         DisableEverything();
-
-        // This doesnt work for some reason
-        RemoveHighlightBoardspace();
 
         // Disable Main menu button on top since it will say they will forfeit the game (ask tristan)
         GameObject.Find("MainMenuButton").GetComponent<Button>().enabled = false;
@@ -899,15 +904,15 @@ public class GameController : MonoBehaviour
 
     private void RemoveHighlightBoardspace()
     {
-        Debug.Log(recentMove + " state = " + recentMove.transform.GetChild(0).gameObject.activeSelf);
         recentMove.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     private void boardSpaceSoundAndHilight()
     {
-        Debug.Log("inside boardSpaceSoundAndHilight()");
-        HighlightBoardspace();
         ButtonClickSound.GetComponent<ButtonClick>().PlaySoundOneShot();
+
+        if (playerTurn == 2)
+            HighlightBoardspace();
     }
     #endregion
 }
