@@ -89,7 +89,7 @@ public class MainMenu : MonoBehaviour
     {
         GameInfo.firstStart = false;
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
         ShowParrot();
 
         yield return new WaitForSeconds(13);
@@ -109,7 +109,6 @@ public class MainMenu : MonoBehaviour
 
     public void parrotArrowClicked()
     {
-        Debug.Log("got here");
         ShowParrot();
         StopCoroutine(parrot);
     }
