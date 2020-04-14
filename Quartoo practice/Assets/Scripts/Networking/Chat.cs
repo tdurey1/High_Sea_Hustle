@@ -87,7 +87,7 @@ public class Chat : MonoBehaviourPun
         GUI.SetNextControlName("ChatField");
         GUIStyle inputStyle = GUI.skin.GetStyle("box");
         inputStyle.alignment = TextAnchor.MiddleLeft;
-        chatInput = GUI.TextField(new Rect(5, Screen.height - 38, 250, 30), chatInput, 60);
+        chatInput = GUI.TextField(new Rect(10, Screen.height - 35, 270, 30), chatInput, 50);
 
         GUI.FocusControl("ChatField");
         }
