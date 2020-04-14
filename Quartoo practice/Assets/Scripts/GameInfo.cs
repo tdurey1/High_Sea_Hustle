@@ -1,6 +1,10 @@
 ﻿public class GameInfo
 {
+    // Used for tooltips in game scene
     public static bool firstGame = true;
+
+    // Used for tooltip in main menu
+    public static bool firstStart = true;
 
     public static bool doubleClickConfirm = true;
 
