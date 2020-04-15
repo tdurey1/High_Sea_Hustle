@@ -39,6 +39,7 @@ public class GameController : MonoBehaviour
 
     void Awake()
     {
+        GameInfo.isGameOver = false;
         SetGameControllerReferenceOnGamePieces();
         SetGameControllerReferenceOnNetwork();
         playerTurn = GameInfo.selectPieceAtStart;
@@ -700,8 +701,7 @@ public class GameController : MonoBehaviour
         // Prevent the user(s) from clicking any boardspace or gamepieces
         DisableEverything();
 
-        // Disable Main menu button on top since it will say they will forfeit the game (ask tristan)
-        GameObject.Find("MainMenuButton").GetComponent<Button>().enabled = false;
+        GameInfo.isGameOver = true;
 
         // By default, assume the player lost
         char playerWinStatus = 'L';
@@ -730,11 +730,11 @@ public class GameController : MonoBehaviour
                 gameSceneManagerObject.GetComponent<GameSceneManager>().showStoryModeLosePanel();
         }
         else if (GameInfo.gameType == 'N')
-            gameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus); 
-
-          
+            gameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus);
         else if (GameInfo.gameType == 'T')
-            GameObject.Find("MainMenuButton").GetComponent<Button>().enabled = true;
+        {
+            // Do nothing since they will click button on top to exit (ask tristan if you dont understand)
+        }
         else
             gameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
 
