@@ -196,6 +196,11 @@ public class GameController : MonoBehaviour
         gameSceneManagerObject.GetComponent<GameSceneManager>().showPlayerLeft();
     }
 
+    public void PlayerDisconnected()
+    {
+        gameSceneManagerObject.GetComponent<GameSceneManager>().showPlayerDisconnected();
+    }
+
     #endregion
 
     #region Story Mode Functions
