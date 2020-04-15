@@ -3,7 +3,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Threading;
+using System.Collections;
 
 public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
@@ -24,8 +24,11 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public Canvas RoomLobbyCanvas;
     public Canvas WaitingLoadingCanvas;
     public Canvas LoadingCanvas;
+    public Canvas DisconnectCanvas;
 
     public Text StatusText;
+
+    public bool intentionalDisconnect = false;
     
     public Transform roomsPanel;
 
@@ -52,12 +55,39 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     private void Start()
     {
         if (PhotonNetwork.IsConnected)
-            PhotonNetwork.Disconnect();
-        else
-            PhotonNetwork.ConnectUsingSettings();   // -> OnConnectedToMaster
+            StartCoroutine(DisconnectReconnect());
+
+        PhotonNetwork.ConnectUsingSettings();   // -> OnConnectedToMaster
 
         if (PhotonNetwork.AutomaticallySyncScene == false)
             PhotonNetwork.AutomaticallySyncScene = true;
+
+    }
+
+    private void Update()
+    {
+        if (PhotonNetwork.NetworkClientState == ClientState.Disconnected && intentionalDisconnect == false)
+        {
+            if (LoadingCanvas.gameObject.activeSelf)
+                LoadingCanvas.gameObject.SetActive(false);
+            if (CreateOrJoinCanvas.gameObject.activeSelf)
+                CreateOrJoinCanvas.gameObject.SetActive(false);
+            if (RoomLobbyCanvas.gameObject.activeSelf)
+                RoomLobbyCanvas.gameObject.SetActive(false);
+            if (WaitingLoadingCanvas.gameObject.activeSelf)
+                WaitingLoadingCanvas.gameObject.SetActive(false);
+
+            DisconnectCanvas.gameObject.SetActive(true);
+        }
+    }
+
+    IEnumerator DisconnectReconnect()
+    {
+        intentionalDisconnect = true;
+        PhotonNetwork.Disconnect();
+
+        while (PhotonNetwork.IsConnected)
+            yield return null;
     }
 
     #endregion
@@ -66,6 +96,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnConnectedToMaster()
     {
+        intentionalDisconnect = false;
         Debug.Log("OnConnectedToMaster succesfully entered");
 
         if (!CreateOrJoinCanvas.gameObject.activeSelf)
@@ -116,7 +147,10 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        PhotonNetwork.ConnectUsingSettings();
+        if (intentionalDisconnect == true)
+            PhotonNetwork.ConnectUsingSettings();
+        else
+            Debug.Log("Loss of connection here");
     }
 
     private void ClearRoomListView()
@@ -297,6 +331,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void OnCreateOrJoinBackButtonClicked()
     {
+        intentionalDisconnect = true;
         PhotonNetwork.Disconnect();
         GameInfo.gameType = 'N';
         Initiate.Fade("UserPreferences", Color.black, 4.0f);
@@ -326,7 +361,14 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         else
             PhotonNetwork.LeaveRoom();  // -> OnLeftRoom  
 
+        intentionalDisconnect = true;
         PhotonNetwork.Disconnect();
+        GameInfo.gameType = 'N';
+        Initiate.Fade("UserPreferences", Color.black, 4.0f);
+    }
+
+    public void OnDisconnectedBackButtonClicked()
+    {
         GameInfo.gameType = 'N';
         Initiate.Fade("UserPreferences", Color.black, 4.0f);
     }

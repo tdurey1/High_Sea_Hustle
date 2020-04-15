@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -725,7 +726,9 @@ public class GameController : MonoBehaviour
                 gameSceneManagerObject.GetComponent<GameSceneManager>().showStoryModeLosePanel();
         }
         else if (GameInfo.gameType == 'N')
-            gameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus);
+            gameSceneManagerObject.GetComponent<GameSceneManager>().showNetworkGameOverPanel(playerWinStatus); 
+
+          
         else if (GameInfo.gameType == 'T')
             GameObject.Find("MainMenuButton").GetComponent<Button>().enabled = true;
         else
@@ -733,6 +736,7 @@ public class GameController : MonoBehaviour
 
         DisableTooltips();
     }
+
 
     private void ChangeSides()
     {
