@@ -193,8 +193,7 @@ public class GameController : MonoBehaviour
 
     public void PlayerLeft()
     {
-        // Show in chat log that player disconnected. Maybe have a popup?
-        Debug.Log("Howdy hoe");
+        gameSceneManagerObject.GetComponent<GameSceneManager>().showPlayerLeft();
     }
 
     #endregion
