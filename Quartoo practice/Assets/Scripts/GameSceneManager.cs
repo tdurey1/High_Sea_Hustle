@@ -17,7 +17,9 @@ public class GameSceneManager : MonoBehaviourPun
     public GameObject opponentAvatar;
     public GameObject topBar;
     public GameObject errorMessagePopup;
+    public GameObject forfeitPopup;
     public UnityEngine.UI.Text errorMessageText;
+    public UnityEngine.UI.Text forfeitMessageText;
     public UnityEngine.UI.Text gameOverMessage;
     public UnityEngine.UI.Text networkGameOverMessage;
 
@@ -99,7 +101,13 @@ public class GameSceneManager : MonoBehaviourPun
 
     public void showForfeitGame()
     {
+        forfeitMessageText.text = "You will forfeit the game. Are you sure you want to quit?";
+        forfeitPopup.SetActive(true);
+    }
 
+    public void hideForfeitGame()
+    {
+        forfeitPopup.SetActive(false);
     }
     #endregion
 
