@@ -362,10 +362,13 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         else
             PhotonNetwork.LeaveRoom();  // -> OnLeftRoom  
 
+        StatusText.text = "Waiting for opponent...";
         intentionalDisconnect = true;
         PhotonNetwork.Disconnect();
-        GameInfo.gameType = 'N';
-        Initiate.Fade("UserPreferences", Color.black, 4.0f);
+
+
+        //GameInfo.gameType = 'N';
+        //Initiate.Fade("UserPreferences", Color.black, 4.0f);
     }
 
     public void OnDisconnectedBackButtonClicked()
