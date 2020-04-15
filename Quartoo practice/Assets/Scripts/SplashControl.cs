@@ -9,6 +9,7 @@ public class SplashControl : MonoBehaviour
     public Image gameLogo;
     public Image teamLogo;
     public Image blackBackground;
+    public Text skipText;
     public AudioSource Waves;
 
     // Start is called before the first frame update
@@ -33,6 +34,7 @@ public class SplashControl : MonoBehaviour
         yield return new WaitForSeconds(2);
         teamLogoFadeOut();
         yield return new WaitForSeconds(1);
+        skipTextFadeOut();
         blackBackgroundFadeOut();
         yield return new WaitForSeconds(2);
         gameLogoFadeIn();
@@ -62,6 +64,11 @@ public class SplashControl : MonoBehaviour
     void teamLogoFadeOut()
     {
         teamLogo.CrossFadeAlpha(0,1, false);
+    }
+
+    void skipTextFadeOut()
+    {
+        skipText.CrossFadeAlpha(0, 1, false);
     }
 
     void blackBackgroundFadeOut()
