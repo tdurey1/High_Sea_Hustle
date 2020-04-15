@@ -37,12 +37,14 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount < 2 && playerLeftRoomFunctionCalled == false)
+        if (GameInfo.gameType == 'N')
         {
-            gameController.PlayerLeft();
-            playerLeftRoomFunctionCalled = true;
+            if (PhotonNetwork.CurrentRoom.PlayerCount < 2 && playerLeftRoomFunctionCalled == false)
+            {
+                gameController.PlayerLeft();
+                playerLeftRoomFunctionCalled = true;
+            }
         }
-
     }
     #endregion
 
