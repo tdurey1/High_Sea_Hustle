@@ -16,6 +16,8 @@ public class GameSceneManager : MonoBehaviourPun
     public GameObject playerAvatar;
     public GameObject opponentAvatar;
     public GameObject topBar;
+    public GameObject errorMessagePopup;
+    public UnityEngine.UI.Text errorMessageText;
     public UnityEngine.UI.Text gameOverMessage;
     public UnityEngine.UI.Text networkGameOverMessage;
 
@@ -25,7 +27,7 @@ public class GameSceneManager : MonoBehaviourPun
         showOpponentAvatar();
         showPlayerAvatar();
     }
-    #region GameOver Panels
+    #region General Panels
     public void showGameOverPanel(char endgameStatus)
     {
         string endgameMessage = getGameOverMessage(endgameStatus);
@@ -87,6 +89,17 @@ public class GameSceneManager : MonoBehaviourPun
     public void hideStoryModeLosePanel()
     {
         storyModeLosePanel.SetActive(false);
+    }
+
+    public void showPlayerLeft()
+    {
+        errorMessageText.text = "Your oppenent has forfeited the game.";
+        errorMessagePopup.SetActive(true);
+    }
+
+    public void showForfeitGame()
+    {
+
     }
     #endregion
 
