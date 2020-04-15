@@ -276,6 +276,7 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
         RoomOptions roomOps = new RoomOptions()
         {
             EmptyRoomTtl = 1,
+            PlayerTtl = 1,
             IsVisible = true,
             IsOpen = true,
             MaxPlayers = 2

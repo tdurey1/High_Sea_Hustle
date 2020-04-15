@@ -44,9 +44,8 @@ public class NetworkController : MonoBehaviourPunCallbacks
             {
                 Debug.Log("network disconnect");
                 gameController.PlayerDisconnected();
-                playerLeftRoomFunctionCalled = true;
             }
-            else if (PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer && PhotonNetwork.CurrentRoom.PlayerCount < 2 && playerLeftRoomFunctionCalled == false)
+            else if (PhotonNetwork.IsConnected && PhotonNetwork.CurrentRoom.PlayerCount < 2 && playerLeftRoomFunctionCalled == false)
             {
                 gameController.PlayerLeft();
                 playerLeftRoomFunctionCalled = true;
