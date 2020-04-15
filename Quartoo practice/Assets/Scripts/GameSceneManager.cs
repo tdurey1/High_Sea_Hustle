@@ -99,6 +99,13 @@ public class GameSceneManager : MonoBehaviourPun
         errorMessagePopup.SetActive(true);
     }
 
+    public void showPlayerDisconnected()
+    {
+        Debug.Log("gamescene disconnect");
+        errorMessageText.text = "You lost connection to the game. Check your internet connection.";
+        errorMessagePopup.SetActive(true);
+    }
+
     public void showForfeitGame()
     {
         forfeitMessageText.text = "You will forfeit the game. Are you sure you want to quit?";

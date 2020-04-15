@@ -40,11 +40,18 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         if (GameInfo.gameType == 'N')
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount < 2 && playerLeftRoomFunctionCalled == false)
+            if (PhotonNetwork.NetworkClientState == ClientState.Disconnected)
+            {
+                Debug.Log("network disconnect");
+                gameController.PlayerDisconnected();
+                playerLeftRoomFunctionCalled = true;
+            }
+            else if (PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer && PhotonNetwork.CurrentRoom.PlayerCount < 2 && playerLeftRoomFunctionCalled == false)
             {
                 gameController.PlayerLeft();
                 playerLeftRoomFunctionCalled = true;
             }
+
         }
     }
     #endregion
@@ -158,7 +165,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 0)
+        if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
