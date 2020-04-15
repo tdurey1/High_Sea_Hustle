@@ -95,8 +95,11 @@ public class GameSceneManager : MonoBehaviourPun
 
     public void showPlayerLeft()
     {
-        errorMessageText.text = "Your oppenent has forfeited the game.";
-        errorMessagePopup.SetActive(true);
+        if (GameInfo.isGameOver == false)
+        {
+            errorMessageText.text = "Your oppenent has forfeited the game.";
+            errorMessagePopup.SetActive(true);
+        }
     }
 
     public void showPlayerDisconnected()
@@ -108,7 +111,11 @@ public class GameSceneManager : MonoBehaviourPun
 
     public void showForfeitGame()
     {
-        forfeitMessageText.text = "You will forfeit the game. Are you sure you want to quit?";
+        if (GameInfo.isGameOver == false && GameInfo.gameType != 'T')
+            forfeitMessageText.text = "You will forfeit the game. Are you sure you want to quit to the main menu?";
+        else
+            forfeitMessageText.text = "Quit to main menu?";
+
         forfeitPopup.SetActive(true);
     }
 
