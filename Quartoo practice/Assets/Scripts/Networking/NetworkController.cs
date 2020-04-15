@@ -32,6 +32,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        playerLeftRoomFunctionCalled = false;
         GameObject player = PhotonNetwork.Instantiate("NetworkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
     }
 
