@@ -97,6 +97,7 @@ public class GameSceneManager : MonoBehaviourPun
     {
         if (GameInfo.isGameOver == false)
         {
+            darkenBackground.SetActive(true);
             errorMessageText.text = "Your oppenent has forfeited the game.";
             errorMessagePopup.SetActive(true);
         }
@@ -104,13 +105,14 @@ public class GameSceneManager : MonoBehaviourPun
 
     public void showPlayerDisconnected()
     {
-        Debug.Log("gamescene disconnect");
+        darkenBackground.SetActive(true);
         errorMessageText.text = "You lost connection to the game. Check your internet connection.";
         errorMessagePopup.SetActive(true);
     }
 
     public void showForfeitGame()
     {
+        darkenBackground.SetActive(true);
         if (GameInfo.isGameOver == false && GameInfo.gameType != 'T')
             forfeitMessageText.text = "You will forfeit the game. Are you sure you want to quit to the main menu?";
         else
@@ -122,6 +124,7 @@ public class GameSceneManager : MonoBehaviourPun
     public void hideForfeitGame()
     {
         forfeitPopup.SetActive(false);
+        darkenBackground.SetActive(false);
     }
     #endregion
 
@@ -155,8 +158,14 @@ public class GameSceneManager : MonoBehaviourPun
     {
         if (settingsPanel.activeSelf)
             hideSettingsPanel();
-        else
+        else if (helpPanel.activeSelf)
             hideHelpPanel();
+        else if (forfeitPopup.activeSelf)
+            hideForfeitGame();
+        else
+        {
+            // do nothing, its a "Player Disconnected/Forfeited panel. Ask tristan if you dont understand
+        }
     }
     #endregion
 
