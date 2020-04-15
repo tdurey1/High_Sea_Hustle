@@ -115,5 +115,8 @@ public class Chat : MonoBehaviourPun
         {
             chatMessages.RemoveAt(chatMessages.Count - 1);
         }
+
+        if (!isChatting)
+            TaskOnClick();
     }
 }
