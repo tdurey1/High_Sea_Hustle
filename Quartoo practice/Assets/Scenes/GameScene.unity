@@ -1621,6 +1621,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2964178457353515647, guid: 4dd75d84a8b82c44c88c68d32fb5b86a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 3302926170826292254, guid: 4dd75d84a8b82c44c88c68d32fb5b86a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -1680,6 +1685,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7272248956294125870, guid: 4dd75d84a8b82c44c88c68d32fb5b86a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 7755207020900241077, guid: 4dd75d84a8b82c44c88c68d32fb5b86a,
         type: 3}
@@ -10793,8 +10803,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1577241507}
   - component: {fileID: 1577241508}
-  - component: {fileID: 1577241509}
   - component: {fileID: 1577241510}
+  - component: {fileID: 1577241509}
   m_Layer: 5
   m_Name: ParotPopup
   m_TagString: Untagged
@@ -10850,14 +10860,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c94c4484eee1705408e546225c89b969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltips:
-  - Click the piece once to select, and a second time to confirm you want to send
-    it to your opponent. You can disable this to a single click in settings.
-  - Forgot the rules or win conditions? Click the question mark above!
-  - After you or your opponent has selected a piece, it is placed at the bottom of
-    the bored.
-  - You can select any piece (gold or silver) to send to your opponent.
-  - Tired of this song? Go to settings and skip to the next or previous song.
 --- !u!95 &1577241510
 Animator:
   serializedVersion: 3
@@ -16754,7 +16756,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 581, y: 329}
+  m_AnchoredPosition: {x: 567.1, y: 329}
   m_SizeDelta: {x: 42.6, y: 43.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2146199428

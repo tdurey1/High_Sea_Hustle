@@ -257,14 +257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c94c4484eee1705408e546225c89b969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltips:
-  - Click the piece once to select, and a second time to confirm you want to send
-    it to your opponent. You can disable this to a single click in settings.
-  - Forgot the rules or win conditions? Click the question mark above!
-  - After you or your opponent has selected a piece, it is placed at the bottom of
-    the bored.
-  - You can select any piece (gold or silver) to send to your opponent.
-  - Tired of this song? Go to settings and skip to the next or previous song.
 --- !u!114 &190251351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -707,7 +699,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 581, y: 329}
+  m_AnchoredPosition: {x: 559, y: 329}
   m_SizeDelta: {x: 42.6, y: 43.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &552668359
