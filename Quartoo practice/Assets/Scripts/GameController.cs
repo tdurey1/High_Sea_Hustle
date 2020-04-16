@@ -709,7 +709,6 @@ public class GameController : MonoBehaviour
 
     public void EndTurn()
     {
-        Debug.Log("here first" + playerTurn);
         ChangeSides();
         placingPiece = true;
 
@@ -918,20 +917,18 @@ public class GameController : MonoBehaviour
 
     private void UpdateTurnMessage(int message)
     {
-        Debug.Log("IN HER TOO");
         switch (message)
         {
             case 1:
-                TurnMessage.text = "Your Turn: Placing gamepiece";
+                TurnMessage.text = "Your Turn:            Placing Piece";
                 break;
             case 2:
-                TurnMessage.text = "Opponent's Turn: Placing Gamepiece";
+                TurnMessage.text = "Opponent's Turn: Placing Piece";
                 break;
             case 3:
                 TurnMessage.text = "Your Turn: Selecting Oppenents Piece";
                 break;
             case 4:
-                Debug.Log("MADE IT HERE");
                 TurnMessage.text = "Opponent's Turn: Selecting Your Piece";
                 break;
         }
