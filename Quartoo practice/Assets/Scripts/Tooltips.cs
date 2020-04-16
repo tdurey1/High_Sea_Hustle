@@ -6,7 +6,7 @@ public class Tooltips : MonoBehaviour
     private List<int> usedTooltips = new List<int>();
     private int popupIndex = 0;
     private int tooltipIndex;
-    public string[] tooltips =
+    private string[] tooltips =
     {
         /*0: Double click */"Click the piece once to select, and a second time to confirm you want to send it to your opponent. You can disable this to a single click in settings.",
         /*1: Help */"Forgot the rules or win conditions? Click the question mark above!",
@@ -19,6 +19,11 @@ public class Tooltips : MonoBehaviour
     public int getUsedTooltipLength()
     {
         return usedTooltips.Count;
+    }
+
+    public int getTooltipsArrayLength()
+    {
+        return tooltips.Length;
     }
 
     public string ShowTooltip()

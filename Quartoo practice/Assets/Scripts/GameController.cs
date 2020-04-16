@@ -885,7 +885,7 @@ public class GameController : MonoBehaviour
 
         gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
 
-        if (tooltips.getUsedTooltipLength() != tooltips.tooltips.Length)
+        if (tooltips.getUsedTooltipLength() != tooltips.getTooltipsArrayLength())
             StartCoroutine("FirstGameTooltip");
 
         hideParrot = StartCoroutine("HideParrot");
