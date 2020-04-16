@@ -7,6 +7,7 @@ public class SettingsMenu : MonoBehaviour
     public Slider musicSlider;
     public Slider soundEffectsSlider;
     public Toggle doubleClickConfirm;
+    public Toggle slowdownAI;
     public AudioMixer masterMixer;
 
     void Awake()
@@ -21,6 +22,7 @@ public class SettingsMenu : MonoBehaviour
         musicSlider.value = savedMusicVol;
         soundEffectsSlider.value = savedSoundFXVol;
         doubleClickConfirm.isOn = GameInfo.doubleClickConfirm ? true : false;
+        slowdownAI.isOn = GameInfo.aiDelayBoardSpace == 1 ? false : true;
     }
 
     public void SetMusicVolume(float volume)
@@ -47,5 +49,12 @@ public class SettingsMenu : MonoBehaviour
     public void ChangeConfirmOption()
     {
         GameInfo.doubleClickConfirm = doubleClickConfirm.isOn ? true : false;
+    }
+
+    public void ChangeAISpeed()
+    {
+        GameInfo.aiDelayBoardSpace = slowdownAI.isOn ? 4 : 1;
+
+        GameInfo.aiDelayPiece = slowdownAI.isOn ? 4 : 1;
     }
 }
