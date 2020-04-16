@@ -128,6 +128,31 @@ public class StartRoom : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         base.OnCreateRoomFailed(returnCode, message);
+
+        RoomOptions roomOps = new RoomOptions()
+        {
+            EmptyRoomTtl = 1,
+            PlayerTtl = 1,
+            IsVisible = true,
+            IsOpen = true,
+            MaxPlayers = 2
+        };
+
+        roomName = GameInfo.username + Random.Range(0, 100);
+        PhotonNetwork.CreateRoom(roomName, roomOps);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        base.OnJoinRoomFailed(returnCode, message);
+
+        if (RoomLobbyCanvas.gameObject.activeSelf)
+            RoomLobbyCanvas.gameObject.SetActive(false);
+        if (WaitingLoadingCanvas.gameObject.activeSelf)
+            WaitingLoadingCanvas.gameObject.SetActive(false);
+
+        intentionalDisconnect = true;
+        PhotonNetwork.Disconnect();
     }
 
     public override void OnJoinedRoom()
