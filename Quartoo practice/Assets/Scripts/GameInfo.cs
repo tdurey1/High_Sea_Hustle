@@ -1,6 +1,6 @@
 ﻿public class GameInfo
 {
-    // Used for tooltips in game scene
+    // Used for tooltips in game scene (Player must get to game over panel to disable these)
     public static bool firstGame = true;
 
     // Used for tooltip in main menu

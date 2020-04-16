@@ -483,7 +483,6 @@ public class GameController : MonoBehaviour
                 EnableTutorialBoardSpace();
                 break;
             case 12:
-                GameInfo.firstGame = false;
                 // Maybe include popup or something, for now clicking the next arrow causes an error so dont enable it
                 //EnableTutorialNextArrow(nextArrow);
                 break;
@@ -769,7 +768,8 @@ public class GameController : MonoBehaviour
         else
             gameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
 
-        DisableTooltips();
+        if (GameInfo.gameType != 'T')
+            DisableTooltips();
     }
 
 
@@ -880,7 +880,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator FirstGameTooltip()
     {
-        yield return new WaitForSeconds(28);
+        yield return new WaitForSeconds(20);
         ParrotCaption.text = tooltips.ShowTooltip();
 
         gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
