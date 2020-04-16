@@ -13,15 +13,15 @@ public class HelpMenu : MonoBehaviour
     public int i;
 
     private string[] text =
-    {
-        "High Sea Hustle is an adaptation of the modern abstract strategy game Quarto. The game consists of 16 pieces and a board composed of 16 square spaces.",
+        {
+        "High Sea Hustle is an adaptation of the modern abstract strategy game Quarto.The game consists of 16 pieces and a board composed of 16 square spaces.",
         "Game pieces have 4 characteristics: gold or silver, tall or short, round or angular, and plain or with an emblem.",
         "The player going first gives a piece to their opponent to begin the game.",
         "The opponent will place that piece on the board, then select a piece to give back.",
-        "The game continues in this pattern, placing a piece by clicking inside one of the squares and then double clicking on a piece to give it to your opponent.",
+        "The game continues in this pattern, placing a piece by clicking inside one of the squares and then double clicking on a piece to give it to your opponent. You can change this to a single click, instead of a double click, in settings.",
         "The object of the game is to be the first person to establish a line of 4 pieces which share a common characteristic.",
         "The line can be formed in any direction: vertical, horizontal, or diagonal. The challenge is keeping track of all the possible winning conditions on the board. Good luck!"
-    };
+        };
 
     void Start()
     {

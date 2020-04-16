@@ -49,7 +49,6 @@ public class MainMenu : MonoBehaviour
     public void tutorial()
     {
         GameInfo.gameType = 'T';
-        GameInfo.firstGame = false;
         Initiate.Fade("GameScene", Color.black, 4.0f);
     }
        
@@ -92,7 +91,7 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(2);
         ShowParrot();
 
-        yield return new WaitForSeconds(13);
+        yield return new WaitForSeconds(15);
         ShowParrot();
     }
 

@@ -36,6 +36,7 @@ public class GameController : MonoBehaviour
     private int tutorialPieceIndex = 1;
     private int tutorialBoardSpaceIndex = 3;
     private Coroutine hideParrot;
+    private bool isNetworkMove = true;
 
     void Awake()
     {
@@ -57,14 +58,25 @@ public class GameController : MonoBehaviour
         if (GameInfo.gameType == 'E' || GameInfo.gameType == 'H' || GameInfo.gameType == 'S')
             StartAIGame();
         else if (GameInfo.gameType == 'N')
+        {
+            if (GameInfo.selectPieceAtStart == 2)
+            {
+                isNetworkMove = false;
+            }
             StartNetworkingGame();
+        }
         else if (GameInfo.gameType == 'T')
             StartTutorialModeGame();
         else
             Debug.Log("Houston we have a problem");
 
         if (GameInfo.gameType != 'T')
-            UpdateTurnMessage();
+        {
+            if (GameInfo.selectPieceAtStart == 1)
+                UpdateTurnMessage(3);
+            else
+                UpdateTurnMessage(4);
+        }
     }
     #endregion
 
@@ -90,11 +102,13 @@ public class GameController : MonoBehaviour
             if (placingPiece == true)
             {
                 Debug.Log("Host placing a piece");
+                UpdateTurnMessage(1);
                 EnableAvailableBoardSpaces();
             }
             // Host is choosing a piece for the opponent to place
             else
             {
+                UpdateTurnMessage(3);
                 Debug.Log("Host choosing opponents piece");
                 EnableAvailablePieces();
             }
@@ -104,6 +118,16 @@ public class GameController : MonoBehaviour
         else if (playerTurn == 2)
         {
             Debug.Log("Opponents turn");
+            if (isNetworkMove)
+            {
+                UpdateTurnMessage(2);
+                isNetworkMove = false;
+            }
+            else
+            {
+                UpdateTurnMessage(4);
+                isNetworkMove = true;
+            }
             StartCoroutine(networkController.WaitForTurn());
         }
     }
@@ -116,7 +140,9 @@ public class GameController : MonoBehaviour
         if (messageType == 'M')
             ReceiveMoveFromNetwork();
         else if (messageType == 'P')
+        {
             ReceivePieceFromNetwork();
+        }
         else
             Debug.Log("Yall broke something in network");
 
@@ -253,7 +279,7 @@ public class GameController : MonoBehaviour
             if (placingPiece == true)
             {
                 Debug.Log("User placing a piece");
-
+                UpdateTurnMessage(1);
                 //Make gameboard interactable, gamepieces not interactable
                 EnableAvailableBoardSpaces();
                 DisableAllPieces();
@@ -262,6 +288,7 @@ public class GameController : MonoBehaviour
             else
             {
                 Debug.Log("User choosing opponents piece");
+                UpdateTurnMessage(3);
                 DisableAllBoardSpaces();
                 EnableAvailablePieces();
             }
@@ -275,7 +302,7 @@ public class GameController : MonoBehaviour
             if (placingPiece == true)
             {
                 Debug.Log("Easy AI placing a piece");
-
+                UpdateTurnMessage(2);
                 string aiBoardSpaceChosen = easyAIController.ChooseLocation(gameCore.GetGameBoard(), gameCore.availableBoardSpaces, gameCore.usedBoardSpaces, gameCore.availablePieces, selectedPiece.id, recentMove.name);
                 Button boardSpace = ConvertAIBoardSpace(aiBoardSpaceChosen);
                 StartCoroutine("DelayAIMove", boardSpace);
@@ -284,7 +311,7 @@ public class GameController : MonoBehaviour
             else
             {
                 Debug.Log("Easy AI choosing opponents piece");
-
+                UpdateTurnMessage(4);
                 // Have ai pick piece
                 string aiPieceChosen = easyAIController.ChooseGamePiece(gameCore.availablePieces);
                 ConvertAIPiece(aiPieceChosen);
@@ -303,7 +330,7 @@ public class GameController : MonoBehaviour
             if (placingPiece == true)
             {
                 Debug.Log("User placing a piece");
-
+                UpdateTurnMessage(1);
                 //Make gameboard interactable, gamepieces not interactable
                 EnableAvailableBoardSpaces();
                 DisableAllPieces();
@@ -311,6 +338,7 @@ public class GameController : MonoBehaviour
             // Player is choosing a piece for the AI to place
             else
             {
+                UpdateTurnMessage(3);
                 Debug.Log("User choosing opponents piece");
                 DisableAllBoardSpaces();
                 EnableAvailablePieces();
@@ -325,7 +353,7 @@ public class GameController : MonoBehaviour
             if (placingPiece == true)
             {
                 Debug.Log("Hard AI placing a piece");
-
+                UpdateTurnMessage(2);
                 string aiBoardSpaceChosen = hardAIController.ChooseLocation(gameCore.GetGameBoard(), gameCore.availableBoardSpaces, gameCore.usedBoardSpaces, gameCore.availablePieces, selectedPiece.id, recentMove.name);
                 Button boardSpace = ConvertAIBoardSpace(aiBoardSpaceChosen);
                 StartCoroutine("DelayAIMove", boardSpace);
@@ -334,7 +362,7 @@ public class GameController : MonoBehaviour
             else
             {
                 Debug.Log("Hard AI choosing opponents piece");
-
+                UpdateTurnMessage(4);
                 // Have ai pick piece
                 string aiPieceChosen = hardAIController.ChooseGamePiece(gameCore.availablePieces);
                 ConvertAIPiece(aiPieceChosen);
@@ -383,6 +411,8 @@ public class GameController : MonoBehaviour
 
         // Player should not be able to click on any gamepiece or boardspace
         DisableEverything();
+
+        UpdateTurnMessage(3);
     }
 
     public void TutorialModeGame()
@@ -401,13 +431,14 @@ public class GameController : MonoBehaviour
                 break;
             case 4:
                 // Inform player opponent will now place piece
-                UpdateTutorialTurnMessage();
+                UpdateTurnMessage(2);
                 DisableTutorialPiece();
                 EnableTutorialNextArrow(nextArrow);
                 tutorialPieceIndex = 14;
                 break;
             case 5:
                 // Have opponent place piece
+                UpdateTurnMessage(4);
                 boardSpace = GameObject.Find("Board Space C2").GetComponent<Button>();
                 PlacePieceOnBoard(boardSpace);
                 EnableTutorialNextArrow(nextArrow);
@@ -416,11 +447,12 @@ public class GameController : MonoBehaviour
                 // Have opponent give piece and player place piece
                 gamePiece = gamePieces[tutorialPieceIndex];
                 TutorialSetPiece(gamePiece);
-                UpdateTutorialTurnMessage();
+                UpdateTurnMessage(1);
                 EnableTutorialBoardSpace();
                 break;
             case 7:
                 // Jump ahead a few turns
+                UpdateTurnMessage(3);
                 EnableTutorialNextArrow(nextArrow);
                 break;
             case 8:
@@ -435,8 +467,8 @@ public class GameController : MonoBehaviour
                 break;
             case 10:
                 // Have opponent place piece and select player piece
+                UpdateTurnMessage(4);
                 DisableTutorialPiece();
-                UpdateTutorialTurnMessage();
                 boardSpace = GameObject.Find("Board Space A2").GetComponent<Button>();
                 PlacePieceOnBoard(boardSpace);
                 tutorialPieceIndex = 3;
@@ -444,14 +476,13 @@ public class GameController : MonoBehaviour
                 break;
             case 11:
                 // Have player win
-                UpdateTutorialTurnMessage();
+                UpdateTurnMessage(1);
                 tutorialBoardSpaceIndex = 5;
                 gamePiece = gamePieces[tutorialPieceIndex];
                 TutorialSetPiece(gamePiece);
                 EnableTutorialBoardSpace();
                 break;
             case 12:
-                GameInfo.firstGame = false;
                 // Maybe include popup or something, for now clicking the next arrow causes an error so dont enable it
                 //EnableTutorialNextArrow(nextArrow);
                 break;
@@ -677,7 +708,6 @@ public class GameController : MonoBehaviour
 
     public void EndTurn()
     {
-        Debug.Log("here first" + playerTurn);
         ChangeSides();
         placingPiece = true;
 
@@ -738,15 +768,14 @@ public class GameController : MonoBehaviour
         else
             gameSceneManagerObject.GetComponent<GameSceneManager>().showGameOverPanel(playerWinStatus);
 
-        DisableTooltips();
+        if (GameInfo.gameType != 'T')
+            DisableTooltips();
     }
 
 
     private void ChangeSides()
     {
         playerTurn = (playerTurn == 1) ? 2 : 1;
-
-        UpdateTurnMessage();
     }
     #endregion
 
@@ -851,7 +880,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator FirstGameTooltip()
     {
-        yield return new WaitForSeconds(28);
+        yield return new WaitForSeconds(20);
         ParrotCaption.text = tooltips.ShowTooltip();
 
         gameSceneManagerObject.GetComponent<GameSceneManager>().showParrot();
@@ -886,14 +915,23 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void UpdateTutorialTurnMessage()
+    private void UpdateTurnMessage(int message)
     {
-        TurnMessage.text = TurnMessage.text == "Your Turn" ? "Opponent's Turn" : "Your Turn";
-    }
-
-    private void UpdateTurnMessage()
-    {
-        TurnMessage.text = playerTurn == 1 ? "Your Turn" : "Opponent's Turn";
+        switch (message)
+        {
+            case 1:
+                TurnMessage.text = "Your Turn:            Placing Piece";
+                break;
+            case 2:
+                TurnMessage.text = "Opponent's Turn: Placing Piece";
+                break;
+            case 3:
+                TurnMessage.text = "Your Turn: Selecting Oppenents Piece";
+                break;
+            case 4:
+                TurnMessage.text = "Opponent's Turn: Selecting Your Piece";
+                break;
+        }
     }
 
     private void HighlightBoardspace()

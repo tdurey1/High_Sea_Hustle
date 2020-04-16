@@ -22,7 +22,7 @@ public class TutorialManager : MonoBehaviour
         /*8 -*/ "If you look at the board now, there is a potential win for a piece that is either tall or triangular.",
         /*9 HS*/ "It's your turn to select a piece for me, but you want to make sure not to give me a piece that will cause me to win. Click the highlighted piece.",
         /*10 CP*/ "I've blocked the winning move, but in doing so I have made a new one for a piece that has a stamp. Now I will select a piece for you to place.",
-        /*11 CS HP*/ "You have just been given a winning piece! Place it in the hilighted board space to win by matching four pieces with a stamp.",
+        /*11 CS HP*/ "You have just been given a winning piece! Place it on the hilighted board space to win by matching four pieces with a stamp.",
         /*12*/ "Congratulations, you've just completed your first game of Quarto! Click on the arrow icon at the top of the screen to exit to the Main Menu. Goodbye!"
     };
 
